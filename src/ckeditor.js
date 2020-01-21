@@ -31,11 +31,13 @@ import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefrom
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
-import InsertImage from './custom/plugins/test';
 import Enter from '@ckeditor/ckeditor5-enter/src/enter';
 import '../theme/theme.css';
+import Gallery from './custom/plugins/gallery';
+import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 
-export default class BalloonEditor extends BalloonEditorBase {}
+export default class BalloonEditor extends BalloonEditorBase {
+}
 
 // Plugins to include in the build.
 BalloonEditor.builtinPlugins = [
@@ -64,39 +66,30 @@ BalloonEditor.builtinPlugins = [
 	PasteFromOffice,
 	Table,
 	TableToolbar,
-	InsertImage
+	Gallery,
+	Underline
 ];
 
 // Editor configuration.
 BalloonEditor.defaultConfig = {
-	blockToolbar: [
-		'heading',
-		'|',
-		'bulletedList',
-		'numberedList',
-		'|',
-		'indent',
-		'outdent',
-		'|',
-		'imageUpload',
-		'blockQuote',
-		'insertTable',
-		'mediaEmbed',
-		'|',
-		'undo',
-		'redo',
-		'insertImage'
-	],
+	placeholder: 'Let`s write an awesome story!',
+	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery' ],
 	toolbar: {
 		items: [
+			'blockQuote',
+			'bulletedList',
+			'numberedList',
+			'|',
+			'heading',
 			'bold',
 			'italic',
-			'link'
-		]
-	},
+			'link',
+		] }, // '|', 'indent', 'outdent' undo, redo,
 	image: {
+		upload: {
+			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
+		},
 		toolbar: [ 'imageResize', 'imageTextAlternative', '|', 'imageStyle:alignCenter', 'imageStyle:full', 'imageStyle:side' ],
-
 		styles: [
 			'full',
 			'side',
@@ -105,13 +98,6 @@ BalloonEditor.defaultConfig = {
 			'alignRight'
 		]
 	},
-	table: {
-		contentToolbar: [
-			'tableColumn',
-			'tableRow',
-			'mergeTableCells'
-		]
-	},
-	// This value must be kept in sync with the language defined in webpack.config.js.
+	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en'
 };
