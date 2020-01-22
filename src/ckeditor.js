@@ -32,9 +32,10 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 import Enter from '@ckeditor/ckeditor5-enter/src/enter';
-import '../theme/theme.css';
 import Gallery from './custom/plugins/gallery';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import ImageCrop from './custom/plugins/image-crop';
+import '../theme/theme.css';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -67,7 +68,8 @@ BalloonEditor.builtinPlugins = [
 	Table,
 	TableToolbar,
 	Gallery,
-	Underline
+	Underline,
+	ImageCrop
 ];
 
 // Editor configuration.
@@ -89,7 +91,7 @@ BalloonEditor.defaultConfig = {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
 		},
-		toolbar: [ 'imageResize', 'imageTextAlternative', '|', 'imageStyle:alignCenter', 'imageStyle:full', 'imageStyle:side' ],
+		toolbar: [ 'imageStyle:alignCenter', 'imageStyle:full', 'imageStyle:side', 'imageCrop' ],
 		styles: [
 			'full',
 			'side',
