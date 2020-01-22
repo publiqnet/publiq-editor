@@ -86,7 +86,7 @@ BalloonEditor.defaultConfig = {
 			'bold',
 			'italic',
 			'link',
-		] }, // '|', 'indent', 'outdent' undo, redo,
+		] }, // '|', 'indent', 'outdent' undo, redo, d
 	image: {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
