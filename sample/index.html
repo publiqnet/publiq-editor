@@ -5,8 +5,12 @@
 	<title>CKEditor 5 – balloon block editor build – development sample</title>
 	<style>
 		body {
-			max-width: 800px;
 			margin: 20px auto;
+		}
+
+		h1 {
+			max-width: 800px;
+			margin: 1em auto;
 		}
 	</style>
 </head>
@@ -31,6 +35,10 @@
 	BalloonEditor.create( document.querySelector( '#editor' ) )
 		.then( editor => {
 			window.editor = editor;
+			console.clear();
+			console.log(window.editor.ui.componentFactory._components);
+			window.editor.ui.componentFactory._components.get('gallery').callback().on('change:galleryIsOn', (p1, p2, p3) => console.log('yes we can! gallery', p1, p2, p3));
+			editor.editing.view.document.on( 'enter', () => console.log( 'yes we can! enter' ));
 		} )
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );

@@ -3,7 +3,45 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-/* Give the block toolbar button some space, moving it a few pixels away from the editable area. */
+:root {
+  --ck-spacing-standard: 0;
+
+  --ck-focus-ring: 1px solid transparent;
+  --ck-inner-shadow: none;
+
+  --ck-widget-outline-thickness: 0;
+}
+
+.ck-content {
+  font-size: 19px;
+}
+
+.ck-content p,
+.ck-content h2,
+.ck-content h3,
+.ck-content h4 {
+  max-width: 870px;
+}
+
+.ck-content p {
+  margin: 0 auto 20px;
+}
+
+.ck-content h2 {
+  font-size: 30px;
+  margin: 24px auto;
+}
+
+.ck-content h3 {
+  font-size: 24px;
+  margin: 20px auto;
+}
+
+.ck-content h4 {
+  font-size: 17px;
+  margin: 14px auto;
+}
+
 .ck.ck-block-toolbar-button {
-	transform: translateX( calc(-1 * var(--ck-spacing-large)) );
+  transform: translateX(calc(50vw - var(--ck-spacing-large) - 870px / 2));
 }
