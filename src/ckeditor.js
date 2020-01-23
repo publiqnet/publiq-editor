@@ -8,7 +8,6 @@
 import BalloonEditorBase from '@ckeditor/ckeditor5-editor-balloon/src/ballooneditor';
 
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
@@ -30,22 +29,21 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
-import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 import Enter from '@ckeditor/ckeditor5-enter/src/enter';
 import Gallery from './custom/plugins/gallery';
-import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import '../theme/theme.scss';
 import ImageCrop from './custom/plugins/image-crop';
-import '../theme/theme.css';
+import SimpleUploadAdapterCustom from './custom/adapter/custom-upload.adapter';
+import env from '@ckeditor/ckeditor5-utils/src/env';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
 
 // Plugins to include in the build.
 BalloonEditor.builtinPlugins = [
-	SimpleUploadAdapter,
+	SimpleUploadAdapterCustom,
 	Enter,
 	Essentials,
-	UploadAdapter,
 	Autoformat,
 	BlockToolbar,
 	Bold,
@@ -68,8 +66,7 @@ BalloonEditor.builtinPlugins = [
 	Table,
 	TableToolbar,
 	Gallery,
-	Underline,
-	ImageCrop
+	ImageCrop,
 ];
 
 // Editor configuration.
@@ -86,7 +83,7 @@ BalloonEditor.defaultConfig = {
 			'bold',
 			'italic',
 			'link',
-		] }, // '|', 'indent', 'outdent' undo, redo, d
+		] }, // '|', 'indent', 'outdent' undo, redo,
 	image: {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
@@ -103,3 +100,4 @@ BalloonEditor.defaultConfig = {
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en'
 };
+BalloonEditor.env = env;
