@@ -14,6 +14,23 @@
   --ck-widget-outline-thickness: 0;
 
   --ck-small-padding-left: 50px;
+
+  --ck-icon-size: 24px;
+
+  --ck-ui-component-min-height: 40px;
+  --ck-ui-component-max-height: 40px;
+
+  --ck-color-block-toolbar-button: #000;
+  --ck-color-button-default-background: #fff;
+  --ck-color-button-default-hover-background: #fff;
+  --ck-color-button-default-active-background: darken(#fff, 2%);
+  --ck-color-button-on-background: #fff;
+  --ck-color-button-on-hover-background: #fff;
+  --ck-color-button-on-active-background: #fff;
+
+  --ck-color-button-default-shadow: 0 3px 7px rgba(43,43,43,.1);
+
+  --ck-color-toolbar-background: #fff;
 }
 
 .ck.ck-content {
@@ -95,23 +112,55 @@
   ol, ul {
     margin: 19px auto;
   }
+
+  .image > figcaption {background-color: unset;}
 }
 
-.ck.ck-block-toolbar-button {
-  transform: translateX(calc(50vw - var(--ck-spacing-large) - 870px / 2));
+.ck {
+  &.ck-button {
+    box-shadow: 0 3px 7px var(--ck-color-button-default-shadow);
+    cursor: pointer;
 
-  @include media-xl {
-    transform: translateX(calc(50vw - var(--ck-spacing-large) - 643px / 2));
+    &:active {
+      box-shadow: 0 3px 7px var(--ck-color-button-default-shadow);
+    }
   }
-  @include media-lg {
-    transform: translateX(calc(50vw - var(--ck-spacing-large) - 470px / 2));
-  }
-  @include media-md {
-    transform: translateX(calc(50vw - var(--ck-spacing-large) - 530px / 2));
-  }
-  @include media-sm {
-    transform: unset;
+  &.ck-block-toolbar-button {
+    border: 1px solid #dee2e6;
+    border-radius: 50% !important;
+    transform: translateX(calc(50vw - var(--ck-spacing-large) - 870px / 2));
+
+    svg {
+      transition: 300ms transform;
+    }
+
+    @include media-xl {
+      transform: translateX(calc(50vw - var(--ck-spacing-large) - 643px / 2));
+    }
+    @include media-lg {
+      transform: translateX(calc(50vw - var(--ck-spacing-large) - 470px / 2));
+    }
+    @include media-md {
+      transform: translateX(calc(50vw - var(--ck-spacing-large) - 530px / 2));
+    }
+    @include media-sm {
+      transform: unset;
+    }
+
+    &.ck-on {
+      svg {
+        transform: rotate(45deg) scale(1.1);
+      }
+    }
+
+    &:hover {
+      .ck.ck-icon :not([fill]) {
+        color: #3366ff;
+      }
+    }
+
+    &:active {
+      border: 1px solid #dee2e6;
+    }
   }
 }
-
-.ck-content .image>figcaption {background-color: unset;}
