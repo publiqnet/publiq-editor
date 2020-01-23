@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+ */
+
+@import "variables";
+
+:root {
+  --ck-spacing-standard: 0;
+
+  --ck-focus-ring: 1px solid transparent;
+  --ck-inner-shadow: none;
+
+  --ck-widget-outline-thickness: 0;
+
+  --ck-small-padding-left: 50px;
+}
+
+.ck.ck-content {
+  font-size: 19px;
+
+  @include media-sm {
+    padding-left: var(--ck-small-padding-left);
+  }
+
+  p, h2, h3,
+  h4, blockquote,
+  ol, ul {
+    max-width: 870px;
+
+    @include media-xl {
+      max-width: 643px;
+    }
+    @include media-lg {
+      max-width: 470px;
+    }
+    @include media-md {
+      max-width: 530px;
+    }
+  }
+
+  p {
+    margin: 0 auto 20px;
+  }
+
+  h2 {
+    font-size: 30px;
+    margin: 24px auto;
+  }
+
+  h3 {
+    font-size: 24px;
+    margin: 20px auto;
+  }
+
+  h4 {
+    font-size: 17px;
+    margin: 14px auto;
+  }
+
+  blockquote {
+    position: relative;
+    max-width: 870px;
+    font-size: 19px;
+    margin: 45px auto;
+    overflow: visible;
+    border-left: none;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:before, &:after {
+      content: '';
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      position: absolute;
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIiBmaWxsPSJub25lIj48cGF0aCBvcGFjaXR5PSIwLjc1IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTExLjE0MjkgMFY3LjE2NDE4QzkuNTc5MDEgNy4xNjQxOCA2LjgyNDEzIDcuMjk5OTUgNi44MjM5OCAxMy44NDA1VjE2LjU2NzJIMTIuODU3MVYzMEgwVjE2LjU2NzJWMTMuODQwNUMwIDguNjk4MzEgMS4yNzM3MiA0Ljg3OTcgNC4wNTY1NCAyLjQ5MDU3QzUuOTgxNTkgMC44Mzc5MzEgOC4yNjIyIDAgMTEuMTQyOSAwWk0yOC4yODU3IDBWNy4xNjQxOEMyNi43MjE5IDcuMTY0MTggMjMuOTY3IDcuMjk5OTUgMjMuOTY2OCAxMy44NDA1VjE2LjU2NzJIMzBWMzBIMTcuMTQyOVYxNi41NjcyVjEzLjg0MDVDMTcuMTQyOSA4LjY5ODMxIDE4LjQxNjYgNC44Nzk3IDIxLjE5OTQgMi40OTA1N0MyMy4xMjQ0IDAuODM3OTMxIDI1LjQwNTEgMCAyOC4yODU3IDBaIiBmaWxsPSIjQzFDNENCIi8+PC9zdmc+);
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+
+    &:before {
+      top: -5px;
+      left: -45px;
+    }
+
+    &:after {
+      bottom: -5px;
+      right: -45px;
+      -webkit-transform: rotate(180deg);
+      transform: rotate(180deg);
+    }
+  }
+
+  ol, ul {
+    margin: 19px auto;
+  }
+}
+
+.ck.ck-block-toolbar-button {
+  transform: translateX(calc(50vw - var(--ck-spacing-large) - 870px / 2));
+
+  @include media-xl {
+    transform: translateX(calc(50vw - var(--ck-spacing-large) - 643px / 2));
+  }
+  @include media-lg {
+    transform: translateX(calc(50vw - var(--ck-spacing-large) - 470px / 2));
+  }
+  @include media-md {
+    transform: translateX(calc(50vw - var(--ck-spacing-large) - 530px / 2));
+  }
+  @include media-sm {
+    transform: unset;
+  }
+}
+
+.ck-content .image>figcaption {background-color: unset;}
