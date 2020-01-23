@@ -1,7 +1,14 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import cropIcon from '../assets/icons/Crop.svg';
+import ImageCropCommand from '../commands/crop.command';
 
+/**
+ *
+ * minimal configuration of Image crop plugin.
+ * We only want that this plugin fires value change event
+ *
+ */
 export default class ImageCrop extends Plugin {
 	init() {
 		const editor = this.editor;
@@ -14,10 +21,10 @@ export default class ImageCrop extends Plugin {
 				cropIsOn: false,
 				isOn: false
 			} );
-			const command = editor.commands.get( 'imageTextAlternative' );
+			editor.commands.add( 'imageCrop', new ImageCropCommand( editor ) );
+			const command = editor.commands.get( 'imageCrop' );
 			view.bind( 'cropIsOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-			this.listenTo( view, 'execute', () =>
-				editor.execute( 'imageTextAlternative', { newValue: 'publiq' + new Date().getMilliseconds() } ) );
+			view.on( 'execute', () => editor.execute( 'imageCrop' ) );
 			return view;
 		} );
 	}

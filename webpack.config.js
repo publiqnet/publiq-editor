@@ -98,6 +98,26 @@ module.exports = {
 						} )
 					},
 				]
+			},
+			{
+				test: /\.s[ca]ss/,
+				use: [
+					{
+						loader: 'style-loader',
+						options: {
+							injectType: 'singletonStyleTag'
+						}
+					},
+					{
+						loader: 'css-loader',
+					},
+					{
+						loader: 'sass-loader',
+						options: {
+							sourceMap: true,
+						},
+					},
+				]
 			}
 		]
 	}
