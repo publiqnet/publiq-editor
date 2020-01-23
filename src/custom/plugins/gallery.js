@@ -1,7 +1,14 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import searchIcon from '../assets/icons/Search.svg';
+import GalleryCommand from '../commands/gallery.command';
 
+/**
+ *
+ * minimal configuration of image Gallery plugin.
+ * We only want that this plugin fires value change event
+ *
+ */
 export default class Gallery extends Plugin {
 	init() {
 		const editor = this.editor;
@@ -14,9 +21,10 @@ export default class Gallery extends Plugin {
 				galleryIsOn: false,
 				isOn: false
 			} );
-			const command = editor.commands.get( 'underline' );
+			editor.commands.add( 'gallery', new GalleryCommand( editor ) );
+			const command = editor.commands.get( 'gallery' );
 			view.bind( 'galleryIsOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-			this.listenTo( view, 'execute', () => editor.execute( 'underline' ) );
+			view.on( 'execute', () => editor.execute( 'gallery' ) );
 			return view;
 		} );
 	}
