@@ -8,6 +8,7 @@
 import BalloonEditorBase from '@ckeditor/ckeditor5-editor-balloon/src/ballooneditor';
 
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
+import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
@@ -31,10 +32,10 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Enter from '@ckeditor/ckeditor5-enter/src/enter';
 import Gallery from './custom/plugins/gallery';
-import '../theme/theme.scss';
 import ImageCrop from './custom/plugins/image-crop';
 import SimpleUploadAdapterCustom from './custom/adapter/custom-upload.adapter';
 import env from '@ckeditor/ckeditor5-utils/src/env';
+import '../theme/theme.scss';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }

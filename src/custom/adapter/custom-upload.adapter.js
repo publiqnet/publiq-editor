@@ -175,7 +175,7 @@ class CustomUploadAdapter {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
 
-			resolve( response.url ? { default: response.url, uri: response.field_test } : response.urls );
+			resolve( response.url ? { default: response.url, uri: response.uri } : response.urls );
 		} );
 
 		// Upload progress when it is supported.
