@@ -50,7 +50,7 @@ export default class SimpleUploadAdapterCustom extends Plugin {
 	 * @inheritDoc
 	 */
 	static get pluginName() {
-		return 'SimpleUploadAdapter';
+		return 'SimpleUploadAdapterCustom';
 	}
 
 	/**
@@ -174,8 +174,7 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-
-			resolve( response.url ? { default: response.url, uri: response.uri } : response.urls );
+			resolve( response.url ? { default: response.url, uri: response.uri, link: response.link } : response.urls );
 		} );
 
 		// Upload progress when it is supported.

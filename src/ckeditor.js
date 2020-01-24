@@ -8,7 +8,6 @@
 import BalloonEditorBase from '@ckeditor/ckeditor5-editor-balloon/src/ballooneditor';
 
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar';
 import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
@@ -74,6 +73,9 @@ BalloonEditor.builtinPlugins = [
 BalloonEditor.defaultConfig = {
 	placeholder: 'Let`s write an awesome story!',
 	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery' ],
+	simpleUpload: {
+		uploadUrl: 'https://publiq.free.beeceptor.com/test'
+	},
 	toolbar: {
 		items: [
 			'blockQuote',

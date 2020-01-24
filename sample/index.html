@@ -91,7 +91,7 @@
 						} )
 						.then( data => {
 							model.enqueueChange( 'transparent', writer => {
-								console.log('in enque');
+								console.log(data);
 								writer.setAttributes( { uploadStatus: 'complete', src: data.default }, imageElement );
 								this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
 							} );
