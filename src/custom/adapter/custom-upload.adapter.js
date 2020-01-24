@@ -174,7 +174,6 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-
 			resolve( response.url ? { default: response.url, uri: response.uri, link: response.link } : response.urls );
 		} );
 
