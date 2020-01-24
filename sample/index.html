@@ -35,7 +35,7 @@
 	BalloonEditor.create( document.querySelector( '#editor' ) )
 		.then( editor => {
 			window.editor = editor;
-			window.env = BalloonEditor.env
+			window.env = BalloonEditor.utils.env;
 			editor.plugins.get( 'ImageUploadEditing' )._readAndUpload =
 				function ( loader, imageElement ) {
 					const editor = this.editor;
@@ -140,9 +140,13 @@
 			});
 			window.editor.ui.componentFactory._components.get('imagecrop').callback().on('change:cropIsOn', (p1, p2, p3) => {
 				console.log( 'crop');
-				console.log( p1);
-				console.log( p2);
-				console.log( p3);
+				BalloonEditor.utils.fetchLocalImage(editor.model.document.selection.getSelectedElement())
+					.then((data) => {
+						console.log(data)
+					})
+					.catch((err) => {
+						console.log(err)
+					})
 			});
 			editor.editing.view.document.on( 'enter', () => console.log( 'yes we can! enter' ));
 			editor.model.schema.extend( 'image', {

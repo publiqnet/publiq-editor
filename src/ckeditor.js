@@ -35,6 +35,7 @@ import ImageCrop from './custom/plugins/image-crop';
 import SimpleUploadAdapterCustom from './custom/adapter/custom-upload.adapter';
 import env from '@ckeditor/ckeditor5-utils/src/env';
 import '../theme/theme.scss';
+import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -100,4 +101,6 @@ BalloonEditor.defaultConfig = {
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en'
 };
-BalloonEditor.env = env;
+BalloonEditor.utils = {};
+BalloonEditor.utils.env = env;
+BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
