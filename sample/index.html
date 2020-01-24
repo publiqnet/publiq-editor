@@ -31,109 +31,24 @@
 </div>
 
 <script src="../build/ckeditor.js"></script>
+<script src="../build/translations/ja.js"></script>
+
 <script>
-	BalloonEditor.create( document.querySelector( '#editor' ) )
-		.then( editor => {
+	BalloonEditor.create( document.querySelector( '#editor' ), {
+		language: 'ja'
+	}).then( editor => {
 			window.editor = editor;
 			window.env = BalloonEditor.utils.env;
-			editor.plugins.get( 'ImageUploadEditing' )._readAndUpload =
-				function ( loader, imageElement ) {
-					const editor = this.editor;
-					const model = editor.model;
-					const t = editor.locale.t;
-					const fileRepository = editor.plugins.get( 'FileRepository' );
-					const notification = editor.plugins.get( 'Notification' );
-
-					model.enqueueChange( 'transparent', writer => {
-						writer.setAttribute( 'uploadStatus', 'reading', imageElement );
-					} );
-
-					return loader.read()
-						.then( () => {
-							const promise = loader.upload();
-
-							// Force re–paint in Safari. Without it, the image will display with a wrong size.
-							// https://github.com/ckeditor/ckeditor5/issues/1975
-							/* istanbul ignore next */
-							if ( env.isSafari ) {
-								const viewFigure = editor.editing.mapper.toViewElement( imageElement );
-								const viewImg = viewFigure.getChild( 0 );
-
-								editor.editing.view.once( 'render', () => {
-									// Early returns just to be safe. There might be some code ran
-									// in between the outer scope and this callback.
-									if ( !viewImg.parent ) {
-										return;
-									}
-
-									const domFigure = editor.editing.view.domConverter.mapViewToDom( viewImg.parent );
-
-									if ( !domFigure ) {
-										return;
-									}
-
-									const originalDisplay = domFigure.style.display;
-
-									domFigure.style.display = 'none';
-
-									// Make sure this line will never be removed during minification for having "no effect".
-									domFigure._ckHack = domFigure.offsetHeight;
-
-									domFigure.style.display = originalDisplay;
-								} );
-							}
-
-							model.enqueueChange( 'transparent', writer => {
-								writer.setAttribute( 'uploadStatus', 'uploading', imageElement );
-							} );
-
-							return promise;
-						} )
-						.then( data => {
-							model.enqueueChange( 'transparent', writer => {
-								console.log(data);
-								writer.setAttributes( { uploadStatus: 'complete', src: data.default }, imageElement );
-								this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
-							} );
-
-							clean();
-						} )
-						.catch( error => {
-							// If status is not 'error' nor 'aborted' - throw error because it means that something else went wrong,
-							// it might be generic error and it would be real pain to find what is going on.
-							if ( loader.status !== 'error' && loader.status !== 'aborted' ) {
-								throw error;
-							}
-
-							// Might be 'aborted'.
-							if ( loader.status == 'error' && error ) {
-								notification.showWarning( error, {
-									title: t( 'Upload failed' ),
-									namespace: 'upload'
-								} );
-							}
-
-							clean();
-
-							// Permanently remove image from insertion batch.
-							model.enqueueChange( 'transparent', writer => {
-								writer.remove( imageElement );
-							} );
-						} );
-
-					function clean() {
-						model.enqueueChange( 'transparent', writer => {
-							writer.removeAttribute( 'uploadId', imageElement );
-							writer.removeAttribute( 'uploadStatus', imageElement );
-						} );
-
-						fileRepository.destroyLoader( loader );
-					}
-				}
 			console.clear();
 			console.log(window.editor.ui.componentFactory._components);
 			window.editor.ui.componentFactory._components.get('gallery').callback().on('change:galleryIsOn', (p1, p2, p3) => {
 				console.log( 'gallery');
+				console.log( p1);
+				console.log( p2);
+				console.log( p3);
+			});
+			window.editor.ui.componentFactory._components.get('imagedelete').callback().on('change:deleteIsOn', (p1, p2, p3) => {
+				console.log( 'delete');
 				console.log( p1);
 				console.log( p2);
 				console.log( p3);
@@ -148,7 +63,14 @@
 						console.log(err)
 					})
 			});
-			editor.editing.view.document.on( 'enter', () => console.log( 'yes we can! enter' ));
+			editor.editing.view.document.on( 'keyup', (evInfo, event) => {
+				console.log( 'yes we can! enter', editor.model.document.selection.getSelectedElement() );
+			});
+			editor.editing.view.document.on( 'click', (p1, p2, p3) => {
+				console.log( 'yes we can! click', editor.model.document.selection.getSelectedElement() );
+			});
+
+
 			editor.model.schema.extend( 'image', {
 				allowAttributes: 'data-uri'
 			} );

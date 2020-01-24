@@ -1,7 +1,7 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import cropIcon from '../assets/icons/Crop.svg';
-import ImageCropCommand from '../commands/crop.command';
+import ImageCropCommand from '../commands/image-crop.command';
 
 /**
  *
@@ -9,7 +9,7 @@ import ImageCropCommand from '../commands/crop.command';
  * We only want that this plugin fires value change event
  *
  */
-export default class ImageCrop extends Plugin {
+export default class ImageCropPlugin extends Plugin {
 	init() {
 		const editor = this.editor;
 		editor.ui.componentFactory.add( 'imageCrop', locale => {
