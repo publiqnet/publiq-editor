@@ -73,6 +73,9 @@ BalloonEditor.builtinPlugins = [
 BalloonEditor.defaultConfig = {
 	placeholder: 'Let`s write an awesome story!',
 	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery' ],
+	simpleUpload: {
+		uploadUrl: 'https://publiq.free.beeceptor.com/test'
+	},
 	toolbar: {
 		items: [
 			'blockQuote',
