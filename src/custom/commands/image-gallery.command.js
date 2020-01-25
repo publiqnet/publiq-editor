@@ -1,6 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 
-export default class GalleryCommand extends Command {
+export default class ImageGalleryCommand extends Command {
 	/**
 	 * *
 	 * @readonly
