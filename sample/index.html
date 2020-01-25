@@ -83,6 +83,13 @@
 					if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
 						return;
 					}
+					domFigure.style.display = 'none';
+
+					// Make sure this line will never be removed during minification for having "no effect".
+					domFigure._ckHack = domFigure.offsetHeight;
+
+					domFigure.style.display = originalDisplay;
+				} );
 
 					const viewWriter = conversionApi.writer;
 					const figure = conversionApi.mapper.toViewElement( data.item );
@@ -118,11 +125,7 @@
 						viewWriter.removeAttribute( 'data-src', img );
 					}
 				} );
-			} );
-			editor.model.enqueueChange('transparent', (writer, elem) => {
-				console.log(elem);
-			});
-		} )
+			} )
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );
 		} );
