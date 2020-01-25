@@ -30,12 +30,13 @@ import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefrom
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Enter from '@ckeditor/ckeditor5-enter/src/enter';
-import Gallery from './custom/plugins/gallery';
-import ImageCrop from './custom/plugins/image-crop';
+import ImageGalleryPlugin from './custom/plugins/image-gallery.plugin';
+import ImageCropPlugin from './custom/plugins/image-crop.plugin';
 import SimpleUploadAdapterCustom from './custom/adapter/custom-upload.adapter';
-import env from '@ckeditor/ckeditor5-utils/src/env';
-import '../theme/theme.scss';
+import ImageDeletePlugin from './custom/plugins/image-delete.plugin';
 import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
+import './custom/builtin-class-customizations';
+import '../theme/theme.scss';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -66,8 +67,9 @@ BalloonEditor.builtinPlugins = [
 	PasteFromOffice,
 	Table,
 	TableToolbar,
-	Gallery,
-	ImageCrop,
+	ImageGalleryPlugin,
+	ImageCropPlugin,
+	ImageDeletePlugin
 ];
 
 // Editor configuration.
@@ -84,12 +86,13 @@ BalloonEditor.defaultConfig = {
 			'bold',
 			'italic',
 			'link',
-		] }, // '|', 'indent', 'outdent' undo, redo
+		]
+	}, // '|', 'indent', 'outdent' undo, redo,
 	image: {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
 		},
-		toolbar: [ 'imageStyle:alignCenter', 'imageStyle:full', 'imageStyle:side', 'imageCrop' ],
+		toolbar: [ 'imageStyle:alignCenter', 'imageStyle:full', 'imageCrop', 'imageDelete' ],
 		styles: [
 			'full',
 			'side',
@@ -102,5 +105,4 @@ BalloonEditor.defaultConfig = {
 	language: 'en'
 };
 BalloonEditor.utils = {};
-BalloonEditor.utils.env = env;
 BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
