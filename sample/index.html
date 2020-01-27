@@ -34,9 +34,7 @@
 <script src="../build/translations/ja.js"></script>
 
 <script>
-	BalloonEditor.create( document.querySelector( '#editor' ), {
-		language: 'ja'
-	}).then( editor => {
+	BalloonEditor.create( document.querySelector( '#editor' ) ).then( editor => {
 			window.editor = editor;
 			window.env = BalloonEditor.utils.env;
 			console.clear();
