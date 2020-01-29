@@ -65,6 +65,9 @@
 		editor.editing.view.document.on( 'delete', ( evInfo, event ) => {
 			console.log( 'yes we can! before', editor.model.document.selection.getSelectedElement() );
 		} );
+		editor.editing.view.document.on( 'imageLoaded', ( evInfo, event, p3 ) => {
+			console.log( 'noric', editor.model.document.selection.getSelectedElement() );
+		} );
 		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
 			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
 				editor.model.change( writer => {
