@@ -180,11 +180,9 @@ DeleteCommand.prototype.execute = function( options = {} ) {
 			this.editor.execute( 'imageDelete' );
 		} else {
 			model.deleteContent( selection, { doNotResetEntireContent } );
+			writer.setSelection( selection );
 		}
 		this._buffer.input( changeCount );
-
-		writer.setSelection( selection );
-
 		this._buffer.unlock();
 	} );
 };
