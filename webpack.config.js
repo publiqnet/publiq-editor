@@ -55,14 +55,14 @@ module.exports = {
 		// 	banner: bundler.getLicenseBanner(),
 		// 	raw: true
 		// } ),
-		// new webpack.NormalModuleReplacementPlugin(
-		// 	/bold\.svg/,
-		// 	'../../../../../src/custom/icons/Bold.svg'
-		// ),
-		// new webpack.NormalModuleReplacementPlugin(
-		// 	/italic\.svg/,
-		// 	'../../../../../src/custom/icons/Italic.svg'
-		// ),
+		new webpack.NormalModuleReplacementPlugin(
+			/bold\.svg/,
+			'../../../../../src/custom/assets/icons/Bold.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/italic\.svg/,
+			'../../../../../src/custom/assets/icons/Italic.svg'
+		),
 		// new webpack.NormalModuleReplacementPlugin(
 		// 	/link\.svg/,
 		// 	'../../../../../src/custom/icons/Link.svg'
@@ -73,7 +73,39 @@ module.exports = {
 		// )
 		new webpack.NormalModuleReplacementPlugin(
 			/pilcrow\.svg/,
-			'../../../../../../src/custom/assets/icons/plus.svg'
+			'../../../../../../src/custom/assets/icons/Plus.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/image\.svg/,
+			'../../../../../src/custom/assets/icons/Image.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/media\.svg/,
+			'../../../../src/custom/assets/icons/Video.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/quote\.svg/,
+			'../../../../src/custom/assets/icons/Quote.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/bulletedlist\.svg/,
+			'../../../../src/custom/assets/icons/Bulleted_list.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/numberedlist\.svg/,
+			'../../../../src/custom/assets/icons/Numbered_list.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/\/link\.svg/,
+			'../../../../src/custom/assets/icons/Link.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/\/unlink\.svg/,
+			'../../../../../src/custom/assets/icons/Unlink.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/\/pencil\.svg/,
+			'../../../../../src/custom/assets/icons/Pencil.svg'
 		)
 	],
 

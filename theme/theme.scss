@@ -121,6 +121,12 @@
     box-shadow: 0 3px 7px var(--ck-color-button-default-shadow);
     cursor: pointer;
 
+    &.ck-on {
+      .ck.ck-icon :not([fill]) {
+        color: #3366ff;
+      }
+    }
+
     &:active {
       box-shadow: 0 3px 7px var(--ck-color-button-default-shadow);
     }

@@ -3,6 +3,8 @@ import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar'
 import env from '@ckeditor/ckeditor5-utils/src/env';
 import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect';
+import DeleteCommand from '@ckeditor/ckeditor5-typing/src/deletecommand';
+import count from '@ckeditor/ckeditor5-utils/src/count';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 	const editor = this.editor;
@@ -58,8 +60,12 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 		} )
 		.then( data => {
 			model.enqueueChange( 'transparent', writer => {
-				// console.log( 'new era' );
-				writer.setAttributes( { uploadStatus: 'complete', src: data.default, 'data-uri': data.uri }, imageElement );
+				writer.setAttributes( {
+					uploadStatus: 'complete',
+					src: data.default,
+					'data-uri': data.uri,
+					'data-link': data.link
+				}, imageElement );
 				this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
 			} );
 
@@ -128,4 +134,57 @@ BlockToolbar.prototype._attachButtonToElement = function( targetElement ) {
 	} );
 	this.buttonView.top = position.top;
 	this.buttonView.left = position.left;
+};
+
+DeleteCommand.prototype.execute = function( options = {} ) {
+	const model = this.editor.model;
+	const doc = model.document;
+
+	model.enqueueChange( this._buffer.batch, writer => {
+		this._buffer.lock();
+
+		const selection = writer.createSelection( options.selection || doc.selection );
+
+		// Do not replace the whole selected content if selection was collapsed.
+		// This prevents such situation:
+		//
+		// <h1></h1><p>[]</p>	-->  <h1>[</h1><p>]</p> 		-->  <p></p>
+		// starting content		-->   after `modifySelection`	-->  after `deleteContent`.
+		const doNotResetEntireContent = selection.isCollapsed;
+
+		// Try to extend the selection in the specified direction.
+		if ( selection.isCollapsed ) {
+			model.modifySelection( selection, { direction: this.direction, unit: options.unit } );
+		}
+
+		// Check if deleting in an empty editor. See #61.
+		if ( this._shouldEntireContentBeReplacedWithParagraph( options.sequence || 1 ) ) {
+			this._replaceEntireContentWithParagraph( writer );
+
+			return;
+		}
+
+		// If selection is still collapsed, then there's nothing to delete.
+		if ( selection.isCollapsed ) {
+			return;
+		}
+
+		let changeCount = 0;
+
+		selection.getFirstRange().getMinimalFlatRanges().forEach( range => {
+			changeCount += count(
+				range.getWalker( { singleCharacters: true, ignoreElementEnd: true, shallow: true } )
+			);
+		} );
+		if ( doc.selection.getSelectedElement() && doc.selection.getSelectedElement().name === 'image' ) {
+			this.editor.execute( 'imageDelete' );
+		} else {
+			model.deleteContent( selection, { doNotResetEntireContent } );
+		}
+		this._buffer.input( changeCount );
+
+		writer.setSelection( selection );
+
+		this._buffer.unlock();
+	} );
 };
