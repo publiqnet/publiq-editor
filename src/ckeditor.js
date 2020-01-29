@@ -96,7 +96,7 @@ BalloonEditor.defaultConfig = {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
 		},
-		toolbar: [ 'imageStyle:alignCenter', 'imageStyle:grid', 'imageStyle:full', 'imageStyle:default', 'imageCrop', 'imageDelete' ],
+		toolbar: [ 'imageStyle:grid', 'imageStyle:full', 'imageStyle:default', 'imageCrop', 'imageDelete' ],
 		styles: [
 			'side',
 			'alignLeft',
