@@ -1,129 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<title>CKEditor 5 – balloon block editor build – development sample</title>
-	<style>
-		body {
-			margin: 20px auto;
-		}
+  <meta charset="utf-8">
+  <title>CKEditor 5 – balloon block editor build – development sample</title>
+  <style>
+    body {
+      margin: 20px auto;
+    }
 
-		h1 {
-			max-width: 870px;
-			margin: 1em auto;
-		}
-	</style>
+    h1 {
+      max-width: 870px;
+      margin: 1em auto;
+    }
+  </style>
 </head>
 <body>
 
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
 <div id="editor">
-	<h2>Sample</h2>
+  <h2>Sample</h2>
 
-	<p>This is an instance of the <a href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/overview.html#balloon-editor">balloon block editor build</a>.</p>
+  <p>This is an instance of the <a href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/overview.html#balloon-editor">balloon block editor build</a>.</p>
 
-	<figure class="image">
-		<img src="../tests/manual/sample.jpg" alt="Autumn fields" />
-	</figure>
+  <figure class="image">
+    <img src="../tests/manual/sample.jpg" alt="Autumn fields" />
+  </figure>
 
-	<p>You can use this sample to validate whether your <a href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/development/custom-builds.html">custom build</a> works fine.</p>
+  <p>You can use this sample to validate whether your <a href="https://ckeditor.com/docs/ckeditor5/latest/builds/guides/development/custom-builds.html">custom build</a> works fine.</p>
 </div>
 
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
 
 <script>
-	BalloonEditor.create( document.querySelector( '#editor' ) ).then( editor => {
-			window.editor = editor;
-			window.env = BalloonEditor.utils.env;
-			console.clear();
-			console.log(window.editor.ui.componentFactory._components);
-			window.editor.ui.componentFactory._components.get('gallery').callback().on('change:galleryIsOn', (p1, p2, p3) => {
-				console.log( 'gallery');
-				console.log( p1);
-				console.log( p2);
-				console.log( p3);
-			});
-			window.editor.ui.componentFactory._components.get('imagedelete').callback().on('change:deleteIsOn', (p1, p2, p3) => {
-				console.log( 'delete');
-				console.log( p1);
-				console.log( p2);
-				console.log( p3);
-			});
-			window.editor.ui.componentFactory._components.get('imagecrop').callback().on('change:cropIsOn', (p1, p2, p3) => {
-				console.log( 'crop');
-				BalloonEditor.utils.fetchLocalImage(editor.model.document.selection.getSelectedElement())
-					.then((data) => {
-						console.log(data)
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			});
-			editor.editing.view.document.on( 'keyup', (evInfo, event) => {
-				console.log( 'yes we can! enter', editor.model.document.selection.getSelectedElement() );
-			});
-			editor.editing.view.document.on( 'click', (p1, p2, p3) => {
-				console.log( 'yes we can! click', editor.model.document.selection.getSelectedElement() );
-			});
 
-
-			editor.model.schema.extend( 'image', {
-				allowAttributes: 'data-uri'
-			} );
-			editor.conversion.for( 'upcast' ).attributeToAttribute( {
-				view: 'data-uri',
-				model: 'data-uri'
-			} );
-			editor.conversion.for( 'downcast' ).add( dispatcher => {
-				dispatcher.on( 'attribute:data-uri:image', ( evt, data, conversionApi ) => {
-					if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
-						return;
-					}
-					domFigure.style.display = 'none';
-
-					// Make sure this line will never be removed during minification for having "no effect".
-					domFigure._ckHack = domFigure.offsetHeight;
-
-					domFigure.style.display = originalDisplay;
+	BalloonEditor.create( document.querySelector( '#editor' )).then( editor => {
+		window.editor = editor;
+		window.env = BalloonEditor.utils.env;
+		console.clear();
+		console.log( window.editor.ui.componentFactory._components );
+		window.editor.ui.componentFactory._components.get( 'gallery' ).callback().on( 'change:galleryIsOn', ( p1, p2, p3 ) => {
+			console.log( 'gallery' );
+			console.log( p1 );
+			console.log( p2 );
+			console.log( p3 );
+		} );
+		window.editor.ui.componentFactory._components.get( 'imagedelete' ).callback().on( 'change:deleteIsOn', ( p1, p2, p3 ) => {
+			console.log( 'delete' );
+			console.log( p1 );
+			console.log( p2 );
+			console.log( p3 );
+		} );
+		window.editor.ui.componentFactory._components.get( 'imagecrop' ).callback().on( 'change:cropIsOn', ( p1, p2, p3 ) => {
+			console.log( 'crop' );
+			BalloonEditor.utils.fetchLocalImage( editor.model.document.selection.getSelectedElement() )
+				.then( ( data ) => {
+					console.log( data );
+				} )
+				.catch( ( err ) => {
+					console.log( err );
 				} );
-
-					const viewWriter = conversionApi.writer;
-					const figure = conversionApi.mapper.toViewElement( data.item );
-					const img = figure.getChild( 0 );
-
-					if ( data.attributeNewValue !== null ) {
-						viewWriter.setAttribute( 'data-uri', data.attributeNewValue, img );
-					} else {
-						viewWriter.removeAttribute( 'data-uri', img );
+		} );
+		editor.editing.view.document.on( 'delete', ( evInfo, event ) => {
+			console.log( 'yes we can! before', editor.model.document.selection.getSelectedElement() );
+		} );
+		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
+			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
+				editor.model.change( writer => {
+					const carretPosition = editor.model.document.selection.getLastPosition();
+					if (carretPosition.nodeAfter && carretPosition.nodeAfter.name !== 'paragraph') {
+						const pElement = writer.createElement( 'paragraph' );
+						writer.insert( pElement, editor.model.document.selection.getLastPosition() );
 					}
 				} );
 			} );
-			editor.model.schema.extend( 'image', {
-				allowAttributes: 'data-src'
-			} );
-			editor.conversion.for( 'upcast' ).attributeToAttribute( {
-				view: 'data-src',
-				model: 'data-src'
-			} );
-			editor.conversion.for( 'downcast' ).add( dispatcher => {
-				dispatcher.on( 'attribute:data-src:image', ( evt, data, conversionApi ) => {
-					if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
-						return;
-					}
-
-					const viewWriter = conversionApi.writer;
-					const figure = conversionApi.mapper.toViewElement( data.item );
-					const img = figure.getChild( 0 );
-
-					if ( data.attributeNewValue !== null ) {
-						viewWriter.setAttribute( 'data-src', data.attributeNewValue, img );
-					} else {
-						viewWriter.removeAttribute( 'data-src', img );
-					}
-				} );
-			} )
+		} );
+	} )
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );
 		} );

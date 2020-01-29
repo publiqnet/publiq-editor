@@ -22,11 +22,15 @@ export default class ImageDeleteCommand extends Command {
 	 *
 	 * @fires execute
 	 */
-	execute( ) {
+	execute() {
 		const model = this.editor.model;
 		const imageElement = model.document.selection.getSelectedElement();
 		this.value = { img: imageElement, date: new Date().getTime() };
 		model.change( writer => {
+			const nextElement = imageElement.nextSibling;
+			if ( nextElement && ( nextElement.name === 'paragraph' && nextElement.isEmpty ) ) {
+				writer.remove( imageElement.nextSibling );
+			}
 			writer.remove( imageElement );
 		} );
 	}

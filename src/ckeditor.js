@@ -37,6 +37,10 @@ import ImageDeletePlugin from './custom/plugins/image-delete.plugin';
 import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
 import './custom/builtin-class-customizations';
 import '../theme/theme.scss';
+import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
+import largeGrid from './custom/assets/icons/Large Grid.svg';
+import middleGrid from './custom/assets/icons/Middle grid.svg';
+import smallGrid from './custom/assets/icons/Small grid.svg';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -92,13 +96,15 @@ BalloonEditor.defaultConfig = {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
 		},
-		toolbar: [ 'imageStyle:alignCenter', 'imageStyle:full', 'imageCrop', 'imageDelete' ],
+		toolbar: [ 'imageStyle:alignCenter', 'imageStyle:grid', 'imageStyle:full', 'imageStyle:default', 'imageCrop', 'imageDelete' ],
 		styles: [
-			'full',
 			'side',
 			'alignLeft',
 			'alignCenter',
-			'alignRight'
+			'alignRight',
+			{ name: 'grid', title: 'Grid size', icon: largeGrid, className: 'grid-size' },
+			{ name: 'full', title: 'Full size', icon: middleGrid, className: 'full-size' },
+			{ name: 'default', title: 'Default size', icon: smallGrid, className: 'default-size' },
 		]
 	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
@@ -106,3 +112,4 @@ BalloonEditor.defaultConfig = {
 };
 BalloonEditor.utils = {};
 BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
+BalloonEditor.utils.insertImage = insertImage;
