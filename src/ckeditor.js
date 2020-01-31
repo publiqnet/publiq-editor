@@ -41,6 +41,7 @@ import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import largeGrid from './custom/assets/icons/Large Grid.svg';
 import middleGrid from './custom/assets/icons/Middle grid.svg';
 import smallGrid from './custom/assets/icons/Small grid.svg';
+import BeforeImgInsert from './custom/plugins/before-image-insert.plugin';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -73,7 +74,8 @@ BalloonEditor.builtinPlugins = [
 	TableToolbar,
 	ImageGalleryPlugin,
 	ImageCropPlugin,
-	ImageDeletePlugin
+	ImageDeletePlugin,
+	BeforeImgInsert
 ];
 
 // Editor configuration.
