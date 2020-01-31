@@ -79,7 +79,7 @@ export default class SimpleUploadAdapterCustom extends Plugin {
 		}
 
 		this.editor.plugins.get( FileRepository ).createUploadAdapter = loader => {
-			return new CustomUploadAdapter( loader, options );
+			return new CustomUploadAdapter( loader, options, this.editor );
 		};
 	}
 }
@@ -97,7 +97,7 @@ class CustomUploadAdapter {
 	 * @param {module:upload/filerepository~FileLoader} loader
 	 * @param {module:upload/adapters/simpleuploadadapter~SimpleUploadConfig} options
 	 */
-	constructor( loader, options ) {
+	constructor( loader, options, editor ) {
 		/**
 		 * FileLoader instance to use during the upload.
 		 *
@@ -111,6 +111,8 @@ class CustomUploadAdapter {
 		 * @member {module:upload/adapters/simpleuploadadapter~SimpleUploadConfig} #options
 		 */
 		this.options = options;
+
+		this.editor = editor;
 	}
 
 	/**
@@ -174,7 +176,9 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-			resolve( response.url ? { default: response.url, uri: response.uri, link: response.link } : response.urls );
+			const attributes = { default: response.url, uri: response.uri, link: response.link };
+			this.editor.execute( 'beforeImageInsert', attributes );
+			resolve( response.url ? attributes : response.urls );
 		} );
 
 		// Upload progress when it is supported.
