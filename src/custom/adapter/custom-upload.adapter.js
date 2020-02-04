@@ -176,9 +176,21 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-			const attributes = { default: response.url, uri: response.uri, link: response.link };
-			this.editor.execute( 'beforeImageInsert', attributes );
-			resolve( response.url ? attributes : response.urls );
+
+			const image = new Image(); // eslint-disable-line
+			image.src = URL.createObjectURL( file ); // eslint-disable-line
+			image.onload = () => {
+				const attributes = {
+					default: response.url,
+					uri: response.uri,
+					link: response.link,
+					width: image.naturalWidth,
+					height: image.naturalHeight,
+					size: getImageSizeName( image.naturalWidth )
+				};
+				this.editor.execute( 'beforeImageInsert', attributes );
+				resolve( response.url ? attributes : response.urls );
+			};
 		} );
 
 		// Upload progress when it is supported.
@@ -215,6 +227,27 @@ class CustomUploadAdapter {
 		// Send the request.
 		this.xhr.send( data );
 	}
+}
+
+function getImageSizeName( width = 0 ) {
+	if ( width >= 1440 ) {
+		return {
+			name: 'fullsize',
+			alias: '_full'
+		};
+	} else if ( width >= 1310 ) {
+		return {
+			name: 'conatinersize',
+			alias: '_container'
+		};
+	} else if ( width >= 870 ) {
+		return {
+			name: 'gridsize',
+			alias: '_grid'
+		};
+	}
+
+	return { name: null, alias: null };
 }
 
 /**

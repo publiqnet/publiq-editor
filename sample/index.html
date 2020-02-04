@@ -7,7 +7,6 @@
     body {
       margin: 20px auto;
     }
-
     h1 {
       max-width: 870px;
       margin: 1em auto;
@@ -15,69 +14,211 @@
   </style>
 </head>
 <body>
-
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
-
 <div id="editor">
-
 </div>
-
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
-
 <script>
 
-	BalloonEditor.create( document.querySelector( '#editor' )).then( editor => {
-		window.editor = editor;
-		window.env = BalloonEditor.utils.env;
-		console.clear();
-		console.log( window.editor.ui.componentFactory._components );
-		window.editor.ui.componentFactory._components.get( 'gallery' ).callback().on( 'change:galleryIsOn', ( p1, p2, p3 ) => {
-			console.log( 'gallery' );
-			console.log( p1 );
-			console.log( p2 );
-			console.log( p3 );
-		} );
-		window.editor.ui.componentFactory._components.get( 'imagedelete' ).callback().on( 'change:deleteIsOn', ( p1, p2, p3 ) => {
-			console.log( 'delete' );
-		} );
-		window.editor.ui.componentFactory._components.get( 'imagecrop' ).callback().on( 'change:cropIsOn', ( p1, p2, p3 ) => {
-			console.log( 'crop' );
-			BalloonEditor.utils.fetchLocalImage( editor.model.document.selection.getSelectedElement() )
-				.then( ( data ) => {
-					console.log( data );
-				} )
-				.catch( ( err ) => {
-					console.log( err );
-				} );
-		} );
-		editor.editing.view.document.on( 'delete', ( evInfo, event ) => {
-			console.log( 'yes we can! before', event );
-		} );
-		editor.editing.view.document.on( 'imageLoaded', ( evInfo, event, p3 ) => {
-		} );
+  BalloonEditor.create( document.querySelector( '#editor' ) ).then( editor => {
+    window.editor = editor;
+    window.env = BalloonEditor.utils.env;
+    console.log( window.editor.ui.componentFactory._components );
+    window.editor.ui.componentFactory._components.get( 'gallery' ).callback().on( 'change:galleryIsOn', ( p1, p2, p3 ) => {
+      console.log( 'gallery' );
+      console.log( p1 );
+      console.log( p2 );
+      console.log( p3 );
+    } );
+    window.editor.ui.componentFactory._components.get( 'imagedelete' ).callback().on( 'change:deleteIsOn', ( p1, p2, p3 ) => {
+      console.log( 'delete' );
+    } );
+    window.editor.ui.componentFactory._components.get( 'imagecrop' ).callback().on( 'change:cropIsOn', ( p1, p2, p3 ) => {
+      console.log( 'crop' );
+      BalloonEditor.utils.fetchLocalImage( editor.model.document.selection.getSelectedElement() )
+        .then( ( data ) => {
+          console.log( data );
+        } )
+        .catch( ( err ) => {
+          console.log( err );
+        } );
+    } );
+    editor.editing.view.document.on( 'delete', ( evInfo, event ) => {
+    } );
+    editor.editing.view.document.on( 'click', ( evInfo, event ) => {
+      if ( event.domTarget.tagName === 'IMG' ) {
+        toggleSizeButtons(event.domTarget.getAttribute('data-size'));
+        setImageSizeIfNeeded(event.domTarget, event.domTarget.getAttribute('data-size'));
+      }
+    } );
+    editor.editing.view.document.on( 'imageLoaded', ( evInfo, event, p3 ) => {
 
-	  editor.ui.componentFactory._components.get('beforeimginsert').callback()
-		  .on('change:beforeInsert', (p1, p2, p3) => {
-		  console.log( 'yes we can! beforeInsert', p1, p2, );
-		  });
+    } );
+    editor.ui.componentFactory._components.get( 'beforeimginsert' ).callback()
+      .on( 'change:beforeInsert', ( evInfo, event, attributes ) => {
 
-		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
-			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
-				editor.model.change( writer => {
-					const carretPosition = editor.model.document.selection.getLastPosition();
-					if (carretPosition.nodeAfter && carretPosition.nodeAfter.name !== 'paragraph') {
-						const pElement = writer.createElement( 'paragraph' );
-						writer.insert( pElement, editor.model.document.selection.getLastPosition() );
-					}
-				} );
-			} );
-		} );
-	} )
-		.catch( error => {
-			console.error( 'There was a problem initializing the editor.', error );
-		} );
+      } );
+    editor.model.schema.extend( 'image', {
+      allowAttributes: ['data-uri', 'data-link', 'data-natural-height', 'data-natural-width', 'data-size']
+    } );
+    // data-link
+    editor.conversion.for( 'upcast' ).attributeToAttribute( {
+      view: 'data-link',
+      model: 'data-link'
+    } );
+    editor.conversion.for( 'downcast' ).add( dispatcher => {
+      dispatcher.on( 'attribute:data-link:image', ( evt, data, conversionApi ) => {
+        if (!conversionApi.consumable.consume( data.item, evt.name )) {
+          return;
+        }
+        const viewWriter = conversionApi.writer;
+        const figure = conversionApi.mapper.toViewElement( data.item );
+        const img = figure.getChild( 0 );
+        if (data.attributeNewValue !== null) {
+          viewWriter.setAttribute( 'data-link', data.attributeNewValue, img );
+        } else {
+          viewWriter.removeAttribute( 'data-link', img );
+        }
+      } );
+    } );
+
+    editor.conversion.for( 'upcast' ).attributeToAttribute( {
+      view: 'data-natural-height',
+      model: 'data-natural-height'
+    } );
+    editor.conversion.for( 'downcast' ).add( dispatcher => {
+      dispatcher.on( 'attribute:data-natural-height:image', ( evt, data, conversionApi ) => {
+        if (!conversionApi.consumable.consume( data.item, evt.name )) {
+          return;
+        }
+        const viewWriter = conversionApi.writer;
+        const figure = conversionApi.mapper.toViewElement( data.item );
+        const img = figure.getChild( 0 );
+        if (data.attributeNewValue !== null) {
+          viewWriter.setAttribute( 'data-natural-height', data.attributeNewValue, img );
+        } else {
+          viewWriter.removeAttribute( 'data-natural-height', img );
+        }
+      } );
+    } );
+
+    editor.conversion.for( 'upcast' ).attributeToAttribute( {
+      view: 'data-natural-width',
+      model: 'data-natural-width'
+    } );
+    editor.conversion.for( 'downcast' ).add( dispatcher => {
+      dispatcher.on( 'attribute:data-natural-width:image', ( evt, data, conversionApi ) => {
+        if (!conversionApi.consumable.consume( data.item, evt.name )) {
+          return;
+        }
+        const viewWriter = conversionApi.writer;
+        const figure = conversionApi.mapper.toViewElement( data.item );
+        const img = figure.getChild( 0 );
+        if (data.attributeNewValue !== null) {
+          viewWriter.setAttribute( 'data-natural-width', data.attributeNewValue, img );
+        } else {
+          viewWriter.removeAttribute( 'data-natural-width', img );
+        }
+      } );
+    } );
+
+    editor.conversion.for( 'upcast' ).attributeToAttribute( {
+      view: 'data-size',
+      model: 'data-size'
+    } );
+    editor.conversion.for( 'downcast' ).add( dispatcher => {
+      dispatcher.on( 'attribute:data-size:image', ( evt, data, conversionApi ) => {
+        if (!conversionApi.consumable.consume( data.item, evt.name )) {
+          return;
+        }
+        const viewWriter = conversionApi.writer;
+        const figure = conversionApi.mapper.toViewElement( data.item );
+        const img = figure.getChild( 0 );
+        if (data.attributeNewValue !== null) {
+          viewWriter.setAttribute( 'data-size', data.attributeNewValue, img );
+        } else {
+          viewWriter.removeAttribute( 'data-size', img );
+        }
+      } );
+    } );
+
+    editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
+      loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
+        editor.model.change( writer => {
+          const carretPosition = editor.model.document.selection.getLastPosition();
+          if (carretPosition.nodeAfter && carretPosition.nodeAfter.name !== 'paragraph') {
+            const pElement = writer.createElement( 'paragraph' );
+            writer.insert( pElement, editor.model.document.selection.getLastPosition() );
+          }
+        } );
+      } );
+    } );
+  } )
+    .catch( error => {
+      console.error( 'There was a problem initializing the editor.', error );
+    } );
+
+  function toggleSizeButtons(size = 'defaultSize') {
+    const $buttonFullsize = document.querySelector('[data-size-toggler="fullsize"]').parentNode.parentNode;
+    const $buttonContainersize = document.querySelector('[data-size-toggler="containersize"]').parentNode.parentNode;
+    const $buttonGridsize = document.querySelector('[data-size-toggler="gridsize"]').parentNode.parentNode;
+
+    switch ( size ) {
+      case 'fullsize':
+        $buttonFullsize.classList.remove('ck-disabled');
+        $buttonContainersize.classList.remove('ck-disabled');
+        $buttonGridsize.classList.remove('ck-disabled');
+
+        $buttonFullsize.removeAttribute('disabled');
+        $buttonContainersize.removeAttribute('disabled');
+        $buttonGridsize.removeAttribute('disabled');
+        break;
+
+      case 'containersize':
+        $buttonFullsize.classList.add('ck-disabled');
+        $buttonContainersize.classList.remove('ck-disabled');
+        $buttonGridsize.classList.remove('ck-disabled');
+
+        $buttonFullsize.setAttribute('disabled', true);
+        $buttonContainersize.removeAttribute('disabled');
+        $buttonGridsize.removeAttribute('disabled');
+        break;
+
+      case 'gridsize':
+        $buttonFullsize.classList.add('ck-disabled');
+        $buttonContainersize.classList.add('ck-disabled');
+        $buttonGridsize.classList.remove('ck-disabled');
+
+        $buttonFullsize.setAttribute('disabled', true);
+        $buttonContainersize.setAttribute('disabled', true);
+        $buttonGridsize.removeAttribute('disabled');
+        break;
+
+      default:
+        $buttonFullsize.classList.add('ck-disabled');
+        $buttonContainersize.classList.add('ck-disabled');
+        $buttonGridsize.classList.add('ck-disabled');
+
+        $buttonFullsize.setAttribute('disabled', true);
+        $buttonContainersize.setAttribute('disabled', true);
+        $buttonGridsize.setAttribute('disabled', true);
+        break;
+    }
+  }
+
+  function setImageSizeIfNeeded(image, size) {
+    let parentClassList = image.parentNode.classList;
+
+    if ( parentClassList.contains('fullsize-image') ||
+         parentClassList.contains('containersize-image') ||
+         parentClassList.contains('gridsize-image') ||
+         parentClassList.contains('defaultsize-image') ) {
+      return;
+    }
+
+    parentClassList.add(size + '-image');
+  }
 </script>
-
 </body>
 </html>
