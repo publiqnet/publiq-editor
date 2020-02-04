@@ -1,7 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import deleteIcon from '../assets/icons/Delete.svg';
-import ImageDeleteCommand from '../commands/image-delete.command';
 
 /**
  *
@@ -21,10 +20,9 @@ export default class ImageDeletePlugin extends Plugin {
 				deleteIsOn: false,
 				isOn: false
 			} );
-			editor.commands.add( 'imageDelete', new ImageDeleteCommand( editor ) );
-			const command = editor.commands.get( 'imageDelete' );
+			const command = editor.commands.get( 'delete' );
 			view.bind( 'deleteIsOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
-			view.on( 'execute', () => editor.execute( 'imageDelete' ) );
+			view.on( 'execute', () => editor.execute( 'delete' ) );
 			return view;
 		} );
 	}

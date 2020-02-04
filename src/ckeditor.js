@@ -42,6 +42,7 @@ import largeGrid from './custom/assets/icons/Large Grid.svg';
 import middleGrid from './custom/assets/icons/Middle grid.svg';
 import smallGrid from './custom/assets/icons/Small grid.svg';
 import BeforeImgInsert from './custom/plugins/before-image-insert.plugin';
+import BeforeImgDelete from './custom/plugins/before-image-delete.plugin';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -75,7 +76,8 @@ BalloonEditor.builtinPlugins = [
 	ImageGalleryPlugin,
 	ImageCropPlugin,
 	ImageDeletePlugin,
-	BeforeImgInsert
+	BeforeImgInsert,
+	BeforeImgDelete
 ];
 
 // Editor configuration.
@@ -118,3 +120,52 @@ BalloonEditor.defaultConfig = {
 BalloonEditor.utils = {};
 BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
 BalloonEditor.utils.insertImage = insertImage;
+BalloonEditor.utils.toggleSizeButtons = toggleSizeButtons;
+
+export function toggleSizeButtons( size = 'defaultSize' ) {
+	const $buttonFullsize = document.querySelector( '[data-size-toggler="fullsize"]' ).parentNode.parentNode; // eslint-disable-line
+	const $buttonContainersize = document.querySelector( '[data-size-toggler="containersize"]' ).parentNode.parentNode; // eslint-disable-line
+	const $buttonGridsize = document.querySelector( '[data-size-toggler="gridsize"]' ).parentNode.parentNode; // eslint-disable-line
+
+	switch ( size ) {
+		case 'fullsize':
+			$buttonFullsize.classList.remove( 'ck-disabled' );
+			$buttonContainersize.classList.remove( 'ck-disabled' );
+			$buttonGridsize.classList.remove( 'ck-disabled' );
+
+			$buttonFullsize.removeAttribute( 'disabled' );
+			$buttonContainersize.removeAttribute( 'disabled' );
+			$buttonGridsize.removeAttribute( 'disabled' );
+			break;
+
+		case 'containersize':
+			$buttonFullsize.classList.add( 'ck-disabled' );
+			$buttonContainersize.classList.remove( 'ck-disabled' );
+			$buttonGridsize.classList.remove( 'ck-disabled' );
+
+			$buttonFullsize.setAttribute( 'disabled', true );
+			$buttonContainersize.removeAttribute( 'disabled' );
+			$buttonGridsize.removeAttribute( 'disabled' );
+			break;
+
+		case 'gridsize':
+			$buttonFullsize.classList.add( 'ck-disabled' );
+			$buttonContainersize.classList.add( 'ck-disabled' );
+			$buttonGridsize.classList.remove( 'ck-disabled' );
+
+			$buttonFullsize.setAttribute( 'disabled', true );
+			$buttonContainersize.setAttribute( 'disabled', true );
+			$buttonGridsize.removeAttribute( 'disabled' );
+			break;
+
+		default:
+			$buttonFullsize.classList.add( 'ck-disabled' );
+			$buttonContainersize.classList.add( 'ck-disabled' );
+			$buttonGridsize.classList.add( 'ck-disabled' );
+
+			$buttonFullsize.setAttribute( 'disabled', true );
+			$buttonContainersize.setAttribute( 'disabled', true );
+			$buttonGridsize.setAttribute( 'disabled', true );
+			break;
+	}
+}
