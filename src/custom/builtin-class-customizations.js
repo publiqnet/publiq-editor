@@ -5,6 +5,7 @@ import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect';
 import DeleteCommand from '@ckeditor/ckeditor5-typing/src/deletecommand';
 import count from '@ckeditor/ckeditor5-utils/src/count';
+import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 	const editor = this.editor;
@@ -64,7 +65,11 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 					uploadStatus: 'complete',
 					src: data.default,
 					'data-uri': data.uri,
-					'data-link': data.link
+					'data-link': 'data.link',
+					'data-natural-width': data.width,
+					'data-natural-height': data.height,
+					'data-size': data.size.name,
+					'imageStyle': data.size.alias
 				}, imageElement );
 				this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
 			} );
@@ -185,4 +190,18 @@ DeleteCommand.prototype.execute = function( options = {} ) {
 		this._buffer.input( changeCount );
 		this._buffer.unlock();
 	} );
+};
+BlockToolbar.prototype._createPanelView = function() {
+	const editor = this.editor;
+	const panelView = new BalloonPanelView( editor.locale );
+	panelView.content.add( this.toolbarView );
+	panelView.class = 'ck-toolbar-container ck-toolbar-circular';
+	editor.ui.view.body.add( panelView );
+	editor.ui.focusTracker.add( panelView.element );
+	// Close #panelView on `Esc` press.
+	this.toolbarView.keystrokes.set( 'Esc', ( evt, cancel ) => {
+		this._hidePanel( true );
+		cancel();
+	} );
+	return panelView;
 };

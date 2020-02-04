@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="24px" height="24px" id="fullsize-button" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
     <title>Full Width</title>
     <desc>Created with Sketch.</desc>
-    <g id="Full-Width" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Full-Width" data-size-toggler="gridsize" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Asset-5">
             <rect id="Rectangle" x="0" y="0" width="24" height="24"></rect>
             <path d="M18,17.06 C18.4142136,17.06 18.75,17.3957864 18.75,17.81 C18.75,18.1896958 18.4678461,18.503491 18.1017706,18.5531534 L18,18.56 L6,18.56 C5.58578644,18.56 5.25,18.2242136 5.25,17.81 C5.25,17.4303042 5.53215388,17.116509 5.89822944,17.0668466 L6,17.06 L18,17.06 Z M20,5.44 C20.5522847,5.44 21,5.88771525 21,6.44 L21,14 C21,14.5522847 20.5522847,15 20,15 L4,15 C3.44771525,15 3,14.5522847 3,14 L3,6.44 C3,5.88771525 3.44771525,5.44 4,5.44 L20,5.44 Z" id="Combined-Shape"></path>
