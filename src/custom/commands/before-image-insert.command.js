@@ -23,10 +23,14 @@ export default class BeforeImageInsert extends Command {
 	 * @fires execute
 	 */
 	execute( options ) {
+		const model = this.editor.model;
 		this.value = { ...options };
-		// model.change( writer => {
-		// 	writer.setAttribute( 'data-temp', option, imageElement );
-		// 	writer.removeAttribute( 'data-temp', imageElement );
-		// } );
+		model.change( writer => {
+			const caretPosition = model.document.selection.getLastPosition();
+			if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
+				const pElement = writer.createElement( 'paragraph' );
+				writer.insert( pElement, model.document.selection.getLastPosition() );
+			}
+		} );
 	}
 }

@@ -1,7 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import { isImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 
-export default class ImageDeleteCommand extends Command {
+export default class BeforeImageDelete extends Command {
 	/**
 	 * *
 	 * @readonly
@@ -22,16 +22,14 @@ export default class ImageDeleteCommand extends Command {
 	 *
 	 * @fires execute
 	 */
-	execute() {
+	execute( options ) {
 		const model = this.editor.model;
-		const imageElement = model.document.selection.getSelectedElement();
-		this.value = { img: imageElement, date: new Date().getTime() };
+		this.value = { ...options };
 		model.change( writer => {
-			const nextElement = imageElement.nextSibling;
+			const nextElement = options.img.nextSibling;
 			if ( nextElement && ( nextElement.name === 'paragraph' && nextElement.isEmpty ) ) {
-				writer.remove( imageElement.nextSibling );
+				writer.remove( options.img.nextSibling );
 			}
-			writer.remove( imageElement );
 		} );
 	}
 }

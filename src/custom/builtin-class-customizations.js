@@ -181,12 +181,12 @@ DeleteCommand.prototype.execute = function( options = {} ) {
 				range.getWalker( { singleCharacters: true, ignoreElementEnd: true, shallow: true } )
 			);
 		} );
-		if ( doc.selection.getSelectedElement() && doc.selection.getSelectedElement().name === 'image' ) {
-			this.editor.execute( 'imageDelete' );
-		} else {
-			model.deleteContent( selection, { doNotResetEntireContent } );
-			writer.setSelection( selection );
+		const element = doc.selection.getSelectedElement();
+		if ( element && element.name === 'image' ) {
+			this.editor.execute( 'beforeImageDelete', { img: element, date: new Date().getTime() } );
 		}
+		model.deleteContent( selection, { doNotResetEntireContent } );
+		writer.setSelection( selection );
 		this._buffer.input( changeCount );
 		this._buffer.unlock();
 	} );
