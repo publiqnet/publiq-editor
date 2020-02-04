@@ -27,6 +27,7 @@
   --ck-color-button-on-background: #fff;
   --ck-color-button-on-hover-background: #fff;
   --ck-color-button-on-active-background: #fff;
+  --ck-color-button-on-active-shadow: transparent;
 
   --ck-color-button-default-shadow: 0 3px 7px rgba(43,43,43,.1);
 
@@ -197,6 +198,8 @@
         box-shadow: 0 3px 7px rgba(43,43,43,.1);
         border: 1px solid #dee2e6;
         border-radius: 50%!important;
+
+        &:active { background: #fff; }
       }
     }
 
@@ -216,6 +219,42 @@
 
     &:before, &:after {
       content: none!important;
+    }
+  }
+
+  // &.ck-balloon-panel {
+  //   button.ck-disabled {
+  //     pointer-events: none;
+  //   }
+  // }
+  
+  figure {
+
+    &.fullsize-image {
+      width: 100%;
+      max-width: unset;
+
+      img { width: 100%; }
+    }
+
+    &.containersize-image {
+      width: 100%;
+      max-width: 1310px;
+      // @media (max-width: 960px) {
+      //   width: calc(100% - 15px);
+      // }
+
+      img { width: 100%; }
+
+      @include media-xl { max-width: 970px; }
+      @include media-lg { max-width: 710px; }
+      @include media-md { max-width: 530px; }
+      @include media-sm { max-width: 100%; }
+    }
+
+    &.gridsize-image {
+      max-width: 870px;
+      img { width: 100%; }
     }
   }
 }

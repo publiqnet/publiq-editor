@@ -98,16 +98,19 @@ BalloonEditor.defaultConfig = {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
 		},
-		toolbar: [ 'imageStyle:grid', 'imageStyle:full', 'imageStyle:default', 'imageCrop', 'imageDelete' ],
+		toolbar: [ 'imageStyle:_grid', 'imageStyle:_container', 'imageStyle:_full', 'imageCrop', 'imageDelete' ],
 		styles: [
 			'side',
 			'alignLeft',
 			'alignCenter',
 			'alignRight',
-			{ name: 'grid', title: 'Grid size', icon: largeGrid, className: 'grid-size' },
-			{ name: 'full', title: 'Full size', icon: middleGrid, className: 'full-size' },
-			{ name: 'default', title: 'Default size', icon: smallGrid, className: 'default-size' },
+			{ name: '_grid', title: 'Grid size', icon: largeGrid, className: 'gridsize-image' },
+			{ name: '_container', title: 'Container size', icon: smallGrid, className: 'containersize-image' },
+			{ name: '_full', title: 'Full size', icon: middleGrid, className: 'fullsize-image' },
 		]
+	},
+	simpleUpload: {
+		uploadUrl: 'https://samoo.free.beeceptor.com/test'
 	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en'

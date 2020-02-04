@@ -65,7 +65,11 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 					uploadStatus: 'complete',
 					src: data.default,
 					'data-uri': data.uri,
-					'data-link': data.link
+					'data-link': 'data.link',
+					'data-natural-width': data.width,
+					'data-natural-height': data.height,
+					'data-size': data.size.name,
+					'imageStyle': data.size.alias
 				}, imageElement );
 				this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
 			} );
