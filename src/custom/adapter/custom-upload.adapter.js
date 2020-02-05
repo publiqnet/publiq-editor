@@ -12,6 +12,7 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { attachLinkToDocumentation } from '@ckeditor/ckeditor5-utils/src/ckeditorerror';
 import FileRepository from '@ckeditor/ckeditor5-upload/src/filerepository';
+import { getImageParameters } from '../customizations';
 
 /**
  * The Simple upload adapter allows uploading images to an application running on your server using
@@ -176,21 +177,10 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-
-			const image = new Image(); // eslint-disable-line
-			image.src = URL.createObjectURL( file ); // eslint-disable-line
-			image.onload = () => {
-				const attributes = {
-					default: response.url,
-					uri: response.uri,
-					link: response.link,
-					width: image.naturalWidth,
-					height: image.naturalHeight,
-					size: getImageSizeName( image.naturalWidth )
-				};
-				this.editor.execute( 'beforeImageInsert', attributes );
-				resolve( response.url ? attributes : response.urls );
-			};
+			getImageParameters( response ).then( params => {
+				this.editor.execute( 'beforeImageInsert', params );
+				resolve( response.url ? params : response.urls );
+			} );
 		} );
 
 		// Upload progress when it is supported.
@@ -227,27 +217,6 @@ class CustomUploadAdapter {
 		// Send the request.
 		this.xhr.send( data );
 	}
-}
-
-function getImageSizeName( width = 0 ) {
-	if ( width >= 1440 ) {
-		return {
-			name: 'fullsize',
-			alias: '_full'
-		};
-	} else if ( width >= 1310 ) {
-		return {
-			name: 'conatinersize',
-			alias: '_container'
-		};
-	} else if ( width >= 870 ) {
-		return {
-			name: 'gridsize',
-			alias: '_grid'
-		};
-	}
-
-	return { name: null, alias: null };
 }
 
 /**
