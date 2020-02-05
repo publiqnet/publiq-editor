@@ -44,7 +44,7 @@
 
   p, h2, h3,
   h4, blockquote,
-  ol, ul {
+  ol, ul, .media {
     max-width: 870px;
 
     @include media-xl {
@@ -234,6 +234,10 @@
     &, .ck.ck-toolbar {
       border-radius: 8px!important;
     }
+  }
+
+  .media {
+    margin: 16px auto;
   }
   
   figure {
