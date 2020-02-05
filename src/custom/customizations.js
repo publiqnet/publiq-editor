@@ -244,7 +244,6 @@ export async function getImageParameters( options, file ) {
 			resolve( attributes );
 		};
 	} );
-	URL.revokeObjectURL( url); // eslint-disable-line
 	return await promise;
 }
 
