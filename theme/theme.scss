@@ -32,6 +32,7 @@
   --ck-color-button-default-shadow: 0 3px 7px rgba(43,43,43,.1);
 
   --ck-color-toolbar-background: #fff;
+  --ck-color-base-foreground: #fff;
 }
 
 .ck.ck-content {
@@ -199,8 +200,15 @@
         border: 1px solid #dee2e6;
         border-radius: 50%!important;
 
-        &:active { background: #fff; }
+        &:active {
+          background: #fff;
+          box-shadow: inset 0 2px 2px var(--ck-color-button-default-active-shadow);
+        }
       }
+    }
+    &.ck-toolbar {
+      border-radius: 10px;
+      overflow: hidden;
     }
 
     .ck-dropdown__arrow {
@@ -222,11 +230,11 @@
     }
   }
 
-  // &.ck-balloon-panel {
-  //   button.ck-disabled {
-  //     pointer-events: none;
-  //   }
-  // }
+  &.ck-balloon-panel {
+    &, .ck.ck-toolbar {
+      border-radius: 8px!important;
+    }
+  }
   
   figure {
 

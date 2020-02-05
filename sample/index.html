@@ -93,12 +93,13 @@
 				}
 			} );
 		} );
+		// data-size
 		editor.conversion.for( 'upcast' ).attributeToAttribute( {
-			view: 'natural-height',
-			model: 'natural-height'
+			view: 'data-size',
+			model: 'data-size'
 		} );
 		editor.conversion.for( 'downcast' ).add( dispatcher => {
-			dispatcher.on( 'attribute:natural-height:image', ( evt, data, conversionApi ) => {
+			dispatcher.on( 'attribute:data-size:image', ( evt, data, conversionApi ) => {
 				if (!conversionApi.consumable.consume( data.item, evt.name )) {
 					return;
 				}
@@ -106,9 +107,49 @@
 				const figure = conversionApi.mapper.toViewElement( data.item );
 				const img = figure.getChild( 0 );
 				if (data.attributeNewValue !== null) {
-					viewWriter.setAttribute( 'natural-height', data.attributeNewValue, img );
+					viewWriter.setAttribute( 'data-size', data.attributeNewValue, img );
 				} else {
-					viewWriter.removeAttribute( 'natural-height', img );
+					viewWriter.removeAttribute( 'data-size', img );
+				}
+			} );
+		} );
+		// data-natural-width
+		editor.conversion.for( 'upcast' ).attributeToAttribute( {
+			view: 'data-natural-width',
+			model: 'data-natural-width'
+		} );
+		editor.conversion.for( 'downcast' ).add( dispatcher => {
+			dispatcher.on( 'attribute:data-natural-width:image', ( evt, data, conversionApi ) => {
+				if (!conversionApi.consumable.consume( data.item, evt.name )) {
+					return;
+				}
+				const viewWriter = conversionApi.writer;
+				const figure = conversionApi.mapper.toViewElement( data.item );
+				const img = figure.getChild( 0 );
+				if (data.attributeNewValue !== null) {
+					viewWriter.setAttribute( 'data-natural-width', data.attributeNewValue, img );
+				} else {
+					viewWriter.removeAttribute( 'data-natural-width', img );
+				}
+			} );
+		} );
+		// data-natural-height
+		editor.conversion.for( 'upcast' ).attributeToAttribute( {
+			view: 'data-natural-height',
+			model: 'data-natural-height'
+		} );
+		editor.conversion.for( 'downcast' ).add( dispatcher => {
+			dispatcher.on( 'attribute:data-natural-height:image', ( evt, data, conversionApi ) => {
+				if (!conversionApi.consumable.consume( data.item, evt.name )) {
+					return;
+				}
+				const viewWriter = conversionApi.writer;
+				const figure = conversionApi.mapper.toViewElement( data.item );
+				const img = figure.getChild( 0 );
+				if (data.attributeNewValue !== null) {
+					viewWriter.setAttribute( 'data-natural-height', data.attributeNewValue, img );
+				} else {
+					viewWriter.removeAttribute( 'data-natural-height', img );
 				}
 			} );
 		} );
@@ -129,11 +170,11 @@
 		} );
 
 	function toggleSizeButtons( size = 'defaultSize' ) {
-		const $buttonFullsize = document.querySelector( '[data-size-toggler="fullsize"]' ).parentNode.parentNode;
-		const $buttonContainersize = document.querySelector( '[data-size-toggler="containersize"]' ).parentNode.parentNode;
-		const $buttonGridsize = document.querySelector( '[data-size-toggler="gridsize"]' ).parentNode.parentNode;
+		const $buttonFullsize = document.querySelector( '[data-size-toggler="fullsize"]' ).parentNode.parentNode; // eslint-disable-line
+		const $buttonContainersize = document.querySelector( '[data-size-toggler="containersize"]' ).parentNode.parentNode; // eslint-disable-line
+		const $buttonGridsize = document.querySelector( '[data-size-toggler="gridsize"]' ).parentNode.parentNode; // eslint-disable-line
 
-		switch (size) {
+		switch ( size ) {
 			case 'fullsize':
 				$buttonFullsize.classList.remove( 'ck-disabled' );
 				$buttonContainersize.classList.remove( 'ck-disabled' );
@@ -173,8 +214,8 @@
 				$buttonContainersize.setAttribute( 'disabled', true );
 				$buttonGridsize.setAttribute( 'disabled', true );
 				break;
+			}
 		}
-	}
 </script>
 </body>
 </html>

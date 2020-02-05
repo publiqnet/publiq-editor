@@ -121,4 +121,4 @@ BalloonEditor.utils = {};
 BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
 BalloonEditor.utils.insertImage = insertImage;
 BalloonEditor.utils.toggleSizeButtons = customizations.toggleSizeButtons;
-BalloonEditor.utils.getImageParameters = customizations.getImageParameters;
+BalloonEditor.utils.getImageProperties = customizations.getImageProperties;

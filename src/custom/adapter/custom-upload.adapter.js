@@ -12,7 +12,7 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { attachLinkToDocumentation } from '@ckeditor/ckeditor5-utils/src/ckeditorerror';
 import FileRepository from '@ckeditor/ckeditor5-upload/src/filerepository';
-import { getImageParameters } from '../customizations';
+import { getImageProperties } from '../customizations';
 
 /**
  * The Simple upload adapter allows uploading images to an application running on your server using
@@ -177,8 +177,7 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-			getImageParameters( response ).then( params => {
-				this.editor.execute( 'beforeImageInsert', params );
+			getImageProperties( response, file, this.editor ).then( params => {
 				resolve( response.url ? params : response.urls );
 			} );
 		} );
