@@ -93,6 +93,47 @@
 				}
 			} );
 		} );
+		// data-size
+		editor.conversion.for( 'upcast' ).attributeToAttribute( {
+			view: 'data-size',
+			model: 'data-size'
+		} );
+		editor.conversion.for( 'downcast' ).add( dispatcher => {
+			dispatcher.on( 'attribute:data-size:image', ( evt, data, conversionApi ) => {
+				if (!conversionApi.consumable.consume( data.item, evt.name )) {
+					return;
+				}
+				const viewWriter = conversionApi.writer;
+				const figure = conversionApi.mapper.toViewElement( data.item );
+				const img = figure.getChild( 0 );
+				if (data.attributeNewValue !== null) {
+					viewWriter.setAttribute( 'data-size', data.attributeNewValue, img );
+				} else {
+					viewWriter.removeAttribute( 'data-size', img );
+				}
+			} );
+		} );
+		// data-natural-width
+		editor.conversion.for( 'upcast' ).attributeToAttribute( {
+			view: 'data-natural-width',
+			model: 'data-natural-width'
+		} );
+		editor.conversion.for( 'downcast' ).add( dispatcher => {
+			dispatcher.on( 'attribute:data-natural-width:image', ( evt, data, conversionApi ) => {
+				if (!conversionApi.consumable.consume( data.item, evt.name )) {
+					return;
+				}
+				const viewWriter = conversionApi.writer;
+				const figure = conversionApi.mapper.toViewElement( data.item );
+				const img = figure.getChild( 0 );
+				if (data.attributeNewValue !== null) {
+					viewWriter.setAttribute( 'data-natural-width', data.attributeNewValue, img );
+				} else {
+					viewWriter.removeAttribute( 'data-natural-width', img );
+				}
+			} );
+		} );
+		// data-natural-height
 		editor.conversion.for( 'upcast' ).attributeToAttribute( {
 			view: 'data-natural-height',
 			model: 'data-natural-height'
@@ -127,6 +168,54 @@
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );
 		} );
+
+	function toggleSizeButtons( size = 'defaultSize' ) {
+		const $buttonFullsize = document.querySelector( '[data-size-toggler="fullsize"]' ).parentNode.parentNode; // eslint-disable-line
+		const $buttonContainersize = document.querySelector( '[data-size-toggler="containersize"]' ).parentNode.parentNode; // eslint-disable-line
+		const $buttonGridsize = document.querySelector( '[data-size-toggler="gridsize"]' ).parentNode.parentNode; // eslint-disable-line
+
+		switch ( size ) {
+			case 'fullsize':
+				$buttonFullsize.classList.remove( 'ck-disabled' );
+				$buttonContainersize.classList.remove( 'ck-disabled' );
+				$buttonGridsize.classList.remove( 'ck-disabled' );
+
+				$buttonFullsize.removeAttribute( 'disabled' );
+				$buttonContainersize.removeAttribute( 'disabled' );
+				$buttonGridsize.removeAttribute( 'disabled' );
+				break;
+
+			case 'containersize':
+				$buttonFullsize.classList.add( 'ck-disabled' );
+				$buttonContainersize.classList.remove( 'ck-disabled' );
+				$buttonGridsize.classList.remove( 'ck-disabled' );
+
+				$buttonFullsize.setAttribute( 'disabled', true );
+				$buttonContainersize.removeAttribute( 'disabled' );
+				$buttonGridsize.removeAttribute( 'disabled' );
+				break;
+
+			case 'gridsize':
+				$buttonFullsize.classList.add( 'ck-disabled' );
+				$buttonContainersize.classList.add( 'ck-disabled' );
+				$buttonGridsize.classList.remove( 'ck-disabled' );
+
+				$buttonFullsize.setAttribute( 'disabled', true );
+				$buttonContainersize.setAttribute( 'disabled', true );
+				$buttonGridsize.removeAttribute( 'disabled' );
+				break;
+
+			default:
+				$buttonFullsize.classList.add( 'ck-disabled' );
+				$buttonContainersize.classList.add( 'ck-disabled' );
+				$buttonGridsize.classList.add( 'ck-disabled' );
+
+				$buttonFullsize.setAttribute( 'disabled', true );
+				$buttonContainersize.setAttribute( 'disabled', true );
+				$buttonGridsize.setAttribute( 'disabled', true );
+				break;
+			}
+		}
 </script>
 </body>
 </html>
