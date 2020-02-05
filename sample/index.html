@@ -94,11 +94,11 @@
 			} );
 		} );
 		editor.conversion.for( 'upcast' ).attributeToAttribute( {
-			view: 'natural-height',
-			model: 'natural-height'
+			view: 'data-natural-height',
+			model: 'data-natural-height'
 		} );
 		editor.conversion.for( 'downcast' ).add( dispatcher => {
-			dispatcher.on( 'attribute:natural-height:image', ( evt, data, conversionApi ) => {
+			dispatcher.on( 'attribute:data-natural-height:image', ( evt, data, conversionApi ) => {
 				if (!conversionApi.consumable.consume( data.item, evt.name )) {
 					return;
 				}
@@ -106,9 +106,9 @@
 				const figure = conversionApi.mapper.toViewElement( data.item );
 				const img = figure.getChild( 0 );
 				if (data.attributeNewValue !== null) {
-					viewWriter.setAttribute( 'natural-height', data.attributeNewValue, img );
+					viewWriter.setAttribute( 'data-natural-height', data.attributeNewValue, img );
 				} else {
-					viewWriter.removeAttribute( 'natural-height', img );
+					viewWriter.removeAttribute( 'data-natural-height', img );
 				}
 			} );
 		} );
@@ -127,54 +127,6 @@
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );
 		} );
-
-	function toggleSizeButtons( size = 'defaultSize' ) {
-		const $buttonFullsize = document.querySelector( '[data-size-toggler="fullsize"]' ).parentNode.parentNode;
-		const $buttonContainersize = document.querySelector( '[data-size-toggler="containersize"]' ).parentNode.parentNode;
-		const $buttonGridsize = document.querySelector( '[data-size-toggler="gridsize"]' ).parentNode.parentNode;
-
-		switch (size) {
-			case 'fullsize':
-				$buttonFullsize.classList.remove( 'ck-disabled' );
-				$buttonContainersize.classList.remove( 'ck-disabled' );
-				$buttonGridsize.classList.remove( 'ck-disabled' );
-
-				$buttonFullsize.removeAttribute( 'disabled' );
-				$buttonContainersize.removeAttribute( 'disabled' );
-				$buttonGridsize.removeAttribute( 'disabled' );
-				break;
-
-			case 'containersize':
-				$buttonFullsize.classList.add( 'ck-disabled' );
-				$buttonContainersize.classList.remove( 'ck-disabled' );
-				$buttonGridsize.classList.remove( 'ck-disabled' );
-
-				$buttonFullsize.setAttribute( 'disabled', true );
-				$buttonContainersize.removeAttribute( 'disabled' );
-				$buttonGridsize.removeAttribute( 'disabled' );
-				break;
-
-			case 'gridsize':
-				$buttonFullsize.classList.add( 'ck-disabled' );
-				$buttonContainersize.classList.add( 'ck-disabled' );
-				$buttonGridsize.classList.remove( 'ck-disabled' );
-
-				$buttonFullsize.setAttribute( 'disabled', true );
-				$buttonContainersize.setAttribute( 'disabled', true );
-				$buttonGridsize.removeAttribute( 'disabled' );
-				break;
-
-			default:
-				$buttonFullsize.classList.add( 'ck-disabled' );
-				$buttonContainersize.classList.add( 'ck-disabled' );
-				$buttonGridsize.classList.add( 'ck-disabled' );
-
-				$buttonFullsize.setAttribute( 'disabled', true );
-				$buttonContainersize.setAttribute( 'disabled', true );
-				$buttonGridsize.setAttribute( 'disabled', true );
-				break;
-		}
-	}
 </script>
 </body>
 </html>

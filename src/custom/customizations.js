@@ -65,7 +65,7 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 					uploadStatus: 'complete',
 					src: data.default,
 					'data-uri': data.uri,
-					'data-link': 'data.link',
+					'data-link': data.link,
 					'data-natural-width': data.width,
 					'data-natural-height': data.height,
 					'data-size': data.size.name,
@@ -230,7 +230,8 @@ export function getImageSizeName( width = 0 ) {
 export async function getImageParameters( options, file ) {
 	const promise = new Promise( ( resolve, reject ) => { // eslint-disable-line
 		const image = new Image(); // eslint-disable-line
-		image.src = URL.createObjectURL( file ); // eslint-disable-line
+		const url = URL.createObjectURL( file ); // eslint-disable-line
+		image.src = url;
 		image.onload = () => {
 			const attributes = {
 				default: options.url,
@@ -243,6 +244,7 @@ export async function getImageParameters( options, file ) {
 			resolve( attributes );
 		};
 	} );
+	URL.revokeObjectURL( url); // eslint-disable-line
 	return await promise;
 }
 
