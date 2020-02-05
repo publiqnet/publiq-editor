@@ -227,7 +227,7 @@ export function getImageSizeName( width = 0 ) {
 	return { name: null, alias: null };
 }
 
-export async function getImageParameters( options, file ) {
+export async function getImageProperties( options, file, editor ) {
 	const promise = new Promise( ( resolve, reject ) => { // eslint-disable-line
 		const image = new Image(); // eslint-disable-line
 		const url = URL.createObjectURL( file ); // eslint-disable-line
@@ -241,6 +241,7 @@ export async function getImageParameters( options, file ) {
 				height: image.naturalHeight,
 				size: getImageSizeName( image.naturalWidth )
 			};
+			editor.execute( 'beforeImageInsert', attributes );
 			resolve( attributes );
 		};
 	} );
