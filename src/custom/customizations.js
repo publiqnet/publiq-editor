@@ -227,7 +227,7 @@ export function getImageSizeName( width = 0 ) {
 	return { name: null, alias: null };
 }
 
-export async function getImageParameters( options ) {
+export async function getImageParameters( options, file ) {
 	const promise = new Promise( ( resolve, reject ) => { // eslint-disable-line
 		const image = new Image(); // eslint-disable-line
 		image.src = URL.createObjectURL( file ); // eslint-disable-line

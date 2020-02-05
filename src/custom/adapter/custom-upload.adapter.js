@@ -177,7 +177,7 @@ class CustomUploadAdapter {
 			if ( !response || response.error ) {
 				return reject( response && response.error && response.error.message ? response.error.message : genericErrorText );
 			}
-			getImageParameters( response ).then( params => {
+			getImageParameters( response, file ).then( params => {
 				this.editor.execute( 'beforeImageInsert', params );
 				resolve( response.url ? params : response.urls );
 			} );
