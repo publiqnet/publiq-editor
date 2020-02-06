@@ -239,6 +239,10 @@
   .media {
     margin: 16px auto;
   }
+
+  .ck-placeholder:not(p):before {
+    content: none;
+  }
   
   figure {
 
