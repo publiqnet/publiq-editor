@@ -57,9 +57,9 @@
 			console.log( 'yes we can! clipboardInput' );
 		} );
 	  editor.editing.view.document.on( 'click', ( evInfo, event ) => {
-		  if ( event.domTarget.tagName === 'IMG' ) {
-			  toggleSizeButtons(event.domTarget.naturalWidth);
-		  }
+		  // if ( event.domTarget.tagName === 'IMG' ) {
+			//   toggleSizeButtons(event.domTarget.naturalWidth);
+		  // }
 	  } );
 
 		editor.ui.componentFactory._components.get( 'beforeimginsert' ).callback()
