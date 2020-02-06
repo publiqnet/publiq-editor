@@ -6,6 +6,7 @@ import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect';
 import DeleteCommand from '@ckeditor/ckeditor5-typing/src/deletecommand';
 import count from '@ckeditor/ckeditor5-utils/src/count';
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
+import WidgetToolbarRepository from '@ckeditor/ckeditor5-widget/src/widgettoolbarrepository';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 	const editor = this.editor;
@@ -202,6 +203,59 @@ BlockToolbar.prototype._createPanelView = function() {
 	} );
 	return panelView;
 };
+
+WidgetToolbarRepository.prototype._showToolbar = function( toolbarDefinition, relatedElement ) {
+	if ( this._isToolbarVisible( toolbarDefinition ) ) {
+		repositionContextualBalloon( this.editor, relatedElement );
+	} else if ( !this._isToolbarInBalloon( toolbarDefinition ) ) {
+		this._balloon.add( {
+			view: toolbarDefinition.view,
+			position: getBalloonPositionData( this.editor, relatedElement ),
+			balloonClassName: toolbarDefinition.balloonClassName,
+		} );
+
+		// Update toolbar position each time stack with toolbar view is switched to visible.
+		// This is in a case target element has changed when toolbar was in invisible stack
+		// e.g. target image was wrapped by a block quote.
+		// See https://github.com/ckeditor/ckeditor5-widget/issues/92.
+		this.listenTo( this._balloon, 'change:visibleView', () => {
+			for ( const definition of this._toolbarDefinitions.values() ) {
+				if ( this._isToolbarVisible( definition ) ) {
+					const relatedElement = definition.getRelatedElement( this.editor.editing.view.document.selection );
+					repositionContextualBalloon( this.editor, relatedElement );
+				}
+			}
+		} );
+	}
+	const view = this.editor.editing.view;
+	const element = view.domConverter.mapViewToDom( view.document.selection.getSelectedElement() );
+	const img = element && element.querySelector( 'img' );
+	toggleSizeButtons( img && img.naturalWidth );
+};
+
+function repositionContextualBalloon( editor, relatedElement ) {
+	const balloon = editor.plugins.get( 'ContextualBalloon' );
+	const position = getBalloonPositionData( editor, relatedElement );
+
+	balloon.updatePosition( position );
+}
+
+function getBalloonPositionData( editor, relatedElement ) {
+	const editingView = editor.editing.view;
+	const defaultPositions = BalloonPanelView.defaultPositions;
+
+	return {
+		target: editingView.domConverter.mapViewToDom( relatedElement ),
+		positions: [
+			defaultPositions.northArrowSouth,
+			defaultPositions.northArrowSouthWest,
+			defaultPositions.northArrowSouthEast,
+			defaultPositions.southArrowNorth,
+			defaultPositions.southArrowNorthWest,
+			defaultPositions.southArrowNorthEast
+		]
+	};
+}
 
 export function getImageSizeName( width = 0 ) {
 	if ( width >= 1440 ) {
