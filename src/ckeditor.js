@@ -111,9 +111,6 @@ BalloonEditor.defaultConfig = {
 			{ name: '_full', title: 'Full size', icon: middleGrid, className: 'fullsize-image' },
 		]
 	},
-	simpleUpload: {
-		uploadUrl: 'https://samoo.free.beeceptor.com/test'
-	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en'
 };
