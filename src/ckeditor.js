@@ -112,6 +112,9 @@ BalloonEditor.defaultConfig = {
 		]
 	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
+	simpleUpload: {
+		uploadUrl: 'https://samoo.free.beeceptor.com/test'
+	},
 	language: 'en'
 };
 BalloonEditor.utils = {};

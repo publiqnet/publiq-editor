@@ -230,7 +230,7 @@ WidgetToolbarRepository.prototype._showToolbar = function( toolbarDefinition, re
 	const view = this.editor.editing.view;
 	const element = view.domConverter.mapViewToDom( view.document.selection.getSelectedElement() );
 	const img = element && element.querySelector( 'img' );
-	toggleSizeButtons( img && img.naturalWidth );
+	if ( img && img.naturalWidth ) { toggleSizeButtons( img.naturalWidth ); } // eslint-disable-line
 };
 
 function repositionContextualBalloon( editor, relatedElement ) {
@@ -326,4 +326,14 @@ export	function toggleSizeButtons( width = 0 ) {
 		$buttonContainersize.setAttribute( 'disabled', true );
 		$buttonGridsize.setAttribute( 'disabled', true );
 	}
+}
+
+export function insertNewLine( model ) {
+	model.change( writer => {
+		const caretPosition = model.document.selection.getLastPosition();
+		if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
+			const pElement = writer.createElement( 'paragraph' );
+			writer.insert( pElement, model.document.selection.getLastPosition() );
+		}
+	} );
 }
