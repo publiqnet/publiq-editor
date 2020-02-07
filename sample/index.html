@@ -54,14 +54,8 @@
 			console.log( 'yes we can! before', event );
 		} );
 		editor.editing.view.document.on( 'clipboardInput', ( evInfo, event ) => {
-			console.log( 'yes we can! clipboardInput' );
+			// insertNewLine(editor.model)
 		} );
-	  editor.editing.view.document.on( 'click', ( evInfo, event ) => {
-		  // if ( event.domTarget.tagName === 'IMG' ) {
-			//   toggleSizeButtons(event.domTarget.naturalWidth);
-		  // }
-	  } );
-
 		editor.ui.componentFactory._components.get( 'beforeimginsert' ).callback()
 			.on( 'change:beforeInsert', ( p1, p2, p3 ) => {
 				console.log( 'before insert--- ', p3 );
@@ -93,14 +87,13 @@
 				}
 			} );
 		} );
-
 		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
 			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
 				editor.model.change( writer => {
 					const carretPosition = editor.model.document.selection.getLastPosition();
 					if (carretPosition.nodeAfter && carretPosition.nodeAfter.name !== 'paragraph') {
 						const pElement = writer.createElement( 'paragraph' );
-						writer.insert( pElement, editor.model.document.selection.getLastPosition() );
+						writer.insert( pElement, carretPosition );
 					}
 				} );
 			} );
@@ -109,46 +102,15 @@
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );
 		} );
-
-	function toggleSizeButtons( width = 0 ) {
-		const $buttonFullsize = document.querySelector( '[data-size-toggler="fullsize"]' ).parentNode.parentNode; // eslint-disable-line
-		const $buttonContainersize = document.querySelector( '[data-size-toggler="containersize"]' ).parentNode.parentNode; // eslint-disable-line
-		const $buttonGridsize = document.querySelector( '[data-size-toggler="gridsize"]' ).parentNode.parentNode; // eslint-disable-line
-
-		if ( width >= 1440 ) {
-			$buttonFullsize.classList.remove( 'ck-disabled' );
-			$buttonContainersize.classList.remove( 'ck-disabled' );
-			$buttonGridsize.classList.remove( 'ck-disabled' );
-
-			$buttonFullsize.removeAttribute( 'disabled' );
-			$buttonContainersize.removeAttribute( 'disabled' );
-			$buttonGridsize.removeAttribute( 'disabled' );
-		} else if ( width >= 1310 ) {
-			$buttonFullsize.classList.add( 'ck-disabled' );
-			$buttonContainersize.classList.remove( 'ck-disabled' );
-			$buttonGridsize.classList.remove( 'ck-disabled' );
-
-			$buttonFullsize.setAttribute( 'disabled', true );
-			$buttonContainersize.removeAttribute( 'disabled' );
-			$buttonGridsize.removeAttribute( 'disabled' );
-		} else if ( width >= 870 ) {
-			$buttonFullsize.classList.add( 'ck-disabled' );
-			$buttonContainersize.classList.add( 'ck-disabled' );
-			$buttonGridsize.classList.remove( 'ck-disabled' );
-
-			$buttonFullsize.setAttribute( 'disabled', true );
-			$buttonContainersize.setAttribute( 'disabled', true );
-			$buttonGridsize.removeAttribute( 'disabled' );
-		} else {
-			$buttonFullsize.classList.add( 'ck-disabled' );
-			$buttonContainersize.classList.add( 'ck-disabled' );
-			$buttonGridsize.classList.add( 'ck-disabled' );
-
-			$buttonFullsize.setAttribute( 'disabled', true );
-			$buttonContainersize.setAttribute( 'disabled', true );
-			$buttonGridsize.setAttribute( 'disabled', true );
-		}
-	}
+  function insertNewLine( model ) {
+	  model.change( writer => {
+		  const caretPosition = model.document.selection.getLastPosition();
+		  if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
+			  const pElement = writer.createElement( 'paragraph' );
+			  writer.insert( pElement, model.document.selection.getLastPosition() );
+		  }
+	  } );
+  }
 </script>
 </body>
 </html>
