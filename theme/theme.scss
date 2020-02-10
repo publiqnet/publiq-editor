@@ -13,8 +13,6 @@
 
   --ck-widget-outline-thickness: 0;
 
-  --ck-small-padding-left: 50px;
-
   --ck-icon-size: 24px;
 
   --ck-ui-component-min-height: 40px;
@@ -37,10 +35,6 @@
 
 .ck.ck-content {
   font-size: 19px;
-
-  @include media-sm {
-    padding-left: var(--ck-small-padding-left);
-  }
 
   p, h2, h3,
   h4, blockquote,
