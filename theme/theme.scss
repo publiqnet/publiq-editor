@@ -234,7 +234,7 @@
     margin: 16px auto;
   }
 
-  .ck-placeholder:not(p):before {
+  .ck-placeholder:not(p, figcaption):before {
     content: none;
   }
   
