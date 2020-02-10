@@ -26,9 +26,5 @@ export default class ImageCropCommand extends Command {
 		const model = this.editor.model;
 		const imageElement = model.document.selection.getSelectedElement();
 		this.value = { img: imageElement, date: new Date().getTime() };
-		// model.change( writer => {
-		// 	writer.setAttribute( 'data-temp', option, imageElement );
-		// 	writer.removeAttribute( 'data-temp', imageElement );
-		// } );
 	}
 }

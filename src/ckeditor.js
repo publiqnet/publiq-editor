@@ -41,8 +41,8 @@ import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import largeGrid from './custom/assets/icons/Large Grid.svg';
 import middleGrid from './custom/assets/icons/Middle grid.svg';
 import smallGrid from './custom/assets/icons/Small grid.svg';
-import BeforeImgInsert from './custom/plugins/before-image-insert.plugin';
-import BeforeImgDelete from './custom/plugins/before-image-delete.plugin';
+import BeforeImageInsertPlugin from './custom/plugins/before-image-insert.plugin';
+import BeforeImageDeletePlugin from './custom/plugins/before-image-delete.plugin';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -76,13 +76,13 @@ BalloonEditor.builtinPlugins = [
 	ImageGalleryPlugin,
 	ImageCropPlugin,
 	ImageDeletePlugin,
-	BeforeImgInsert,
-	BeforeImgDelete
+	BeforeImageInsertPlugin,
+	BeforeImageDeletePlugin
 ];
 
 // Editor configuration.
 BalloonEditor.defaultConfig = {
-	placeholder: 'Let`s write an awesome story!',
+	placeholder: `Let's write an awesome story!`, // eslint-disable-line
 	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery' ],
 	toolbar: {
 		items: [
