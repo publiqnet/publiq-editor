@@ -12,6 +12,7 @@ import ImageGalleryCommand from '../commands/image-gallery.command';
 export default class ImageGalleryPlugin extends Plugin {
 	init() {
 		const editor = this.editor;
+		editor.commands.add( 'gallery', new ImageGalleryCommand( editor ) );
 		editor.ui.componentFactory.add( 'gallery', locale => {
 			const view = new ButtonView( locale );
 			view.set( {
@@ -19,9 +20,8 @@ export default class ImageGalleryPlugin extends Plugin {
 				icon: searchIcon,
 				tooltip: true,
 				galleryIsOn: true,
-				isOn: false
+				isOn: true
 			} );
-			editor.commands.add( 'gallery', new ImageGalleryCommand( editor ) );
 			const command = editor.commands.get( 'gallery' );
 			view.bind( 'galleryIsOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
 			view.on( 'execute', () => editor.execute( 'gallery' ) );

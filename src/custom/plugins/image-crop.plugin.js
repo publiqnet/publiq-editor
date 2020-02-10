@@ -12,6 +12,7 @@ import ImageCropCommand from '../commands/image-crop.command';
 export default class ImageCropPlugin extends Plugin {
 	init() {
 		const editor = this.editor;
+		editor.commands.add( 'imageCrop', new ImageCropCommand( editor ) );
 		editor.ui.componentFactory.add( 'imageCrop', locale => {
 			const view = new ButtonView( locale );
 			view.set( {
@@ -21,7 +22,6 @@ export default class ImageCropPlugin extends Plugin {
 				cropIsOn: false,
 				isOn: false
 			} );
-			editor.commands.add( 'imageCrop', new ImageCropCommand( editor ) );
 			const command = editor.commands.get( 'imageCrop' );
 			view.bind( 'cropIsOn', 'isEnabled' ).to( command, 'value', 'isEnabled' );
 			view.on( 'execute', () => editor.execute( 'imageCrop' ) );
