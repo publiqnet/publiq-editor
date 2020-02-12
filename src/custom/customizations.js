@@ -67,6 +67,8 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 					src: data.default,
 					'data-uri': data.uri,
 					'data-link': data.link,
+					'data-natural-width': data.width,
+					'data-natural-height': data.height,
 					'imageStyle': data.size
 				}, imageElement );
 				this._parseAndSetSrcsetAttributeOnImage( data, imageElement, writer );
@@ -279,6 +281,8 @@ export async function getImageProperties( options, file, editor ) {
 				default: options.url,
 				uri: options.uri,
 				link: options.link,
+				width: image.naturalWidth,
+				height: image.naturalHeight,
 				size: getImageSizeName( image.naturalWidth )
 			};
 			editor.execute( 'beforeImageInsert', attributes );
