@@ -111,6 +111,9 @@ BalloonEditor.defaultConfig = {
 			{ name: '_full', title: 'Full size', icon: middleGrid, className: 'fullsize-image' },
 		]
 	},
+	mediaEmbed: {
+		previewsInData: true
+	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en'
 };
