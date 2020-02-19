@@ -15,7 +15,6 @@
   </style>
 </head>
 <body>
-
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
 <div id="editor">
@@ -24,7 +23,6 @@
 
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
-
 <script>
 
 	BalloonEditor.create( document.querySelector( '#editor' ) ).then( editor => {
@@ -37,9 +35,9 @@
 			console.log( p2 );
 			console.log( p3 );
 		} );
-		window.editor.ui.componentFactory._components.get( 'imagedelete' ).callback().on( 'change:deleteIsOn', ( p1, p2, p3 ) => {
-			console.log( 'delete' );
-		} );
+	  editor.editing.view.document.on( 'paste', ( evInfo, data, p3) => {
+
+	  } );
 		window.editor.ui.componentFactory._components.get( 'imagecrop' ).callback().on( 'change:cropIsOn', ( p1, p2, p3 ) => {
 			console.log( 'crop' );
 			BalloonEditor.utils.fetchLocalImage( editor.model.document.selection.getSelectedElement() )
@@ -49,12 +47,6 @@
 				.catch( ( err ) => {
 					console.log( err );
 				} );
-		} );
-		editor.editing.view.document.on( 'delete', ( evInfo, event ) => {
-			console.log( 'yes we can! before', event );
-		} );
-		editor.editing.view.document.on( 'clipboardInput', ( evInfo, event ) => {
-			// insertNewLine(editor.model)
 		} );
 		editor.ui.componentFactory._components.get( 'beforeimginsert' ).callback()
 			.on( 'change:beforeInsert', ( p1, p2, p3 ) => {
@@ -66,26 +58,6 @@
 			} );
 		editor.model.schema.extend( 'image', {
 			allowAttributes: ['data-uri', 'data-link', 'natural-height', 'natural-width', 'data-size']
-		} );
-		// data-link
-		editor.conversion.for( 'upcast' ).attributeToAttribute( {
-			view: 'data-link',
-			model: 'data-link'
-		} );
-		editor.conversion.for( 'downcast' ).add( dispatcher => {
-			dispatcher.on( 'attribute:data-link:image', ( evt, data, conversionApi ) => {
-				if (!conversionApi.consumable.consume( data.item, evt.name )) {
-					return;
-				}
-				const viewWriter = conversionApi.writer;
-				const figure = conversionApi.mapper.toViewElement( data.item );
-				const img = figure.getChild( 0 );
-				if (data.attributeNewValue !== null) {
-					viewWriter.setAttribute( 'data-link', data.attributeNewValue, img );
-				} else {
-					viewWriter.removeAttribute( 'data-link', img );
-				}
-			} );
 		} );
 		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
 			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {

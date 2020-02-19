@@ -7,6 +7,10 @@ import DeleteCommand from '@ckeditor/ckeditor5-typing/src/deletecommand';
 import count from '@ckeditor/ckeditor5-utils/src/count';
 import BalloonPanelView from '@ckeditor/ckeditor5-ui/src/panel/balloon/balloonpanelview';
 import WidgetToolbarRepository from '@ckeditor/ckeditor5-widget/src/widgettoolbarrepository';
+import MediaEmbedCommand from '@ckeditor/ckeditor5-media-embed/src/mediaembedcommand';
+import { createMediaFigureElement, toMediaWidget } from '@ckeditor/ckeditor5-media-embed/src/utils';
+import { modelToViewUrlAttributeConverter } from '@ckeditor/ckeditor5-media-embed/src/converters';
+import MediaEmbedEditing from '@ckeditor/ckeditor5-media-embed/src/mediaembedediting';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 	const editor = this.editor;
@@ -235,6 +239,98 @@ WidgetToolbarRepository.prototype._showToolbar = function( toolbarDefinition, re
 	if ( img && img.naturalWidth ) { toggleSizeButtons( img.naturalWidth ); } // eslint-disable-line
 };
 
+MediaEmbedEditing.prototype.init = function() {
+	const editor = this.editor;
+	const schema = editor.model.schema;
+	const t = editor.t;
+	const conversion = editor.conversion;
+	const renderMediaPreview = editor.config.get( 'mediaEmbed.previewsInData' );
+	const registry = this.registry;
+
+	editor.commands.add( 'mediaEmbed', new MediaEmbedCommand( editor ) );
+
+	// Configure the schema.
+	schema.register( 'media', {
+		isObject: true,
+		isBlock: true,
+		allowWhere: '$block',
+		allowAttributes: [ 'url' ]
+	} );
+
+	// Model -> Data
+	conversion.for( 'dataDowncast' ).elementToElement( {
+		model: 'media',
+		view: ( modelElement, viewWriter ) => {
+			const url = modelElement.getAttribute( 'url' );
+			if ( !url ) { return; } //eslint-disable-line
+			return createMediaFigureElement( viewWriter, registry, url, {
+				renderMediaPreview: url && renderMediaPreview
+			} );
+		}
+	} );
+
+	// Model -> Data (url -> data-oembed-url)
+	conversion.for( 'dataDowncast' ).add(
+		modelToViewUrlAttributeConverter( registry, {
+			renderMediaPreview
+		} ) );
+
+	// Model -> View (element)
+	conversion.for( 'editingDowncast' ).elementToElement( {
+		model: 'media',
+		view: ( modelElement, viewWriter ) => {
+			const url = modelElement.getAttribute( 'url' );
+			if ( !url ) { return; } //eslint-disable-line
+			const figure = createMediaFigureElement( viewWriter, registry, url, {
+				renderForEditingView: true
+			} );
+
+			return toMediaWidget( figure, viewWriter, t( 'media widget' ) );
+		}
+	} );
+
+	// Model -> View (url -> data-oembed-url)
+	conversion.for( 'editingDowncast' ).add(
+		modelToViewUrlAttributeConverter( registry, {
+			renderForEditingView: true
+		} ) );
+
+	// View -> Model (data-oembed-url -> url)
+	conversion.for( 'upcast' )
+	// Upcast semantic media.
+		.elementToElement( {
+			view: {
+				name: 'oembed',
+				attributes: {
+					url: true
+				}
+			},
+			model: ( viewMedia, modelWriter ) => {
+				const url = viewMedia.getAttribute( 'url' );
+
+				if ( registry.hasMedia( url ) ) {
+					return modelWriter.createElement( 'media', { url } );
+				}
+			}
+		} )
+		// Upcast non-semantic media.
+		.elementToElement( {
+			view: {
+				name: 'div',
+				attributes: {
+					'data-oembed-url': true
+				}
+			},
+			model: ( viewMedia, modelWriter ) => {
+				const url = viewMedia.getAttribute( 'data-oembed-url' );
+
+				if ( registry.hasMedia( url ) ) {
+					return modelWriter.createElement( 'media', { url } );
+				}
+			}
+		} );
+};
+
 function repositionContextualBalloon( editor, relatedElement ) {
 	const balloon = editor.plugins.get( 'ContextualBalloon' );
 	const position = getBalloonPositionData( editor, relatedElement );
@@ -340,4 +436,48 @@ export function insertNewLine( model ) {
 			writer.insert( pElement, model.document.selection.getLastPosition() );
 		}
 	} );
+}
+
+export const embedTypes = ( ) => {
+	return {
+		instagram: 'data-instgrm-permalink',
+		twitter: 'twitter-tweet',
+		facebook: 'src="https://www.facebook.com/',
+		youtube: 'src="https://www.youtube.com/',
+		pinterest: 'href="https://www.pinterest.com'
+	};
+};
+
+export function runEmbedScript( src, type ) {
+	const runScript = () => {
+		const script = document.createElement( 'script' ); // eslint-disable-line
+		script.src = src;
+		script.async = true;
+		script.defer = true;
+		// script.charset = charset;
+		document.body.appendChild( script ); // eslint-disable-line
+	};
+	switch ( type ) {
+		case 'instagram' :
+			if ( window.instgrm ) { // eslint-disable-line
+				setTimeout(() => { // eslint-disable-line
+					instgrm.Embeds.process(); // eslint-disable-line
+				}, 0 );
+			} else { runScript(); }
+			break;
+		case 'twitter' :
+			if ( window.twttr ) { // eslint-disable-line
+				setTimeout(() => { // eslint-disable-line
+					twttr.widgets.load(); // eslint-disable-line
+				}, 0 );
+			} else { runScript(); }
+			break;
+		case 'pinterest' :
+			if ( window.PinUtils ) { // eslint-disable-line
+				setTimeout(() => { // eslint-disable-line
+					PinUtils.build(); // eslint-disable-line
+				}, 0 );
+			} else { runScript(); }
+			break;
+	}
 }

@@ -43,6 +43,8 @@ import middleGrid from './custom/assets/icons/Middle grid.svg';
 import smallGrid from './custom/assets/icons/Small grid.svg';
 import BeforeImageInsertPlugin from './custom/plugins/before-image-insert.plugin';
 import BeforeImageDeletePlugin from './custom/plugins/before-image-delete.plugin';
+import SocialMediaEmbedEditing from './custom/plugins/social-embed-editing.plugin';
+import SocialEmbedPlugin from './custom/plugins/social-embed.plugin';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -77,13 +79,15 @@ BalloonEditor.builtinPlugins = [
 	ImageCropPlugin,
 	ImageDeletePlugin,
 	BeforeImageInsertPlugin,
-	BeforeImageDeletePlugin
+	BeforeImageDeletePlugin,
+	SocialMediaEmbedEditing,
+	SocialEmbedPlugin
 ];
 
 // Editor configuration.
 BalloonEditor.defaultConfig = {
 	placeholder: `Let's write an awesome story!`, // eslint-disable-line
-	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery' ],
+	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed' ],
 	toolbar: {
 		items: [
 			'blockQuote',
@@ -111,11 +115,71 @@ BalloonEditor.defaultConfig = {
 			{ name: '_full', title: 'Full size', icon: middleGrid, className: 'fullsize-image' },
 		]
 	},
-	mediaEmbed: {
-		previewsInData: true
-	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
-	language: 'en'
+	language: 'en',
+	mediaEmbed: {
+		previewsInData: true,
+		extraProviders: [
+			{
+				name: 'pinterest',
+				url: [
+					/(<a data-pin-do=".*?".*?><\/a>)\s?(<script .*?>.*?<\/script>)/,
+					/(<a data-pin-do=".*?".*?><\/a>)/
+				],
+				html: match => {
+					// const id = match[ 1 ];
+
+					return ( match[ 1 ] );
+				}
+			},
+			{
+				name: 'twitter',
+				url: [
+					/(<blockquote .*?class="twitter-tweet".*?>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/,
+					/(<blockquote .*?class="twitter-tweet".*?>.*?<\/blockquote>)/
+				],
+				html: match => {
+					// const id = match[ 1 ];
+
+					return ( match[ 1 ] );
+				}
+			},
+			{
+				name: 'facebook',
+				url: [
+					/(<iframe .*?src="https:\/\/www\.facebook\.com\/.*?".*?><\/iframe>)/
+				],
+				html: match => {
+					// const id = match[ 1 ];
+
+					return ( match[ 1 ] );
+				}
+			},
+			{
+				name: 'instagram',
+				url: [
+					/(<blockquote .*?class="instagram-media".*?>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/,
+					/(<blockquote .*?class="instagram-media".*?>.*?<\/blockquote>)/
+				],
+				html: match => {
+					// const id = match[ 1 ];
+
+					return ( match[ 1 ] );
+				}
+			},
+			{
+				name: 'youtube',
+				url: [
+					/(<iframe .*?src="https:\/\/www\.youtube\.com\/.*?".*?><\/iframe>)/
+				],
+				html: match => {
+					// const id = match[ 1 ];
+
+					return ( match[ 1 ] );
+				}
+			}
+		]
+	}
 };
 BalloonEditor.utils = {};
 BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
