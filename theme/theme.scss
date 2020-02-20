@@ -172,10 +172,10 @@
     background: none;
 
     &.ck-balloon-panel_arrow_n {
-      transform: translate(110px,-54px);
+      transform: translate(130px,-54px);
     }
     &.ck-balloon-panel_arrow_s {
-      transform: translate(110px, 54px);
+      transform: translate(130px, 54px);
     }
 
     .ck-toolbar_floating {
@@ -232,6 +232,38 @@
 
   .media {
     margin: 16px auto;
+
+    &[data-embed-type="youtube"] {
+      > div {
+        position: relative;
+        padding-top: 56.25%;
+
+        iframe {
+          position: absolute;
+          top: 0; left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
+  &-media__wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 20px;
+
+    .instagram-media,
+    .instagram-media-registered,
+    .twitter-tweet {
+      &:after, &:before {
+        content: none !important;
+      }
+    }
+
+    .twitter-tweet {
+      max-width: 500px !important;
+    }
   }
 
   .ck-placeholder:not(p):not(figcaption):before {
