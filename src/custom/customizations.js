@@ -428,12 +428,13 @@ export	function toggleSizeButtons( width = 0 ) {
 	}
 }
 
-export function insertNewLine( model ) {
+export function insertNewLine( model, afterElement = '' ) {
 	model.change( writer => {
 		const caretPosition = model.document.selection.getLastPosition();
 		if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
 			const pElement = writer.createElement( 'paragraph' );
-			writer.insert( pElement, model.document.selection.getLastPosition() );
+			const position = afterElement ? writer.createPositionAfter( afterElement ) : model.document.selection.getLastPosition();
+			writer.insert( pElement, position );
 		}
 	} );
 }

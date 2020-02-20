@@ -147,7 +147,7 @@ BalloonEditor.defaultConfig = {
 			{
 				name: 'facebook',
 				url: [
-					/(<iframe .*?src="https:\/\/www\.facebook\.com\/.*?".*?><\/iframe>)/
+					/(<iframe .*?src="https:\/\/www\.facebook\.com\/.*?".*?>\s?<\/iframe>)/
 				],
 				html: match => {
 					// const id = match[ 1 ];
@@ -170,7 +170,7 @@ BalloonEditor.defaultConfig = {
 			{
 				name: 'youtube',
 				url: [
-					/(<iframe .*?src="https:\/\/www\.youtube\.com\/.*?".*?><\/iframe>)/
+					/(<iframe .*?src="https:\/\/www\.youtube\.com\/.*?".*?>\s?<\/iframe>)/
 				],
 				html: match => {
 					// const id = match[ 1 ];
