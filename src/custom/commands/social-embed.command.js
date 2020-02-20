@@ -1,7 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/utils';
 import { getSelectedMediaModelWidget } from '@ckeditor/ckeditor5-media-embed/src/utils';
-import { embedTypes } from '../customizations';
+import { embedTypes, insertNewLine } from '../customizations';
 
 export default class SocialMediaEmbedCommand extends Command {
 	/**
@@ -61,7 +61,7 @@ export default class SocialMediaEmbedCommand extends Command {
 				} );
 
 				model.insertContent( mediaElement, insertPosition );
-
+				insertNewLine( model, mediaElement );
 				writer.setSelection( mediaElement, 'on' );
 			} );
 		}

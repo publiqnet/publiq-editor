@@ -428,12 +428,13 @@ export	function toggleSizeButtons( width = 0 ) {
 	}
 }
 
-export function insertNewLine( model ) {
+export function insertNewLine( model, afterElement = '' ) {
 	model.change( writer => {
 		const caretPosition = model.document.selection.getLastPosition();
 		if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
 			const pElement = writer.createElement( 'paragraph' );
-			writer.insert( pElement, model.document.selection.getLastPosition() );
+			const position = afterElement ? writer.createPositionAfter( afterElement ) : model.document.selection.getLastPosition();
+			writer.insert( pElement, position );
 		}
 	} );
 }
@@ -448,13 +449,20 @@ export const embedTypes = ( ) => {
 	};
 };
 
+export const embedScripts = () => {
+	return {
+		instagram: '//www.instagram.com/embed.js',
+		twitter: 'https://platform.twitter.com/widgets.js',
+		pinterest: '//assets.pinterest.com/js/pinit.js',
+	};
+};
+
 export function runEmbedScript( src, type ) {
 	const runScript = () => {
 		const script = document.createElement( 'script' ); // eslint-disable-line
-		script.src = src;
+		script.src = embedScripts()[ type ];
 		script.async = true;
 		script.defer = true;
-		// script.charset = charset;
 		document.body.appendChild( script ); // eslint-disable-line
 	};
 	switch ( type ) {

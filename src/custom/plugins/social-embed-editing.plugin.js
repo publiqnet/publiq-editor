@@ -14,6 +14,7 @@ import SocialMediaEmbedRegistry from '../views/social-media-embed.registry';
 import SocialMediaEmbedCommand from '../commands/social-embed.command';
 import { createMediaFigureElement, toMediaWidget } from '@ckeditor/ckeditor5-media-embed/src/utils';
 import { runEmbedScript } from '../customizations';
+import { stringify } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
 
 /**
  * The media embed editing feature.
@@ -132,10 +133,35 @@ export default class SocialMediaEmbedEditing extends Plugin {
 				const figure = createMediaFigureElement( viewWriter, registry, { type, id, code, script }, {
 					renderForEditingView: true
 				} );
-				const src = script && script.match( /src="(.*?)"/ );
-				if ( src && src[ 1 ] ) { runEmbedScript( src[ 1 ], type ); } // eslint-disable-line
+				// const src = script && script.match( /src="(.*?)"/ );
+				// if ( src && src[ 1 ] ) { runEmbedScript( src[ 1 ], type ); } // eslint-disable-line
+				runEmbedScript( '', type );
 				return toMediaWidget( figure, viewWriter, t( 'media widget' ) );
 			}
 		} );
+		// View -> Model
+		conversion.for( 'upcast' )
+		// Upcast semantic media.
+			.elementToElement( {
+				view: {
+					name: 'figure',
+					attributes: {
+						'data-embed-type': true,
+						'data-id': true
+					}
+				},
+				model: ( viewMedia, modelWriter ) => {
+					if ( viewMedia.getAttribute( 'url' ) ) { return; } // eslint-disable-line
+					const type = viewMedia.getAttribute( 'data-embed-type' );
+					const id = viewMedia.getAttribute( 'data-id' );
+					let code = '';
+					if ( viewMedia.childCount && viewMedia._children[ 0 ]._children.length ) {
+						code = `${ stringify( viewMedia._children[ 0 ]._children[ 0 ] ) }`;
+					}
+					// eslint-disable-next-line
+					if ( type && id ) { return modelWriter.createElement( 'media', { 'data-embed-type': type, 'data-id': id,
+						'data-embed-code': code, 'data-embed-script': '' } ); }
+				}
+			} );
 	}
 }
