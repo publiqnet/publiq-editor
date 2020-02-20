@@ -132,8 +132,9 @@ export default class SocialMediaEmbedEditing extends Plugin {
 				const figure = createMediaFigureElement( viewWriter, registry, { type, id, code, script }, {
 					renderForEditingView: true
 				} );
-				const src = script && script.match( /src="(.*?)"/ );
-				if ( src && src[ 1 ] ) { runEmbedScript( src[ 1 ], type ); } // eslint-disable-line
+				// const src = script && script.match( /src="(.*?)"/ );
+				// if ( src && src[ 1 ] ) { runEmbedScript( src[ 1 ], type ); } // eslint-disable-line
+				runEmbedScript( '', type );
 				return toMediaWidget( figure, viewWriter, t( 'media widget' ) );
 			}
 		} );
