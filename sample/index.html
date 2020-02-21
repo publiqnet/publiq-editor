@@ -52,6 +52,14 @@
 			.on( 'change:beforeInsert', ( p1, p2, p3 ) => {
 				console.log( 'before insert--- ', p3 );
 			} );
+	  editor.plugins.get( 'Notification' )
+			.on( 'show:caution:size-error', ( p1, p2, p3 ) => {
+				console.log( 'warning is shown in error' );
+			} );
+	  editor.plugins.get( 'Notification' )
+			.on( 'show:caution:upload', ( p1, p2, p3 ) => {
+				console.log( 'warning is shown ' );
+			} );
 		editor.ui.componentFactory._components.get( 'beforeimgdelete' ).callback()
 			.on( 'change:beforeDelete', ( p1, p2, p3 ) => {
 				console.log( 'before delete--- ', p3 );
