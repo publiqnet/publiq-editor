@@ -18,7 +18,7 @@
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
 <div id="editor">
-
+  <figure class="media" data-embed-type="pinterest" data-id="pinterest__1582127515112"><div><a data-pin-do="embedPin" data-pin-width="large" href="https://www.pinterest.com/pin/586242076481832706/"></a></div></figure>
 </div>
 
 <script src="../build/ckeditor.js"></script>
@@ -51,6 +51,14 @@
 		editor.ui.componentFactory._components.get( 'beforeimginsert' ).callback()
 			.on( 'change:beforeInsert', ( p1, p2, p3 ) => {
 				console.log( 'before insert--- ', p3 );
+			} );
+	  editor.plugins.get( 'Notification' )
+			.on( 'show:caution:size-error', ( p1, p2, p3 ) => {
+				console.log( 'warning is shown in error' );
+			} );
+	  editor.plugins.get( 'Notification' )
+			.on( 'show:caution:upload', ( p1, p2, p3 ) => {
+				console.log( 'warning is shown ' );
 			} );
 		editor.ui.componentFactory._components.get( 'beforeimgdelete' ).callback()
 			.on( 'change:beforeDelete', ( p1, p2, p3 ) => {

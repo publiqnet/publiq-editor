@@ -169,12 +169,7 @@ export default class SocialMediaEmbedRegistry {
 	 */
 	_getEmbedMatches( embed, pattern ) {
 		// 1. Try to match without stripping the protocol and "www" subdomain.
-		let embedCode;
-		if ( embed.code ) {
-			embedCode = embed.code;
-		} else {
-			embedCode = embed;
-		}
+		const embedCode = embed.code ? embed.code : embed;
 		const match = embedCode.match( pattern );
 
 		return match;

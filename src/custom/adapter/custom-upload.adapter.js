@@ -113,6 +113,11 @@ class CustomUploadAdapter {
 		 */
 		this.options = options;
 
+		/**
+		 * Max file size (in bytes)
+		 */
+		this.maxFileSize = 5242880;
+
 		this.editor = editor;
 	}
 
@@ -125,6 +130,10 @@ class CustomUploadAdapter {
 	upload() {
 		return this.loader.file
 			.then( file => new Promise( ( resolve, reject ) => {
+				if ( file.size > this.maxFileSize ) {
+					reject( 'max file size error' );
+					return;
+				}
 				this._initRequest();
 				this._initListeners( resolve, reject, file );
 				this._sendRequest( file );

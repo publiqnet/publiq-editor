@@ -12,6 +12,8 @@ import { createMediaFigureElement, toMediaWidget } from '@ckeditor/ckeditor5-med
 import { modelToViewUrlAttributeConverter } from '@ckeditor/ckeditor5-media-embed/src/converters';
 import MediaEmbedEditing from '@ckeditor/ckeditor5-media-embed/src/mediaembedediting';
 
+const MaxFileSizeError = 'max file size error';
+
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 	const editor = this.editor;
 	const model = editor.model;
@@ -89,10 +91,13 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 
 			// Might be 'aborted'.
 			if ( loader.status == 'error' && error ) {
-				notification.showWarning( error, {
-					title: t( 'Upload failed' ),
-					namespace: 'upload'
-				} );
+				const data = {
+					message: error === MaxFileSizeError ? 'max file size error' : error,
+					type: 'caution',
+					namespace: error === MaxFileSizeError ? 'size-error' : 'upload',
+					title: error === MaxFileSizeError ? t( 'Upload failed due to file size' ) : t( 'Upload failed' )
+				};
+				notification._showNotification( data );
 			}
 
 			clean();
@@ -428,12 +433,13 @@ export	function toggleSizeButtons( width = 0 ) {
 	}
 }
 
-export function insertNewLine( model ) {
+export function insertNewLine( model, afterElement = '' ) {
 	model.change( writer => {
 		const caretPosition = model.document.selection.getLastPosition();
 		if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
 			const pElement = writer.createElement( 'paragraph' );
-			writer.insert( pElement, model.document.selection.getLastPosition() );
+			const position = afterElement ? writer.createPositionAfter( afterElement ) : model.document.selection.getLastPosition();
+			writer.insert( pElement, position );
 		}
 	} );
 }
@@ -448,13 +454,20 @@ export const embedTypes = ( ) => {
 	};
 };
 
+export const embedScripts = () => {
+	return {
+		instagram: '//www.instagram.com/embed.js',
+		twitter: 'https://platform.twitter.com/widgets.js',
+		pinterest: '//assets.pinterest.com/js/pinit.js',
+	};
+};
+
 export function runEmbedScript( src, type ) {
 	const runScript = () => {
 		const script = document.createElement( 'script' ); // eslint-disable-line
-		script.src = src;
+		script.src = embedScripts()[ type ];
 		script.async = true;
 		script.defer = true;
-		// script.charset = charset;
 		document.body.appendChild( script ); // eslint-disable-line
 	};
 	switch ( type ) {
