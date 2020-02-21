@@ -12,6 +12,8 @@ import { createMediaFigureElement, toMediaWidget } from '@ckeditor/ckeditor5-med
 import { modelToViewUrlAttributeConverter } from '@ckeditor/ckeditor5-media-embed/src/converters';
 import MediaEmbedEditing from '@ckeditor/ckeditor5-media-embed/src/mediaembedediting';
 
+const MaxFileSizeError = 'max file size error';
+
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 	const editor = this.editor;
 	const model = editor.model;
@@ -89,10 +91,13 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 
 			// Might be 'aborted'.
 			if ( loader.status == 'error' && error ) {
-				notification.showWarning( error, {
-					title: t( 'Upload failed' ),
-					namespace: 'upload'
-				} );
+				const data = {
+					message: error === MaxFileSizeError ? 'max file size error' : error,
+					type: 'caution',
+					namespace: error === MaxFileSizeError ? 'size-error' : 'upload',
+					title: error === MaxFileSizeError ? t( 'Upload failed due to file size' ) : t( 'Upload failed' )
+				};
+				notification._showNotification( data );
 			}
 
 			clean();
