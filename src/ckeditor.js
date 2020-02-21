@@ -117,6 +117,9 @@ BalloonEditor.defaultConfig = {
 	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	language: 'en',
+	link: {
+		addTargetToExternalLinks: true,
+	},
 	mediaEmbed: {
 		previewsInData: true,
 		extraProviders: [
