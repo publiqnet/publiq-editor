@@ -270,8 +270,17 @@
     }
   }
 
-  .ck-placeholder:not(p):not(figcaption):before {
-    content: none;
+  .ck-placeholder {
+    &:not(p):not(figcaption):before {
+      content: none;
+    }
+
+    &:not(figcaption):before {
+      display: inline-block;
+      width: 0;
+      white-space: nowrap;
+      visibility: visible;
+    }
   }
 
   figure {
