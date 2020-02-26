@@ -126,58 +126,50 @@ BalloonEditor.defaultConfig = {
 			{
 				name: 'pinterest',
 				url: [
-					/(<a data-pin-do=".*?".*?><\/a>)\s?(<script .*?>.*?<\/script>)/,
-					/(<a data-pin-do=".*?".*?><\/a>)/
+					/(<a data-pin-do="embedPin" .*?href="https:\/\/www\.pinterest\.com\/pin\/.*?".*?><\/a>)\s?(<script .*?>.*?<\/script>)/,
+					/(<a data-pin-do="embedPin" .*?href="https:\/\/www\.pinterest\.com\/pin\/.*?".*?><\/a>)/,
 				],
 				html: match => {
-					// const id = match[ 1 ];
-
 					return ( match[ 1 ] );
 				}
 			},
 			{
 				name: 'twitter',
 				url: [
-					/(<blockquote .*?class="twitter-tweet".*?>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/,
-					/(<blockquote .*?class="twitter-tweet".*?>.*?<\/blockquote>)/
+					/(<blockquote .*?class="twitter-tweet".*?>.*?<a href="https:\/\/t\.co\/.*?".*?>.*?<\/a>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/, // eslint-disable-line
+					/(<blockquote .*?class="twitter-tweet".*?>.*?<a href="https:\/\/t\.co\/.*?".*?>.*?<\/a>.*?<\/blockquote>)/,
+					/(<blockquote .*?class="twitter-tweet".*?>.*?<a href="https:\/\/twitter\.com\/.*?".*?>.*?<\/a>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/, // eslint-disable-line
+					/(<blockquote .*?class="twitter-tweet".*?>.*?<a href="https:\/\/twitter\.com\/.*?".*?>.*?<\/a>.*?<\/blockquote>)/
 				],
 				html: match => {
-					// const id = match[ 1 ];
-
 					return ( match[ 1 ] );
 				}
 			},
 			{
 				name: 'facebook',
 				url: [
-					/(<iframe .*?src="https:\/\/www\.facebook\.com\/.*?".*?>\s?<\/iframe>)/
+					/(<iframe .*?src="https:\/\/www\.facebook\.com\/plugins\/.*?".*?>\s?<\/iframe>)/
 				],
 				html: match => {
-					// const id = match[ 1 ];
-
 					return ( match[ 1 ] );
 				}
 			},
 			{
 				name: 'instagram',
 				url: [
-					/(<blockquote .*?class="instagram-media".*?>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/,
-					/(<blockquote .*?class="instagram-media".*?>.*?<\/blockquote>)/
+					/(<blockquote .*?class="instagram-media" .*?data-instgrm-permalink="https:\/\/www\.instagram\.com\/p\/.*?" .*?>.*?<\/blockquote>)\s?(<script .*?>.*?<\/script>)/, // eslint-disable-line
+					/(<blockquote .*?class="instagram-media" .*?data-instgrm-permalink="https:\/\/www\.instagram\.com\/p\/.*?" .*?>.*?<\/blockquote>)/ // eslint-disable-line
 				],
 				html: match => {
-					// const id = match[ 1 ];
-
 					return ( match[ 1 ] );
 				}
 			},
 			{
 				name: 'youtube',
 				url: [
-					/(<iframe .*?src="https:\/\/www\.youtube\.com\/.*?".*?>\s?<\/iframe>)/
+					/(<iframe .*?src="https:\/\/www\.youtube\.com\/embed\/.*?".*?>\s?<\/iframe>)/
 				],
 				html: match => {
-					// const id = match[ 1 ];
-
 					return ( match[ 1 ] );
 				}
 			}
