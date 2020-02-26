@@ -35,8 +35,14 @@
 			console.log( p2 );
 			console.log( p3 );
 		} );
-	  editor.editing.view.document.on( 'paste', ( evInfo, data, p3) => {
+	  editor.editing.view.document.on( 'click', ( evInfo, data, p3) => {
 
+	  } );
+	  editor.editing.view.document.on( 'imageLoaded', ( evInfo, data, p3) => {
+		    if(editor.model.document.selection.getSelectedElement().getAttribute('uploadId')) {
+		      editor.plugins.get( 'WidgetToolbarRepository' )._toolbarDefinitions.get( 'image' )
+				    .view.items.get( 3 ).element.classList.remove( 'ck-disabled' );
+        }
 	  } );
 		window.editor.ui.componentFactory._components.get( 'imagecrop' ).callback().on( 'change:cropIsOn', ( p1, p2, p3 ) => {
 			console.log( 'crop' );
