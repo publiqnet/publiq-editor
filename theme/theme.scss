@@ -38,7 +38,7 @@
 
   p, h2, h3,
   h4, blockquote,
-  ol, ul, .media {
+  ol, ul, .media, .table {
     max-width: 870px;
 
     @include media-xl {
@@ -249,9 +249,6 @@
   }
 
   &-media__wrapper {
-    > div {
-      width: 100%;
-    }
     display: flex;
     justify-content: center;
     margin: 0 0 20px;
@@ -266,6 +263,10 @@
 
     .twitter-tweet {
       max-width: 500px !important;
+    }
+
+    > div[style*="height: 0"] {
+      width: 100%;
     }
   }
 
