@@ -1,5 +1,7 @@
 import ImageUploadEditing from '@ckeditor/ckeditor5-image/src/imageupload/imageuploadediting';
 import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar';
+import BlockButtonView from '@ckeditor/ckeditor5-ui/src/toolbar/block/blockbuttonview';
+import iconPilcrow from './assets/icons/Plus.svg';
 import env from '@ckeditor/ckeditor5-utils/src/env';
 import { getOptimalPosition } from '@ckeditor/ckeditor5-utils/src/dom/position';
 import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect';
@@ -148,6 +150,46 @@ BlockToolbar.prototype._attachButtonToElement = function( targetElement ) {
 	} );
 	this.buttonView.top = position.top;
 	this.buttonView.left = position.left;
+};
+
+BlockToolbar.prototype._createButtonView = function() {
+	const editor = this.editor;
+	const t = editor.t;
+	const buttonView = new BlockButtonView( editor.locale );
+
+	buttonView.set( {
+		label: t( 'Edit block' ),
+		icon: iconPilcrow,
+		withText: false
+	} );
+
+	// Bind the panelView observable properties to the buttonView.
+	buttonView.bind( 'isOn' ).to( this.panelView, 'isVisible' );
+	buttonView.bind( 'tooltip' ).to( this.panelView, 'isVisible', isVisible => !isVisible );
+
+	// Toggle the panelView upon buttonView#execute.
+	this.listenTo( buttonView, 'execute', () => {
+		if ( !this.panelView.isVisible ) {
+			this._showPanel();
+		} else {
+			this._hidePanel( true );
+		}
+	} );
+
+	this.listenTo( buttonView, 'change:isOn', () => {
+		if ( !buttonView.isOn ) {
+			document.querySelector( '[data-placeholder]:not(figcaption)' ).classList.add( 'ck-placeholder' ); //eslint-disable-line
+		}
+	} );
+
+	editor.ui.view.body.add( buttonView );
+	editor.ui.focusTracker.add( buttonView.element );
+
+	buttonView.element.addEventListener( 'click', function() {
+		document.querySelector( '[data-placeholder]:not(figcaption)' ).classList.remove( 'ck-placeholder' ); //eslint-disable-line
+	} );
+
+	return buttonView;
 };
 
 DeleteCommand.prototype.execute = function( options = {} ) {
