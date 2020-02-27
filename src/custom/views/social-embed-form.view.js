@@ -271,7 +271,7 @@ export default class SocialMediaEmbedFormView extends View {
 
 		labeledInput.label = t( 'Media EMBED' );
 		labeledInput.infoText = this._embedInputViewInfoDefault;
-		inputView.placeholder = 'some media embed';
+		inputView.placeholder = 'Paste a media code to embed content from another site (e.g. Twitter)';
 
 		inputView.on( 'input', () => {
 			// Display the tip text only when there's some value. Otherwise fall back to the default info text.
