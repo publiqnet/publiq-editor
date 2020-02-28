@@ -121,7 +121,7 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 };
 
 BlockToolbar.prototype._attachButtonToElement = function( targetElement ) {
-	if ( targetElement.textContent || targetElement.nodeName === 'FIGURE' ) {
+	if ( targetElement.textContent || targetElement.closest( 'figure' ) ) {
 		this._hideButton();
 		return;
 	}
