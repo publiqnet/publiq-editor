@@ -177,8 +177,12 @@ BlockToolbar.prototype._createButtonView = function() {
 	} );
 
 	this.listenTo( buttonView, 'change:isOn', () => {
-		if ( !buttonView.isOn ) {
-			document.querySelector( '[data-placeholder]:not(figcaption)' ).classList.add( 'ck-placeholder' ); //eslint-disable-line
+		const position = editor.model.document.selection.getLastPosition();
+		if ( !buttonView.isOn && position.path[ 0 ] && position.path[ 1 ] ) {
+			const element = document.querySelector( '[data-placeholder]:not(figcaption)' ); //eslint-disable-line
+			if ( element ) {
+				element.classList.add( 'ck-placeholder' );
+			}
 		}
 	} );
 
@@ -186,7 +190,11 @@ BlockToolbar.prototype._createButtonView = function() {
 	editor.ui.focusTracker.add( buttonView.element );
 
 	buttonView.element.addEventListener( 'click', function() {
-		document.querySelector( '[data-placeholder]:not(figcaption)' ).classList.remove( 'ck-placeholder' ); //eslint-disable-line
+		const element = document.querySelector( '[data-placeholder]:not(figcaption)' ); //eslint-disable-line
+		const position = editor.model.document.selection.getLastPosition();
+		if ( element && !position.path[ 0 ] && !position.path[ 1 ] ) {
+			element.classList.remove( 'ck-placeholder' );
+		}
 	} );
 
 	return buttonView;
