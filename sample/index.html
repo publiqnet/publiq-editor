@@ -18,6 +18,8 @@
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
 <div id="editor">
+  <figure class="image ck-widget fullsize-image" contenteditable="false"><img src="https://south.publiq.network:14123/storage?file=5jwQK5zKcBm5Ri17wDvjH2owhAXMZPxuSBDbaU5tpF4" data-uri="5jwQK5zKcBm5Ri17wDvjH2owhAXMZPxuSBDbaU5tpF4" data-link="https://south.publiq.network:14123/storage?file=5jwQK5zKcBm5Ri17wDvjH2owhAXMZPxuSBDbaU5tpF4" data-natural-width="1920" data-natural-height="1080">
+  </figure>
 </div>
 
 <script src="../build/ckeditor.js"></script>
@@ -69,9 +71,6 @@
 			.on( 'change:beforeDelete', ( p1, p2, p3 ) => {
 				console.log( 'before delete--- ', p3 );
 			} );
-		editor.model.schema.extend( 'image', {
-			allowAttributes: ['data-uri', 'data-link', 'natural-height', 'natural-width', 'data-size']
-		} );
 		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
 			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
 				editor.model.change( writer => {
