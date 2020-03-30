@@ -34,10 +34,6 @@ import ImageGalleryPlugin from './custom/plugins/image-gallery.plugin';
 import ImageCropPlugin from './custom/plugins/image-crop.plugin';
 import SimpleUploadAdapterCustom from './custom/adapter/custom-upload.adapter';
 import ImageDeletePlugin from './custom/plugins/image-delete.plugin';
-import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
-import * as customizations from './custom/customizations';
-import '../theme/theme.scss';
-import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import largeGrid from './custom/assets/icons/Large Grid.svg';
 import middleGrid from './custom/assets/icons/Middle grid.svg';
 import smallGrid from './custom/assets/icons/Small grid.svg';
@@ -45,6 +41,10 @@ import BeforeImageInsertPlugin from './custom/plugins/before-image-insert.plugin
 import BeforeImageDeletePlugin from './custom/plugins/before-image-delete.plugin';
 import SocialMediaEmbedEditing from './custom/plugins/social-embed-editing.plugin';
 import SocialEmbedPlugin from './custom/plugins/social-embed.plugin';
+import * as customizations from './custom/customizations';
+import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
+import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
+import '../theme/theme.scss';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
