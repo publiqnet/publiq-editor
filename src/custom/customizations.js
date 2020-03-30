@@ -13,6 +13,11 @@ import MediaEmbedCommand from '@ckeditor/ckeditor5-media-embed/src/mediaembedcom
 import { createMediaFigureElement, toMediaWidget } from '@ckeditor/ckeditor5-media-embed/src/utils';
 import { modelToViewUrlAttributeConverter } from '@ckeditor/ckeditor5-media-embed/src/converters';
 import MediaEmbedEditing from '@ckeditor/ckeditor5-media-embed/src/mediaembedediting';
+import ImageEditing, { createImageViewElement } from '@ckeditor/ckeditor5-image/src/image/imageediting';
+import ImageLoadObserver from '@ckeditor/ckeditor5-image/src/image/imageloadobserver';
+import { toImageWidget } from '@ckeditor/ckeditor5-image/src/image/utils';
+import { modelToViewAttributeConverter, srcsetAttributeConverter, viewFigureToModel } from '@ckeditor/ckeditor5-image/src/image/converters';
+import ImageInsertCommand from '@ckeditor/ckeditor5-image/src/image/imageinsertcommand';
 
 const MaxFileSizeError = 'max file size error';
 
@@ -384,6 +389,113 @@ MediaEmbedEditing.prototype.init = function() {
 				}
 			}
 		} );
+};
+
+ImageEditing.prototype.init = function() {
+	const editor = this.editor;
+	const schema = editor.model.schema;
+	const t = editor.t;
+	const conversion = editor.conversion;
+
+	// See https://github.com/ckeditor/ckeditor5-image/issues/142.
+	editor.editing.view.addObserver( ImageLoadObserver );
+
+	// Configure schema.
+	schema.register( 'image', {
+		isObject: true,
+		isBlock: true,
+		allowWhere: '$block',
+		allowAttributes: [ 'alt', 'src', 'srcset', 'data-uri', 'data-link', 'data-natural-height', 'data-natural-width' ]
+	} );
+
+	conversion.for( 'dataDowncast' ).elementToElement( {
+		model: 'image',
+		view: ( modelElement, viewWriter ) => createImageViewElement( viewWriter )
+	} );
+
+	conversion.for( 'editingDowncast' ).elementToElement( {
+		model: 'image',
+		view: ( modelElement, viewWriter ) => toImageWidget( createImageViewElement( viewWriter ), viewWriter, t( 'image widget' ) )
+	} );
+
+	conversion.for( 'downcast' )
+		.add( modelToViewAttributeConverter( 'src' ) )
+		.add( modelToViewAttributeConverter( 'alt' ) )
+		.add( modelToViewAttributeConverter( 'data-uri' ) )
+		.add( modelToViewAttributeConverter( 'data-link' ) )
+		.add( modelToViewAttributeConverter( 'data-natural-width' ) )
+		.add( modelToViewAttributeConverter( 'data-natural-height' ) )
+		.add( srcsetAttributeConverter() );
+
+	conversion.for( 'upcast' )
+		.elementToElement( {
+			view: {
+				name: 'img',
+				attributes: {
+					src: true
+				}
+			},
+			model: ( viewImage, modelWriter ) => modelWriter.createElement( 'image', { src: viewImage.getAttribute( 'src' ) } )
+		} )
+		.attributeToAttribute( {
+			view: {
+				name: 'img',
+				key: 'data-uri'
+			},
+			model: 'data-uri'
+		} )
+		.attributeToAttribute( {
+			view: {
+				name: 'img',
+				key: 'data-link'
+			},
+			model: 'data-link'
+		} )
+		.attributeToAttribute( {
+			view: {
+				name: 'img',
+				key: 'data-natural-height'
+			},
+			model: 'data-natural-height'
+		} )
+		.attributeToAttribute( {
+			view: {
+				name: 'img',
+				key: 'data-natural-width'
+			},
+			model: 'data-natural-width'
+		} )
+		.attributeToAttribute( {
+			view: {
+				name: 'img',
+				key: 'alt'
+			},
+			model: 'alt'
+		} )
+		.attributeToAttribute( {
+			view: {
+				name: 'img',
+				key: 'srcset'
+			},
+			model: {
+				key: 'srcset',
+				value: viewImage => {
+					const value = {
+						data: viewImage.getAttribute( 'srcset' )
+					};
+
+					if ( viewImage.hasAttribute( 'width' ) ) {
+						value.width = viewImage.getAttribute( 'width' );
+					}
+
+					return value;
+				}
+			}
+		} )
+		.add( viewFigureToModel() );
+
+	// Register imageUpload command.
+	editor.commands.add( 'imageInsert', new ImageInsertCommand( editor ) );
 };
 
 function repositionContextualBalloon( editor, relatedElement ) {
