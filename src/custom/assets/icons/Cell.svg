@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
-    <title>Cell</title>
-    <desc>Created with Sketch.</desc>
     <g id="Cell" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="Rectangle" x="0" y="0" width="24" height="24"></rect>
         <path d="M19,4.25 L5,4.25 C4.58578644,4.25 4.25,4.58578644 4.25,5 L4.25,19 C4.25,19.4142136 4.58578644,19.75 5,19.75 L19,19.75 C19.4142136,19.75 19.75,19.4142136 19.75,19 L19.75,5 C19.75,4.58578644 19.4142136,4.25 19,4.25 Z M18.25,5.75 L18.25,18.25 L5.75,18.25 L5.75,5.75 L18.25,5.75 Z" id="Rectangle" fill="#3366FF" fill-rule="nonzero"></path>

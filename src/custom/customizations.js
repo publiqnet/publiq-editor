@@ -18,6 +18,8 @@ import ImageLoadObserver from '@ckeditor/ckeditor5-image/src/image/imageloadobse
 import { toImageWidget } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { modelToViewAttributeConverter, srcsetAttributeConverter, viewFigureToModel } from '@ckeditor/ckeditor5-image/src/image/converters';
 import ImageInsertCommand from '@ckeditor/ckeditor5-image/src/image/imageinsertcommand';
+import renderMathInElement from 'katex/contrib/auto-render/auto-render';
+// import katex from 'katex/dist/katex.mjs';
 
 const MaxFileSizeError = 'max file size error';
 
@@ -126,7 +128,7 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 };
 
 BlockToolbar.prototype._attachButtonToElement = function( targetElement ) {
-	if ( targetElement.textContent || targetElement.closest( 'figure' ) ) {
+	if ( targetElement && ( targetElement.textContent || targetElement.closest( 'figure' ) ) ) {
 		this._hideButton();
 		return;
 	}
@@ -656,3 +658,19 @@ export function runEmbedScript( src, type ) {
 			break;
 	}
 }
+
+export function renderTexInput( texInput, element ) {
+	// const options = {
+	// 	displayMode: true,
+	// 	truest: true
+	// };
+	renderMathInElement( element.children[ 0 ], {
+		delimiters: [
+			{ left: '$$', right: '$$', display: true },
+			{ left: '\\[', right: '\\]', display: true },
+			{ left: '$', right: '$', display: false },
+			{ left: '\\(', right: '\\)', display: false }
+		]
+	} );
+}
+

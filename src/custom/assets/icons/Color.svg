@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
-    <title>Color</title>
-    <desc>Created with Sketch.</desc>
     <g id="Color" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <rect id="Rectangle" x="0" y="0" width="24" height="24"></rect>
         <path d="M12,5.17783335 C12.5,4.5 18,10.444402 18,14.2680154 C18,17.4337468 15.3137139,20 12,20 C8.68628613,20 6,17.4337468 6,14.2680154 C6,11.7817055 8.7770789,9.64110893 10.3475473,7.64372314 C11.1254074,6.65429456 11.4011954,5.98961277 12,5.17783335 Z M15,12.5 C13.8954305,12.5 13.5,13.5 13,14.5 C12.5,15.5 12.3954305,17.5 13.5,17.5 C14.6045695,17.5 15.5,16.5 16,15.5 C16.5,14.5 16.1045695,12.5 15,12.5 Z" id="Combined-Shape" fill="#3366FF" fill-rule="nonzero"></path>
