@@ -18,7 +18,10 @@ import ImageLoadObserver from '@ckeditor/ckeditor5-image/src/image/imageloadobse
 import { toImageWidget } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { modelToViewAttributeConverter, srcsetAttributeConverter, viewFigureToModel } from '@ckeditor/ckeditor5-image/src/image/converters';
 import ImageInsertCommand from '@ckeditor/ckeditor5-image/src/image/imageinsertcommand';
-import renderMathInElement from 'katex/contrib/auto-render/auto-render';
+// import renderMathInElement from 'katex/contrib/auto-render/auto-render';
+import DropdownButtonView from '@ckeditor/ckeditor5-ui/src/dropdown/button/dropdownbuttonview';
+import ModalView from './views/modal/modal.view';
+import ModalPanelView from './views/modal/modal-panel.view';
 // import katex from 'katex/dist/katex.mjs';
 
 const MaxFileSizeError = 'max file size error';
@@ -659,18 +662,37 @@ export function runEmbedScript( src, type ) {
 	}
 }
 
-export function renderTexInput( texInput, element ) {
+export function renderTexInput( /* texInput, element */ ) {
 	// const options = {
 	// 	displayMode: true,
 	// 	truest: true
 	// };
-	renderMathInElement( element.children[ 0 ], {
-		delimiters: [
-			{ left: '$$', right: '$$', display: true },
-			{ left: '\\[', right: '\\]', display: true },
-			{ left: '$', right: '$', display: false },
-			{ left: '\\(', right: '\\)', display: false }
-		]
-	} );
+	// renderMathInElement( element.children[ 0 ], {
+	// 	delimiters: [
+	// 		{ left: '$$', right: '$$', display: true },
+	// 		{ left: '\\[', right: '\\]', display: true },
+	// 		{ left: '$', right: '$', display: false },
+	// 		{ left: '\\(', right: '\\)', display: false }
+	// 	]
+	// } );
+}
+
+export function createModal( locale, ButtonClass = DropdownButtonView ) {
+	const buttonView = new ButtonClass( locale );
+
+	const panelView = new ModalPanelView( locale );
+	const modalView = new ModalView( locale, buttonView, panelView );
+
+	buttonView.bind( 'isEnabled' ).to( modalView );
+
+	if ( buttonView instanceof DropdownButtonView ) {
+		buttonView.bind( 'isOn' ).to( modalView, 'isOpen' );
+	} else {
+		buttonView.arrowView.bind( 'isOn' ).to( modalView, 'isOpen' );
+	}
+
+	// addDefaultBehavior( modalView );
+
+	return modalView;
 }
 

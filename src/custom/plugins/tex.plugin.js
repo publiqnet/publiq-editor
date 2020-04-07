@@ -8,11 +8,10 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
 import formulaIcon from '../assets/icons/Formula.svg';
 import TexInputFormView from '../views/tex-input-form.view';
 import TexEditing from './tex-editing.plugin';
-import { renderTexInput } from '../customizations';
+import { createModal, renderTexInput } from '../customizations';
 
 /**
  * The media embed UI plugin.
@@ -53,22 +52,22 @@ export default class TexPlugin extends Plugin {
 		this.form = new TexInputFormView( getFormValidators( editor.t ), editor.locale );
 
 		editor.ui.componentFactory.add( 'texEditing', locale => {
-			const dropdown = createDropdown( locale );
+			const modal = createModal( locale );
 
-			this._setUpDropdown( dropdown, this.form, command, editor );
-			this._setUpForm( this.form, dropdown, command );
+			this._setUpModal( modal, this.form, command, editor );
+			this._setUpForm( this.form, modal, command );
 
-			return dropdown;
+			return modal;
 		} );
 	}
 
-	_setUpDropdown( dropdown, form, command ) {
+	_setUpModal( modal, form, command ) {
 		const editor = this.editor;
 		const t = editor.t;
-		const button = dropdown.buttonView;
+		const button = modal.buttonView;
 
-		dropdown.bind( 'isEnabled' ).to( command );
-		dropdown.panelView.children.add( form );
+		modal.bind( 'isEnabled' ).to( command );
+		modal.panelView.children.add( form );
 
 		button.set( {
 			label: t( 'Tex editing' ),
@@ -90,7 +89,7 @@ export default class TexPlugin extends Plugin {
 			form.focus();
 		}, { priority: 'low' } );
 
-		dropdown.on( 'submit', () => {
+		modal.on( 'submit', () => {
 			if ( form.isValid() ) {
 				editor.execute( 'renderTex', { texInput: form.texInput, type: 'tex-input' } );
 				setTimeout( () => { // eslint-disable-line
@@ -101,17 +100,17 @@ export default class TexPlugin extends Plugin {
 			}
 		} );
 
-		dropdown.on( 'change:isOpen', () => form.resetFormStatus() );
-		dropdown.on( 'cancel', () => closeUI() );
+		modal.on( 'change:isOpen', () => form.resetFormStatus() );
+		modal.on( 'cancel', () => closeUI() );
 
 		function closeUI() {
 			editor.editing.view.focus();
-			dropdown.isOpen = false;
+			modal.isOpen = false;
 		}
 	}
 
-	_setUpForm( form, dropdown, command ) {
-		form.delegate( 'submit', 'cancel' ).to( dropdown );
+	_setUpForm( form, modal, command ) {
+		form.delegate( 'submit', 'cancel' ).to( modal );
 		form.texInputView.bind( 'value' ).to( command, 'value' );
 
 		// Form elements should be read-only when corresponding commands are disabled.

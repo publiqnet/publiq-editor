@@ -16,6 +16,7 @@ import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
 import '@ckeditor/ckeditor5-media-embed/theme/mediaform.css';
 import LabeledTextareaView from './labeled-textarea.view';
 import TextareaView from './textarea.view';
+// import Template from '@ckeditor/ckeditor5-ui/src/template';
 
 /**
  * The Tex (especially LaTex) input form view controller class.
@@ -49,13 +50,6 @@ export default class TexInputFormView extends View {
 		this.keystrokes = new KeystrokeHandler();
 
 		/**
-		 * The Tex input view.
-		 *
-		 * @member {module:ui/labeledinput/labeledinputview~LabeledTextareaView}
-		 */
-		this.texInputView = this._createTexInput();
-
-		/**
 		 * The Save button view.
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
@@ -71,6 +65,13 @@ export default class TexInputFormView extends View {
 		this.cancelButtonView = this._createButton( t( 'Cancel' ), cancelIcon, 'ck-button-cancel', 'cancel' );
 
 		this.previewButtonView = this._createButton( t( 'preview' ), checkIcon, 'ck-button-save' );
+
+		/**
+		 * The Tex input view.
+		 *
+		 * @member {module:ui/labeledinput/labeledinputview~LabeledTextareaView}
+		 */
+		this.texInputView = this._createTexInput();
 
 		/**
 		 * A collection of views that can be focused in the form.
@@ -124,7 +125,6 @@ export default class TexInputFormView extends View {
 
 			children: [
 				this.texInputView,
-				this.saveButtonView,
 				this.cancelButtonView
 			]
 		} );
@@ -157,7 +157,6 @@ export default class TexInputFormView extends View {
 
 		const childViews = [
 			this.texInputView,
-			this.saveButtonView,
 			this.cancelButtonView
 		];
 
@@ -278,8 +277,43 @@ export default class TexInputFormView extends View {
 			// Display the tip text only when there's some value. Otherwise fall back to the default info text.
 			labeledTextarea.infoText = textareaView.element.value ? this._texTextareaInfoTip : this._texTextareaInfoDefault;
 		} );
+		const previewDivView = new View( this.locale );
+		previewDivView.setTemplate( {
+			tag: 'div',
 
-		return labeledTextarea;
+			attributes: {
+				class: [
+					'ck',
+					// other classes
+				],
+				'height': '200px',
+
+				// tabindex: '-1'
+			},
+		} );
+		const previewAndInputView = new View( this.locale );
+		previewAndInputView.setTemplate(
+			{
+				tag: 'div',
+
+				attributes: {
+					class: [
+						'ck',
+						// other classes
+					],
+
+					tabindex: '-1'
+				},
+
+				children: [
+					labeledTextarea,
+					this.previewButtonView,
+					previewDivView,
+					this.saveButtonView
+				]
+			} );
+
+		return previewAndInputView;
 	}
 
 	/**
