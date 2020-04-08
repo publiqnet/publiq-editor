@@ -373,6 +373,7 @@
   justify-content: center;
 }
 .custom-modal {
+  opacity: 0;
   background: #FFFFFF;
   box-shadow: 1px 3px 7px rgba(43, 43, 43, 0.2);
   border-radius: 15px;
@@ -459,4 +460,7 @@
       top: 90px;
     }
   }
+}
+.set_visible {
+  opacity: 1;
 }

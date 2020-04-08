@@ -22,6 +22,8 @@ import ImageInsertCommand from '@ckeditor/ckeditor5-image/src/image/imageinsertc
 import DropdownButtonView from '@ckeditor/ckeditor5-ui/src/dropdown/button/dropdownbuttonview';
 import ModalView from './views/modal/modal.view';
 import ModalPanelView from './views/modal/modal-panel.view';
+import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
+import SwitchButtonView from '@ckeditor/ckeditor5-ui/src/button/switchbuttonview';
 // import katex from 'katex/dist/katex.mjs';
 
 const MaxFileSizeError = 'max file size error';
@@ -691,8 +693,54 @@ export function createModal( locale, ButtonClass = DropdownButtonView ) {
 		buttonView.arrowView.bind( 'isOn' ).to( modalView, 'isOpen' );
 	}
 
-	// addDefaultBehavior( modalView );
+	addDefaultBehavior( modalView );
 
 	return modalView;
 }
 
+function addDefaultBehavior( modalView ) {
+	closeDropdownOnBlur( modalView );
+	closeDropdownOnExecute( modalView );
+	focusDropdownContentsOnArrows( modalView );
+}
+function closeDropdownOnBlur( modalView ) {
+	modalView.on( 'render', () => {
+		clickOutsideHandler( {
+			emitter: modalView,
+			activator: () => modalView.isOpen,
+			callback: () => {
+				modalView.isOpen = false;
+			},
+			contextElements: [ modalView.element ]
+		} );
+	} );
+}
+function closeDropdownOnExecute( modalView ) {
+	// Close the dropdown when one of the list items has been executed.
+	modalView.on( 'execute', evt => {
+		// Toggling a switch button view should not close the dropdown.
+		if ( evt.source instanceof SwitchButtonView ) {
+			return;
+		}
+
+		modalView.isOpen = false;
+	} );
+}
+
+function focusDropdownContentsOnArrows( modalView ) {
+	// If the dropdown panel is already open, the arrow down key should focus the first child of the #panelView.
+	modalView.keystrokes.set( 'arrowdown', ( data, cancel ) => {
+		if ( modalView.isOpen ) {
+			modalView.panelView.focus();
+			cancel();
+		}
+	} );
+
+	// If the dropdown panel is already open, the arrow up key should focus the last child of the #panelView.
+	modalView.keystrokes.set( 'arrowup', ( data, cancel ) => {
+		if ( modalView.isOpen ) {
+			modalView.panelView.focusLast();
+			cancel();
+		}
+	} );
+}

@@ -8,10 +8,11 @@
  */
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import formulaIcon from '../assets/icons/Formula.svg';
+import formulaIcon from '../assets/icons/formula (1).svg';
 import TexInputFormView from '../views/tex-input-form.view';
 import TexEditing from './tex-editing.plugin';
 import { createModal, renderTexInput } from '../customizations';
+import katex from 'katex/dist/katex.mjs';
 
 /**
  * The media embed UI plugin.
@@ -41,8 +42,6 @@ export default class TexPlugin extends Plugin {
 	init() {
 		const editor = this.editor;
 		const command = editor.commands.get( 'renderTex' );
-		// const registry = editor.plugins.get( TexEditing ).registry;
-		// this.registry = registry;
 
 		/**
 		 * The form view displayed inside the drop-down.
@@ -68,6 +67,7 @@ export default class TexPlugin extends Plugin {
 
 		modal.bind( 'isEnabled' ).to( command );
 		modal.panelView.children.add( form );
+		modal.isOpen = false;
 
 		button.set( {
 			label: t( 'Tex editing' ),
@@ -85,15 +85,33 @@ export default class TexPlugin extends Plugin {
 			// didn't change the selection), they would see the old value instead of the actual value of the
 			// command.
 			form.texInput = command.value || '';
-			form.texInputView.select();
+			form.texInputView.template.children[ 0 ].textareaView.select();
 			form.focus();
 		}, { priority: 'low' } );
-
+		modal.on( 'preview', () => {
+			form.isValid();
+			let html;
+			try {
+				html = katex.renderToString( form.texInput, { output: 'html', macros: { '\\f': 'f(#1)' } } );
+			} catch ( e ) {
+				if ( e instanceof katex.ParseError ) {
+					// KaTeX can't parse the expression
+					html = ( 'Error in LaTeX \'' + form.texInput + '\': ' + e.message )
+						.replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+					html = `<p style="color:red">${ html }</p>`;
+				} else {
+					throw e; // other error
+				}
+			}
+			form.texInputView.template.children[ 2 ].element.innerHTML = html;
+			// katex.render( form.texInput, form.texInputView.template.children[ 2 ].element,
+			// { throwOnError: false, output: 'html', displayMode: true, strict: 'warn' } );
+		} );
 		modal.on( 'submit', () => {
 			if ( form.isValid() ) {
 				editor.execute( 'renderTex', { texInput: form.texInput, type: 'tex-input' } );
 				setTimeout( () => { // eslint-disable-line
-					const texInput = editor.plugins.get( TexEditing ).texInput;
+					const texInput = form.texInput;
 					renderTexInput( texInput, editor.editing.view.domConverter.viewToDom( this.texViewElement ) );
 				}, 0 );
 				closeUI();
@@ -110,12 +128,12 @@ export default class TexPlugin extends Plugin {
 	}
 
 	_setUpForm( form, modal, command ) {
-		form.delegate( 'submit', 'cancel' ).to( modal );
+		form.delegate( 'submit', 'cancel', 'preview' ).to( modal );
 		form.texInputView.bind( 'value' ).to( command, 'value' );
 
 		// Form elements should be read-only when corresponding commands are disabled.
 		form.texInputView.bind( 'isReadOnly' ).to( command, 'isEnabled', value => !value );
-		form.saveButtonView.bind( 'isEnabled' ).to( command );
+		form.saveButtonView.bind( 'isEnabled' ).to( form, 'valid' );
 	}
 
 	get texViewElement() {
@@ -134,15 +152,15 @@ function getFormValidators( t, /* registry*/ ) {
 				return t( 'The Tex input must not be empty.' );
 			}
 		},
-		// form => {
-		// 	// try {
-		// 	// 	const tex = katex.renderToString( form.texInput, { throwOnError: true } );
-		// 	// 	console.log( tex ); // eslint-disable-line
-		// 	// } catch ( e ) {
-		// 	// 	console.log( e ); // eslint-disable-line
-		// 	// 	return t( 'Wrong Tex input.' );
-		// 	// }
-		// }
+		form => {
+			try {
+				const tex = katex.renderToString( form.texInput, { throwOnError: true, macros: { '\\f': 'f(#1)' } } );
+				console.log( tex ); // eslint-disable-line
+			} catch ( e ) {
+				console.log( e ); // eslint-disable-line
+				return t( 'Wrong Tex input.' );
+			}
+		}
 	];
 }
 

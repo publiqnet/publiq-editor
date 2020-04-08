@@ -68,7 +68,7 @@ export default class ModalPanelView extends View {
 					// other classes
 					'custom-modal',
 					bind.to( 'position', value => `ck-dropdown__panel_${ value }` ),
-					bind.if( 'isVisible', 'ck-dropdown__panel-visible' )
+					bind.if( 'isVisible', 'set_visible' )
 				]
 			},
 

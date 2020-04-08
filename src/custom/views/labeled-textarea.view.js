@@ -171,7 +171,7 @@ export default class LabeledTextareaView extends View {
 		textareaView.bind( 'isReadOnly' ).to( this );
 		textareaView.bind( 'hasError' ).to( this, 'errorText', value => !!value );
 
-		textareaView.on( 'input', () => {
+		textareaView.on( 'change', () => {
 			// UX: Make the error text disappear and disable the error indicator as the user
 			// starts fixing the errors.
 			this.errorText = null;

@@ -12,6 +12,8 @@
       max-width: 870px;
       margin: 1em auto;
     }
+    .katex-version {display: none;}
+    .katex-version::after {content:"0.10.2 or earlier";}
   </style>
 </head>
 <body>
@@ -95,5 +97,9 @@
 	  } );
   }
 </script>
+<span class="katex">
+  <span class="katex-mathml">The KaTeX stylesheet is not loaded!</span>
+  <span class="katex-version rule">KaTeX stylesheet version: </span>
+</span>
 </body>
 </html>

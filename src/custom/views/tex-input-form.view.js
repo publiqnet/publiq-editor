@@ -11,7 +11,7 @@ import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
 import FocusCycler from '@ckeditor/ckeditor5-ui/src/focuscycler';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 
-import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
+// import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
 import '@ckeditor/ckeditor5-media-embed/theme/mediaform.css';
 import LabeledTextareaView from './labeled-textarea.view';
@@ -54,7 +54,7 @@ export default class TexInputFormView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.saveButtonView = this._createButton( t( 'Add' ), checkIcon, 'ck-button-save' );
+		this.saveButtonView = this._createButton( t( 'Add' ), '', 'ck-button-save', 'submit', true );
 		this.saveButtonView.type = 'submit';
 
 		/**
@@ -64,7 +64,7 @@ export default class TexInputFormView extends View {
 		 */
 		this.cancelButtonView = this._createButton( t( 'Cancel' ), cancelIcon, 'ck-button-cancel', 'cancel' );
 
-		this.previewButtonView = this._createButton( t( 'preview' ), checkIcon, 'ck-button-save' );
+		this.previewButtonView = this._createButton( t( 'preview' ), '', 'ck-button-save', 'preview', true );
 
 		/**
 		 * The Tex input view.
@@ -72,6 +72,13 @@ export default class TexInputFormView extends View {
 		 * @member {module:ui/labeledinput/labeledinputview~LabeledTextareaView}
 		 */
 		this.texInputView = this._createTexInput();
+
+		/**
+		 * The form valid property.
+		 *
+		 * @member {}
+		 */
+		this.set( 'valid', false );
 
 		/**
 		 * A collection of views that can be focused in the form.
@@ -205,7 +212,7 @@ export default class TexInputFormView extends View {
 	 * @type {Number}
 	 */
 	get texInput() {
-		return this.texInputView.textareaView.element.value.trim();
+		return this.texInputView.template.children[ 0 ].textareaView.element.value.trim();
 	}
 
 	/**
@@ -217,7 +224,7 @@ export default class TexInputFormView extends View {
 	 * @param {String} tex input
 	 */
 	set texInput( texInput ) {
-		this.texInputView.textareaView.element.value = texInput.trim();
+		this.texInputView.template.children[ 0 ].textareaView.element.value = texInput.trim();
 	}
 
 	/**
@@ -235,12 +242,12 @@ export default class TexInputFormView extends View {
 			if ( errorText ) {
 				// Apply updated error.
 				this.texInputView.errorText = errorText;
-
-				return false;
+				this.valid = false;
+				return this.valid;
 			}
 		}
-
-		return true;
+		this.valid = true;
+		return this.valid;
 	}
 
 	/**
@@ -250,8 +257,10 @@ export default class TexInputFormView extends View {
 	 * See {@link #isValid}.
 	 */
 	resetFormStatus() {
-		this.texInputView.errorText = null;
-		this.texInputView.infoText = this._texTextareaInfoDefault;
+		this.texInputView.template.children[ 0 ].errorText = null;
+		this.texInputView.template.children[ 0 ].infoText = this._texTextareaInfoDefault;
+		this.texInputView.template.children[ 2 ].element.textContent = '';
+		this.valid = false;
 	}
 
 	/**
@@ -273,9 +282,10 @@ export default class TexInputFormView extends View {
 		labeledTextarea.infoText = this._texTextareaInfoDefault;
 		textareaView.placeholder = 'Paste a Tex code to compile into formulas, e.g. \\f{x} compiled into ƒ(x)';
 
-		textareaView.on( 'input', () => {
+		textareaView.on( 'change', () => {
 			// Display the tip text only when there's some value. Otherwise fall back to the default info text.
 			labeledTextarea.infoText = textareaView.element.value ? this._texTextareaInfoTip : this._texTextareaInfoDefault;
+			this.valid = false;
 		} );
 		const previewDivView = new View( this.locale );
 		previewDivView.setTemplate( {
@@ -324,16 +334,20 @@ export default class TexInputFormView extends View {
 	 * @param {String} icon The button icon.
 	 * @param {String} className The additional button CSS class name.
 	 * @param {String} [eventName] An event name that the `ButtonView#execute` event will be delegated to.
-	 * @returns {module:ui/button/buttonview~ButtonView} The button view instance.
+	 * @returns {} The button view instance.
 	 */
-	_createButton( label, icon, className, eventName ) {
+	_createButton( label, icon, className, eventName, withText = false ) {
 		const button = new ButtonView( this.locale );
-
-		button.set( {
+		const buttonOptions = {
+			label,
+			tooltip: true,
+			withText
+		};
+		button.set( icon ? {
 			label,
 			icon,
 			tooltip: true
-		} );
+		} : buttonOptions );
 
 		button.extendTemplate( {
 			attributes: {
