@@ -73,7 +73,7 @@ export default class TexPlugin extends Plugin {
 		let html;
 		modal.render();
 		setTimeout( () => {//eslint-disable-line
-			document.querySelector( '.ck-balloon-panel' ).appendChild( modal.element );//eslint-disable-line
+			document.querySelector( '.ck-balloon-panel' ).parentNode.appendChild( modal.element );//eslint-disable-line
 		}, 0 );
 
 		// Toggle the modal when its button has been clicked.

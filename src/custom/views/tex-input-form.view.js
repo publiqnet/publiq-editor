@@ -54,7 +54,7 @@ export default class TexInputFormView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.saveButtonView = this._createButton( t( 'Add' ), '', 'ck-button-save', 'submit', true );
+		this.saveButtonView = this._createButton( t( 'Add' ), '', 'tex-button--save', 'submit', true );
 		this.saveButtonView.type = 'submit';
 
 		/**
@@ -62,9 +62,9 @@ export default class TexInputFormView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.cancelButtonView = this._createButton( t( 'Cancel' ), cancelIcon, 'ck-button-cancel', 'cancel' );
+		this.cancelButtonView = this._createButton( t( 'Cancel' ), cancelIcon, 'tex-button--close', 'cancel' );
 
-		this.previewButtonView = this._createButton( t( 'preview' ), '', 'ck-button-save', 'preview', true );
+		this.previewButtonView = this._createButton( t( 'Preview' ), '', 'tex-button--preview', 'preview', true );
 
 		/**
 		 * The Tex input view.
@@ -287,6 +287,34 @@ export default class TexInputFormView extends View {
 			labeledTextarea.infoText = textareaView.element.value ? this._texTextareaInfoTip : this._texTextareaInfoDefault;
 			this.valid = false;
 		} );
+		const inputCaptionView = new View( this.locale );
+		inputCaptionView.setTemplate( {
+			tag: 'h3',
+
+			attributes: {
+				class: [
+					'tex-label'
+					// other classes
+				],
+			},
+			children: [
+				'Formula pad'
+			]
+		} );
+		const outputCaptionView = new View( this.locale );
+		outputCaptionView.setTemplate( {
+			tag: 'h3',
+
+			attributes: {
+				class: [
+					'tex-label'
+					// other classes
+				]
+			},
+			children: [
+				'LaTex Formula Preview'
+			]
+		} );
 		const previewDivView = new View( this.locale );
 		previewDivView.setTemplate( {
 			tag: 'div',
@@ -294,9 +322,9 @@ export default class TexInputFormView extends View {
 			attributes: {
 				class: [
 					'ck',
+					'tex-output'
 					// other classes
 				],
-				'height': '200px',
 
 				// tabindex: '-1'
 			},
@@ -316,8 +344,10 @@ export default class TexInputFormView extends View {
 				},
 
 				children: [
+					inputCaptionView,
 					labeledTextarea,
 					this.previewButtonView,
+					outputCaptionView,
 					previewDivView,
 					this.saveButtonView
 				]

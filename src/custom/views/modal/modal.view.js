@@ -119,7 +119,8 @@ export default class ModalView extends View {
 					'modal-overlay',
 					// other classes
 					bind.to( 'class' ),
-					bind.if( 'isEnabled', 'ck-disabled', value => !value )
+					bind.if( 'isEnabled', 'ck-disabled', value => !value ),
+					bind.if( 'isOpen', 'modal-overlay--visible' ),
 				]
 			},
 

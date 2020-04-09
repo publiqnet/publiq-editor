@@ -17,10 +17,7 @@
 <body>
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
-<div id="editor">
-  <figure class="image ck-widget fullsize-image" contenteditable="false"><img src="https://south.publiq.network:14123/storage?file=5jwQK5zKcBm5Ri17wDvjH2owhAXMZPxuSBDbaU5tpF4" data-uri="5jwQK5zKcBm5Ri17wDvjH2owhAXMZPxuSBDbaU5tpF4" data-link="https://south.publiq.network:14123/storage?file=5jwQK5zKcBm5Ri17wDvjH2owhAXMZPxuSBDbaU5tpF4" data-natural-width="1920" data-natural-height="1080">
-  </figure>
-</div>
+<div id="editor"></div>
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
 <script>
@@ -81,6 +78,12 @@
 				} );
 			} );
 		} );
+		// const transformParent = document.querySelector('.ck-balloon-panel');
+		// const modalOverlay = document.querySelector('.modal-overlay');
+		// const button = modalOverlay.children[0];
+
+		// modalOverlay.parentNode.appendChild(button);
+		// transformParent.parentNode.appendChild(modalOverlay);
 	} )
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );
