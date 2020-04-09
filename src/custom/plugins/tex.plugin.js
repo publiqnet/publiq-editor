@@ -94,7 +94,7 @@ export default class TexPlugin extends Plugin {
 			// didn't change the selection), they would see the old value instead of the actual value of the
 			// command.
 			form.texInput = command.value || '';
-			form.texInputView.template.children[ 1 ].textareaView.select();
+			form.texInputView.template.children[ 1 ].select();
 			form.focus();
 		}, { priority: 'low' } );
 		modal.on( 'preview', () => {

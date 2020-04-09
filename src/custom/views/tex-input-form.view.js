@@ -11,12 +11,9 @@ import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
 import FocusCycler from '@ckeditor/ckeditor5-ui/src/focuscycler';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 
-// import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
 import '@ckeditor/ckeditor5-media-embed/theme/mediaform.css';
-import LabeledTextareaView from './labeled-textarea.view';
 import TextareaView from './textarea.view';
-// import Template from '@ckeditor/ckeditor5-ui/src/template';
 
 /**
  * The Tex (especially LaTex) input form view controller class.
@@ -212,7 +209,7 @@ export default class TexInputFormView extends View {
 	 * @type {Number}
 	 */
 	get texInput() {
-		return this.texInputView.template.children[ 1 ].textareaView.element.value.trim();
+		return this.texInputView.template.children[ 1 ].element.value.trim();
 	}
 
 	/**
@@ -224,7 +221,7 @@ export default class TexInputFormView extends View {
 	 * @param {String} tex input
 	 */
 	set texInput( texInput ) {
-		this.texInputView.template.children[ 1 ].textareaView.element.value = texInput.trim();
+		this.texInputView.template.children[ 1 ].element.value = texInput.trim();
 	}
 
 	/**
@@ -257,8 +254,6 @@ export default class TexInputFormView extends View {
 	 * See {@link #isValid}.
 	 */
 	resetFormStatus() {
-		this.texInputView.template.children[ 1 ].errorText = null;
-		this.texInputView.template.children[ 1 ].infoText = this._texTextareaInfoDefault;
 		this.texInputView.template.children[ 4 ].element.textContent = '';
 		this.valid = false;
 	}
@@ -270,21 +265,10 @@ export default class TexInputFormView extends View {
 	 * @returns {} Labeled textarea view instance.
 	 */
 	_createTexInput() {
-		const t = this.locale.t;
-
-		const labeledTextarea = new LabeledTextareaView( this.locale, TextareaView );
-		const textareaView = labeledTextarea.textareaView;
-
-		this._texTextareaInfoDefault = t( 'Paste the Tex code in the input.' );
-		this._texTextareaInfoTip = t( 'Tip: Paste the Tex into the content to compile faster.' );
-
-		labeledTextarea.label = t( 'Tex Integration' );
-		labeledTextarea.infoText = this._texTextareaInfoDefault;
+		const textareaView = new TextareaView( this.locale );
 		textareaView.placeholder = 'Paste a Tex code to compile into formulas, e.g. \\f{x} compiled into ƒ(x)';
 
 		textareaView.on( 'change', () => {
-			// Display the tip text only when there's some value. Otherwise fall back to the default info text.
-			labeledTextarea.infoText = textareaView.element.value ? this._texTextareaInfoTip : this._texTextareaInfoDefault;
 			this.valid = false;
 		} );
 		const inputCaptionView = new View( this.locale );
@@ -345,7 +329,7 @@ export default class TexInputFormView extends View {
 
 				children: [
 					inputCaptionView,
-					labeledTextarea,
+					textareaView,
 					this.previewButtonView,
 					outputCaptionView,
 					previewDivView,
