@@ -212,7 +212,7 @@ export default class TexInputFormView extends View {
 	 * @type {Number}
 	 */
 	get texInput() {
-		return this.texInputView.template.children[ 0 ].textareaView.element.value.trim();
+		return this.texInputView.template.children[ 1 ].textareaView.element.value.trim();
 	}
 
 	/**
@@ -224,7 +224,7 @@ export default class TexInputFormView extends View {
 	 * @param {String} tex input
 	 */
 	set texInput( texInput ) {
-		this.texInputView.template.children[ 0 ].textareaView.element.value = texInput.trim();
+		this.texInputView.template.children[ 1 ].textareaView.element.value = texInput.trim();
 	}
 
 	/**
@@ -257,9 +257,9 @@ export default class TexInputFormView extends View {
 	 * See {@link #isValid}.
 	 */
 	resetFormStatus() {
-		this.texInputView.template.children[ 0 ].errorText = null;
-		this.texInputView.template.children[ 0 ].infoText = this._texTextareaInfoDefault;
-		this.texInputView.template.children[ 2 ].element.textContent = '';
+		this.texInputView.template.children[ 1 ].errorText = null;
+		this.texInputView.template.children[ 1 ].infoText = this._texTextareaInfoDefault;
+		this.texInputView.template.children[ 4 ].element.textContent = '';
 		this.valid = false;
 	}
 

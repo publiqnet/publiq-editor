@@ -4,6 +4,7 @@
  */
 
 @import "variables";
+@import url("../node_modules/katex/dist/katex.min.css");
 
 :root {
   --ck-spacing-standard: 0;
@@ -468,7 +469,7 @@
       span { opacity: 1!important; }
 
       &.ck-disabled {
-        opacity: .8!important;
+        opacity: .35!important;
       }
     }
   }

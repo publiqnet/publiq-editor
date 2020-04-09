@@ -94,7 +94,7 @@ export default class TexPlugin extends Plugin {
 			// didn't change the selection), they would see the old value instead of the actual value of the
 			// command.
 			form.texInput = command.value || '';
-			form.texInputView.template.children[ 0 ].textareaView.select();
+			form.texInputView.template.children[ 1 ].textareaView.select();
 			form.focus();
 		}, { priority: 'low' } );
 		modal.on( 'preview', () => {
@@ -111,7 +111,7 @@ export default class TexPlugin extends Plugin {
 					throw e; // other error
 				}
 			}
-			form.texInputView.template.children[ 2 ].element.innerHTML = html;
+			form.texInputView.template.children[ 4 ].element.innerHTML = html;
 			// katex.render( form.texInput, form.texInputView.template.children[ 2 ].element,
 			// { throwOnError: false, output: 'html', displayMode: true, strict: 'warn' } );
 		} );
