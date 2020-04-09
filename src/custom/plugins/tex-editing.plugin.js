@@ -15,6 +15,7 @@ import RenderTexCommand from '../commands/tex-render.command';
 // import { renderTexInput } from '../customizations';
 import TexPlugin from './tex.plugin';
 import Template from '@ckeditor/ckeditor5-ui/src/template';
+import { renderTexInput } from '../customizations';
 
 /**
  * The media embed editing feature.
@@ -43,7 +44,6 @@ export default class TexEditing extends Plugin {
 	init() {
 		const editor = this.editor;
 		const schema = editor.model.schema;
-		const t = editor.t;
 		const conversion = editor.conversion;
 		// const renderMediaPreview = editor.config.get( 'mediaEmbed.previewsInData' );
 		// const registry = this.registry;
@@ -100,6 +100,27 @@ export default class TexEditing extends Plugin {
 				}
 			} );
 		} );
+		// data-id
+		editor.conversion.for( 'upcast' ).attributeToAttribute( {
+			view: 'data-curr-rendering',
+			model: 'data-curr-rendering'
+		} );
+		editor.conversion.for( 'downcast' ).add( dispatcher => {
+			dispatcher.on( 'attribute:data-curr-rendering:div', ( evt, data, conversionApi ) => {
+				if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
+					return;
+				}
+
+				const viewWriter = conversionApi.writer;
+				const texDiv = conversionApi.mapper.toViewElement( data.item );
+
+				if ( data.attributeNewValue !== null ) {
+					viewWriter.setAttribute( 'data-curr-rendering', data.attributeNewValue, texDiv );
+				} else {
+					viewWriter.removeAttribute( 'data-curr-rendering', texDiv );
+				}
+			} );
+		} );
 
 		// Model -> Data
 		conversion.for( 'dataDowncast' ).elementToElement( {
@@ -127,6 +148,7 @@ export default class TexEditing extends Plugin {
 			view: ( modelElement, viewWriter ) => {
 				const type = modelElement.getAttribute( 'data-type' );
 				const id = modelElement.getAttribute( 'data-id' );
+				const currentRendering = toBoolean( modelElement.getAttribute( 'data-curr-rendering' ) );
 
 				const texParagraph = viewWriter.createEditableElement( 'p' );
 				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( this.texInput ) );
@@ -135,9 +157,11 @@ export default class TexEditing extends Plugin {
 				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), createTexInputParagraph( this.texInput, viewWriter ) );
 
 				this.editor.plugins.get( TexPlugin ).texViewElement = texDiv;
-				// renderTexInput( editor.editing.view.domConverter.viewToDom( texDiv ) );
+				if ( !currentRendering ) {
+					setTimeout( () => renderTexInput( this.texInput, editor.editing.view.domConverter.viewToDom( texDiv ) ), 0 );// eslint-disable-line
+				}
 
-				return toWidget( texDiv, viewWriter, t( 'tex container' ) );
+				return toWidget( texDiv, viewWriter, { hasSelectionHandle: true } );
 			}
 		} );
 		// View -> Model
@@ -155,10 +179,11 @@ export default class TexEditing extends Plugin {
 				model: ( viewMedia, modelWriter ) => {
 					const type = viewMedia.getAttribute( 'data-type' );
 					const id = viewMedia.getAttribute( 'data-id' );
-					const currentRendering = viewMedia.getAttribute( 'data-curr-rendering' );
+					const currentRendering = toBoolean( viewMedia.getAttribute( 'data-curr-rendering' ) );
 					// eslint-disable-next-line
-					if (type && id && !currentRendering) {
-						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id } );
+					if (type && id && !currentRendering ) {
+						this.texInput = viewMedia.getChild( 0 ).getChild( 0 ).data;
+						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
 					} else if ( currentRendering ) { viewMedia._removeAttribute( 'data-curr-rendering' ); } // eslint-disable-line
 				}
 			} );
@@ -183,4 +208,10 @@ function createTexInputParagraph( texInput, writer, attributes = {} ) {
 
 		return domElement;
 	} );
+}
+
+function toBoolean( val ) {
+	const stringToBoolean = new Map( [ [ 'true', true ], [ 'false', false ], [ '0', false ], [ '', false ], [ ' ', false ], [ 0, false ] ] );// eslint-disable-line
+	if ( stringToBoolean.has( val ) ) return stringToBoolean.get( val );// eslint-disable-line
+	return true;
 }

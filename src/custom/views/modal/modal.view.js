@@ -188,7 +188,7 @@ export default class ModalView extends View {
 			}
 		};
 
-		// Open the modal panel using the arrow down key, just like with return or space.
+		// Open the modal panel using the arrow up key, just like with return or space.
 		this.keystrokes.set( 'arrowup', ( data, cancel ) => {
 			// Don't open if the modal is disabled or already open.
 			if ( !this.isOpen ) {
