@@ -55,7 +55,7 @@ export default class TexEditing extends Plugin {
 			isObject: true,
 			isBlock: true,
 			allowWhere: '$block',
-			allowAttributes: [ 'data-type', 'data-id' ]
+			allowAttributes: [ 'data-type', 'data-id', 'data-curr-rendering' ]
 		} );
 
 		// data-embed-type
@@ -148,16 +148,18 @@ export default class TexEditing extends Plugin {
 					name: 'div',
 					attributes: {
 						'data-type': true,
-						'data-id': true
+						'data-id': true,
+						'data-curr-rendering': true
 					}
 				},
 				model: ( viewMedia, modelWriter ) => {
 					const type = viewMedia.getAttribute( 'data-type' );
 					const id = viewMedia.getAttribute( 'data-id' );
+					const currentRendering = viewMedia.getAttribute( 'data-curr-rendering' );
 					// eslint-disable-next-line
-					if (type && id) {
+					if (type && id && !currentRendering) {
 						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id } );
-					}
+					} else if ( currentRendering ) { viewMedia._removeAttribute( 'data-curr-rendering' ); } // eslint-disable-line
 				}
 			} );
 	}

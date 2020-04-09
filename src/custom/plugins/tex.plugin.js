@@ -11,8 +11,9 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import formulaIcon from '../assets/icons/formula (1).svg';
 import TexInputFormView from '../views/tex-input-form.view';
 import TexEditing from './tex-editing.plugin';
-import { createModal, renderTexInput } from '../customizations';
+import { createModal } from '../customizations';
 import katex from 'katex/dist/katex.mjs';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 
 /**
  * The media embed UI plugin.
@@ -52,28 +53,36 @@ export default class TexPlugin extends Plugin {
 
 		editor.ui.componentFactory.add( 'texEditing', locale => {
 			const modal = createModal( locale );
-
+			this.buttonView = new ButtonView( editor.locale ); // modal.buttonView;
+			this.buttonView.set( {
+				label: editor.t( 'Tex editing' ),
+				icon: formulaIcon,
+				tooltip: true
+			} );
+			this.buttonView.delegate( 'execute' ).to( this.buttonView, 'open' );
 			this._setUpModal( modal, this.form, command, editor );
 			this._setUpForm( this.form, modal, command );
 
-			return modal;
+			return this.buttonView;
 		} );
 	}
 
 	_setUpModal( modal, form, command ) {
+		const button = this.buttonView;
 		const editor = this.editor;
-		const t = editor.t;
-		const button = modal.buttonView;
+		let html;
+		modal.render();
+		setTimeout( () => {//eslint-disable-line
+			document.querySelector( '.ck-balloon-panel' ).appendChild( modal.element );//eslint-disable-line
+		}, 0 );
 
+		// Toggle the modal when its button has been clicked.
+		modal.listenTo( this.buttonView, 'open', () => {
+			modal.isOpen = !modal.isOpen;
+		} );
 		modal.bind( 'isEnabled' ).to( command );
 		modal.panelView.children.add( form );
 		modal.isOpen = false;
-
-		button.set( {
-			label: t( 'Tex editing' ),
-			icon: formulaIcon,
-			tooltip: true
-		} );
 
 		// Note: Use the low priority to make sure the following listener starts working after the
 		// default action of the drop-down is executed (i.e. the panel showed up). Otherwise, the
@@ -90,7 +99,6 @@ export default class TexPlugin extends Plugin {
 		}, { priority: 'low' } );
 		modal.on( 'preview', () => {
 			form.isValid();
-			let html;
 			try {
 				html = katex.renderToString( form.texInput, { output: 'html', macros: { '\\f': 'f(#1)' } } );
 			} catch ( e ) {
@@ -107,12 +115,17 @@ export default class TexPlugin extends Plugin {
 			// katex.render( form.texInput, form.texInputView.template.children[ 2 ].element,
 			// { throwOnError: false, output: 'html', displayMode: true, strict: 'warn' } );
 		} );
-		modal.on( 'submit', () => {
+		modal.on( 'submit', event => {
 			if ( form.isValid() ) {
 				editor.execute( 'renderTex', { texInput: form.texInput, type: 'tex-input' } );
 				setTimeout( () => { // eslint-disable-line
-					const texInput = form.texInput;
-					renderTexInput( texInput, editor.editing.view.domConverter.viewToDom( this.texViewElement ) );
+					const texElement = editor.editing.view.domConverter.viewToDom( this.texViewElement );
+					texElement.textContent = '';
+					texElement.appendChild(
+						new DOMParser().parseFromString( html, 'text/html' ).getElementsByClassName( 'katex' )[ 0 ]// eslint-disable-line
+					);
+					texElement.setAttribute( 'data-curr-rendering', true );
+					event.stop();
 				}, 0 );
 				closeUI();
 			}

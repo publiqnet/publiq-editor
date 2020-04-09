@@ -4,7 +4,7 @@
  */
 
 /**
- * @module ui/dropdown/dropdownview
+ * @module ui/modal/modalview
  */
 
 import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
@@ -18,12 +18,12 @@ import View from '@ckeditor/ckeditor5-ui/src/view';
 
 export default class ModalView extends View {
 	/**
-	 * Creates an instance of the dropdown.
+	 * Creates an instance of the modal.
 	 *
 	 * Also see {@link #render}.
 	 *
 	 * @param {module:utils/locale~Locale} [locale] The localization services instance.
-	 * @param {module:ui/dropdown/button/dropdownbutton~DropdownButton} buttonView
+	 * @param {module:ui/modal/button/modalbutton~DropdownButton} buttonView
 	 * @param {} panelView
 	 */
 	constructor( locale, buttonView, panelView ) {
@@ -32,31 +32,23 @@ export default class ModalView extends View {
 		const bind = this.bindTemplate;
 
 		/**
-		 * Button of the dropdown view. Clicking the button opens the {@link #panelView}.
-		 *
-		 * @readonly
-		 * @member {module:ui/button/buttonview~ButtonView} #buttonView
-		 */
-		this.buttonView = buttonView;
-
-		/**
-		 * Panel of the dropdown. It opens when the {@link #buttonView} is
+		 * Panel of the modal. It opens when the {@link #buttonView} is
 		 * {@link module:ui/button/buttonview~ButtonView#event:execute executed} (i.e. clicked).
 		 *
 		 * Child views can be added to the panel's `children` collection:
 		 *
-		 *		dropdown.panelView.children.add( childView );
+		 *		modal.panelView.children.add( childView );
 		 *
-		 * See {@link module:ui/dropdown/dropdownpanelview~DropdownPanelView#children} and
+		 * See {@link module:ui/modal/modalpanelview~DropdownPanelView#children} and
 		 * {@link module:ui/viewcollection~ViewCollection#add}.
 		 *
 		 * @readonly
-		 * @member {module:ui/dropdown/dropdownpanelview~DropdownPanelView} #panelView
+		 * @member {module:ui/modal/modalpanelview~DropdownPanelView} #panelView
 		 */
 		this.panelView = panelView;
 
 		/**
-		 * Controls whether the dropdown view is open, i.e. shows or hides the {@link #panelView panel}.
+		 * Controls whether the modal view is open, i.e. shows or hides the {@link #panelView panel}.
 		 *
 		 * @observable
 		 * @member {Boolean} #isOpen
@@ -64,7 +56,7 @@ export default class ModalView extends View {
 		this.set( 'isOpen', false );
 
 		/**
-		 * Controls whether the dropdown is enabled, i.e. it can be clicked and execute an action.
+		 * Controls whether the modal is enabled, i.e. it can be clicked and execute an action.
 		 *
 		 * See {@link module:ui/button/buttonview~ButtonView#isEnabled}.
 		 *
@@ -74,7 +66,7 @@ export default class ModalView extends View {
 		this.set( 'isEnabled', true );
 
 		/**
-		 * (Optional) The additional CSS class set on the dropdown {@link #element}.
+		 * (Optional) The additional CSS class set on the modal {@link #element}.
 		 *
 		 * @observable
 		 * @member {String} #class
@@ -86,10 +78,10 @@ export default class ModalView extends View {
 		 *
 		 * **Note**: When `'auto'`, the panel will use one of the remaining positions to stay
 		 * in the viewport, visible to the user. The positions correspond directly to
-		 * {@link module:ui/dropdown/dropdownview~DropdownView.defaultPanelPositions default panel positions}.
+		 * {@link module:ui/modal/modalview~DropdownView.defaultPanelPositions default panel positions}.
 		 *
 		 * **Note**: This value has an impact on the
-		 * {@link module:ui/dropdown/dropdownpanelview~DropdownPanelView#position} property
+		 * {@link module:ui/modal/modalpanelview~DropdownPanelView#position} property
 		 * each time the panel becomes {@link #isOpen open}.
 		 *
 		 * @observable
@@ -99,7 +91,7 @@ export default class ModalView extends View {
 		this.set( 'panelPosition', 'auto' );
 
 		/**
-		 * Tracks information about DOM focus in the dropdown.
+		 * Tracks information about DOM focus in the modal.
 		 *
 		 * @readonly
 		 * @member {module:utils/focustracker~FocusTracker}
@@ -108,10 +100,10 @@ export default class ModalView extends View {
 
 		/**
 		 * Instance of the {@link module:utils/keystrokehandler~KeystrokeHandler}. It manages
-		 * keystrokes of the dropdown:
+		 * keystrokes of the modal:
 		 *
-		 * * <kbd>▼</kbd> opens the dropdown,
-		 * * <kbd>◀</kbd> and <kbd>Esc</kbd> closes the dropdown.
+		 * * <kbd>▼</kbd> opens the modal,
+		 * * <kbd>◀</kbd> and <kbd>Esc</kbd> closes the modal.
 		 *
 		 * @readonly
 		 * @member {module:utils/keystrokehandler~KeystrokeHandler}
@@ -132,34 +124,25 @@ export default class ModalView extends View {
 			},
 
 			children: [
-				buttonView,
 				panelView
 			]
 		} );
 
-		buttonView.extendTemplate( {
-			attributes: {
-				class: [
-					'ck-dropdown__button',
-				]
-			}
-		} );
-
 		/**
-		 * A child {@link module:ui/list/listview~ListView list view} of the dropdown located
-		 * in its {@link module:ui/dropdown/dropdownview~DropdownView#panelView panel}.
+		 * A child {@link module:ui/list/listview~ListView list view} of the modal located
+		 * in its {@link module:ui/modal/modalview~DropdownView#panelView panel}.
 		 *
-		 * **Note**: Only supported when dropdown has list view added using {@link module:ui/dropdown/utils~addListToDropdown}.
+		 * **Note**: Only supported when modal has list view added using {@link module:ui/modal/utils~addListToDropdown}.
 		 *
 		 * @readonly
 		 * @member {module:ui/list/listview~ListView} #listView
 		 */
 
 		/**
-		 * A child toolbar of the dropdown located in the
-		 * {@link module:ui/dropdown/dropdownview~DropdownView#panelView panel}.
+		 * A child toolbar of the modal located in the
+		 * {@link module:ui/modal/modalview~DropdownView#panelView panel}.
 		 *
-		 * **Note**: Only supported when dropdown has list view added using {@link module:ui/dropdown/utils~addToolbarToDropdown}.
+		 * **Note**: Only supported when modal has list view added using {@link module:ui/modal/utils~addToolbarToDropdown}.
 		 *
 		 * @readonly
 		 * @member {module:ui/toolbar/toolbarview~ToolbarView} #toolbarView
@@ -174,8 +157,8 @@ export default class ModalView extends View {
 		 * For {@link #toolbarView} It fires when one of the buttons has been
 		 * {@link module:ui/button/buttonview~ButtonView#event:execute executed}.
 		 *
-		 * **Note**: Only supported when dropdown has list view added using {@link module:ui/dropdown/utils~addListToDropdown}
-		 * or {@link module:ui/dropdown/utils~addToolbarToDropdown}.
+		 * **Note**: Only supported when modal has list view added using {@link module:ui/modal/utils~addListToDropdown}
+		 * or {@link module:ui/modal/utils~addToolbarToDropdown}.
 		 *
 		 * @event execute
 		 */
@@ -187,34 +170,8 @@ export default class ModalView extends View {
 	render() {
 		super.render();
 
-		// Toggle the dropdown when its button has been clicked.
-		this.listenTo( this.buttonView, 'open', () => {
-			this.isOpen = !this.isOpen;
-		} );
-
-		// Toggle the visibility of the panel when the dropdown becomes open.
+		// Toggle the visibility of the panel when the modal becomes open.
 		this.panelView.bind( 'isVisible' ).to( this, 'isOpen' );
-
-		// Let the dropdown control the position of the panel. The position must
-		// be updated every time the dropdown is open.
-		this.on( 'change:isOpen', () => {
-			if ( !this.isOpen ) {
-				return;
-			}
-
-			// If "auto", find the best position of the panel to fit into the viewport.
-			// Otherwise, simply assign the static position.
-			if ( this.panelPosition === 'auto' ) {
-				this.panelView.position = ModalView._getOptimalPosition( {
-					element: this.panelView.element,
-					target: this.buttonView.element,
-					fitInViewport: true,
-					positions: this._panelPositions
-				} ).name;
-			} else {
-				this.panelView.position = this.panelPosition;
-			}
-		} );
 
 		// Listen for keystrokes coming from within #element.
 		this.keystrokes.listenTo( this.element );
@@ -222,40 +179,40 @@ export default class ModalView extends View {
 		// Register #element in the focus tracker.
 		this.focusTracker.add( this.element );
 
-		const closeDropdown = ( data, cancel ) => {
+		const closeModal = ( data, cancel ) => {
 			if ( this.isOpen ) {
-				this.buttonView.focus();
+				// this.buttonView.focus();
 				this.isOpen = false;
 				cancel();
 			}
 		};
 
-		// Open the dropdown panel using the arrow down key, just like with return or space.
-		this.keystrokes.set( 'arrowdown', ( data, cancel ) => {
-			// Don't open if the dropdown is disabled or already open.
-			if ( this.buttonView.isEnabled && !this.isOpen ) {
+		// Open the modal panel using the arrow down key, just like with return or space.
+		this.keystrokes.set( 'arrowup', ( data, cancel ) => {
+			// Don't open if the modal is disabled or already open.
+			if ( !this.isOpen ) {
 				this.isOpen = true;
 				cancel();
 			}
 		} );
 
-		// Block the right arrow key (until nested dropdowns are implemented).
+		// Block the right arrow key (until nested modals are implemented).
 		this.keystrokes.set( 'arrowright', ( data, cancel ) => {
 			if ( this.isOpen ) {
 				cancel();
 			}
 		} );
 
-		// Close the dropdown using the arrow left/escape key.
-		this.keystrokes.set( 'arrowleft', closeDropdown );
-		this.keystrokes.set( 'esc', closeDropdown );
+		// Close the modal using the arrow left/escape key.
+		this.keystrokes.set( 'arrowleft', closeModal );
+		this.keystrokes.set( 'esc', closeModal );
 	}
 
 	/**
 	 * Focuses the {@link #buttonView}.
 	 */
 	focus() {
-		this.buttonView.focus();
+		// this.buttonView.focus();
 	}
 
 	/**
@@ -278,10 +235,10 @@ export default class ModalView extends View {
 }
 
 /**
- * A set of positioning functions used by the dropdown view to determine
+ * A set of positioning functions used by the modal view to determine
  * the optimal position (i.e. fitting into the browser viewport) of its
- * {@link module:ui/dropdown/dropdownview~DropdownView#panelView panel} when
- * {@link module:ui/dropdown/dropdownview~DropdownView#panelPosition} is set to 'auto'`.
+ * {@link module:ui/modal/modalview~DropdownView#panelView panel} when
+ * {@link module:ui/modal/modalview~DropdownView#panelPosition} is set to 'auto'`.
  *
  * The available positioning functions are as follow:
  *
@@ -319,11 +276,11 @@ export default class ModalView extends View {
  *
  * Positioning functions are compatible with {@link module:utils/dom/position~Position}.
  *
- * The name that position function returns will be reflected in dropdown panel's class that
- * controls its placement. See {@link module:ui/dropdown/dropdownview~DropdownView#panelPosition}
+ * The name that position function returns will be reflected in modal panel's class that
+ * controls its placement. See {@link module:ui/modal/modalview~DropdownView#panelPosition}
  * to learn more.
  *
- * @member {Object} module:ui/dropdown/dropdownview~DropdownView.defaultPanelPositions
+ * @member {Object} module:ui/modal/modalview~DropdownView.defaultPanelPositions
  */
 ModalView.defaultPanelPositions = {
 	southEast: buttonRect => {
@@ -357,9 +314,9 @@ ModalView.defaultPanelPositions = {
 };
 
 /**
- * A function used to calculate the optimal position for the dropdown panel.
+ * A function used to calculate the optimal position for the modal panel.
  *
  * @protected
- * @member {Function} module:ui/dropdown/dropdownview~DropdownView._getOptimalPosition
+ * @member {Function} module:ui/modal/modalview~ModalView._getOptimalPosition
  */
 ModalView._getOptimalPosition = getOptimalPosition;
