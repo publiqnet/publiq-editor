@@ -80,7 +80,7 @@ export default class TexPlugin extends Plugin {
 		modal.listenTo( this.buttonView, 'open', () => {
 			modal.isOpen = !modal.isOpen;
 		} );
-		modal.bind( 'isEnabled' ).to( command );
+		modal.bind( 'isEnabled' ).to( this.buttonView );
 		modal.panelView.children.add( form );
 		modal.isOpen = false;
 
