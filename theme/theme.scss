@@ -173,10 +173,10 @@
     background: none;
 
     &.ck-balloon-panel_arrow_n {
-      transform: translate(130px,-54px);
+      transform: translate(152px,-54px);
     }
     &.ck-balloon-panel_arrow_s {
-      transform: translate(130px, 54px);
+      transform: translate(152px, 54px);
     }
 
     .ck-toolbar_floating {
@@ -381,7 +381,7 @@
 .custom-modal {
   background: #FFFFFF !important;
   box-shadow: 1px 3px 7px rgba(43, 43, 43, 0.2);
-  border-radius: 15px;
+  border-radius: 15px!important;
   max-width: 1090px;
   // height: 510px;
   overflow-y: auto;
@@ -410,6 +410,10 @@
     }
   }
 
+  form {
+    width: 100%!important;
+  }
+
   form > div {
     width: 100% !important;
     display: flex !important;
@@ -430,8 +434,22 @@
 
     & + button {
       position: absolute !important;
-      top: 30px; right: 30px;
+      min-width: 30px!important;
+      min-height: 30px!important;
+      top: 25px; right: 25px;
+      background-color: #ECF0F3!important;
+      border-radius: 50%!important;
+
+      svg {
+        width: 16px!important;
+        height: 16px!important;
+      }
     }
+  }
+
+  .tex-label {
+    font: 700 25px/1.36 'Open Sans', sans-serif;
+    margin: 0 0 23px;
   }
 
   .tex-output {
@@ -450,7 +468,7 @@
       font: 600 13px/1.38 'Open Sans', sans-serif !important;
       border-radius: 7px!important;
       padding: 6px 10px!important;
-      margin: 12px 0!important;
+      margin: 12px 0 0!important;
       color: #565A60!important;
       align-self: flex-end;
       min-height: unset!important;
@@ -463,10 +481,15 @@
       align-self: center;
       border-radius: 7px!important;
       color: #ffffff!important;
-      font: 600 17px/1.38 'Open Sans', sans-serif !important;
       padding: 10px 20px!important;
+      margin: 40px 0 0 !important;
 
       span { opacity: 1!important; }
+
+      .ck-button__label {
+        font: 600 17px/1.38 'Open Sans', sans-serif !important;
+        line-height: 1!important;
+      }
 
       &.ck-disabled {
         opacity: .35!important;
