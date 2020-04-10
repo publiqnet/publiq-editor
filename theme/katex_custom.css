@@ -1,4 +1,6 @@
 /* stylelint-disable font-family-no-missing-generic-family-keyword */
+@import url("../node_modules/katex/dist/katex.min.css");
+
 @font-face {
     font-family: 'KaTeX_AMS';
     src: url(/build/fonts/KaTeX_AMS-Regular.woff2) format('woff2'), url(/build/fonts/KaTeX_AMS-Regular.woff) format('woff'), url(/build/fonts/KaTeX_AMS-Regular.ttf) format('truetype');

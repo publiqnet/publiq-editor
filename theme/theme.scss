@@ -34,7 +34,8 @@
 
   p, h2, h3,
   h4, blockquote,
-  ol, ul, .media, .table {
+  ol, ul, .media, .table,
+  .ck-widget {
     max-width: 870px;
 
     @include media-xl {
@@ -46,6 +47,10 @@
     @include media-md {
       max-width: 530px;
     }
+  }
+
+  .ck-widget {
+    margin: 0 auto 20px;
   }
 
   p {
