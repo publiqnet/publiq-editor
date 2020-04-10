@@ -45,6 +45,7 @@ import * as customizations from './custom/customizations';
 import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
 import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import '../theme/theme.scss';
+import TexPlugin from './custom/plugins/tex.plugin';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -81,7 +82,8 @@ BalloonEditor.builtinPlugins = [
 	BeforeImageInsertPlugin,
 	BeforeImageDeletePlugin,
 	SocialMediaEmbedEditing,
-	SocialEmbedPlugin
+	SocialEmbedPlugin,
+	TexPlugin
 ];
 
 // Editor configuration.

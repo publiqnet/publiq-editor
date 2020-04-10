@@ -3,19 +3,15 @@
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-/**
- * @module ui/inputtext/inputtextview
- */
-
-import View from '../view';
-import '../../theme/components/inputtext/inputtext.css';
+import View from '@ckeditor/ckeditor5-ui/src/view';
+import '@ckeditor/ckeditor5-ui/theme/components/inputtext/inputtext.css';
 
 /**
  * The text input view class.
  *
  * @extends module:ui/view~View
  */
-export default class TextAreaView extends View {
+export default class TextareaView extends View {
 	/**
 	 * @inheritDoc
 	 */

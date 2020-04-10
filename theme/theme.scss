@@ -1,9 +1,6 @@
-/*
- * Copyright (c) 2003-2020, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
- */
-
 @import "variables";
+@import "katex_custom.css";
+
 
 :root {
   --ck-spacing-standard: 0;
@@ -38,7 +35,8 @@
 
   p, h2, h3,
   h4, blockquote,
-  ol, ul, .media, .table {
+  ol, ul, .media, .table,
+  .ck-widget {
     max-width: 870px;
 
     @include media-xl {
@@ -50,6 +48,10 @@
     @include media-md {
       max-width: 530px;
     }
+  }
+
+  .ck-widget {
+    margin: 0 auto 20px;
   }
 
   p {
@@ -172,10 +174,10 @@
     background: none;
 
     &.ck-balloon-panel_arrow_n {
-      transform: translate(130px,-54px);
+      transform: translate(152px,-54px);
     }
     &.ck-balloon-panel_arrow_s {
-      transform: translate(130px, 54px);
+      transform: translate(152px, 54px);
     }
 
     .ck-toolbar_floating {
@@ -354,6 +356,145 @@
     &.gridsize-image {
       max-width: 870px;
       img { width: 100%; }
+    }
+  }
+}
+.modal-overlay {
+  display: none!important;
+  background: rgba(#F7F8F9, .9) !important;
+  mix-blend-mode: normal;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &--visible {
+    display: inline-block !important;
+  }
+}
+.custom-modal {
+  background: #FFFFFF !important;
+  box-shadow: 1px 3px 7px rgba(43, 43, 43, 0.2);
+  border-radius: 15px!important;
+  max-width: 1090px;
+  // height: 510px;
+  overflow-y: auto;
+  width: calc(100% - 30px) !important;
+  padding: 23px 30px 35px !important;
+  position: absolute !important;
+  top: 50%; left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  @include media-md {
+    height: 100vh;
+    border-radius: 0;
+  }
+  h3 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 34px;
+    color: #2B2B2B;
+    margin: 0 0 30px;
+    padding-right: 40px;
+    b {
+      color: #3365ff;
+    }
+    @include media-sm {
+      font-size: 20px;
+    }
+  }
+
+  form {
+    width: 100%!important;
+  }
+
+  form > div {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column;
+    outline: none!important;
+
+    textarea {
+      width: 100%!important;
+      min-height: 30vh!important;
+      color: #565A60!important;
+      font: 17px/1.15 'Open Sans', sans-serif !important;
+      background: #F7F8F9!important;
+      border: 3px solid rgba(51,102,255,0.10)!important;
+      border-radius: 15px!important;
+      padding: 21px 23px!important;
+      resize: none;
+    }
+
+    & + button {
+      position: absolute !important;
+      min-width: 30px!important;
+      min-height: 30px!important;
+      top: 25px; right: 25px;
+      background-color: #ECF0F3!important;
+      border-radius: 50%!important;
+
+      svg {
+        width: 16px!important;
+        height: 16px!important;
+      }
+    }
+  }
+
+  .tex-label {
+    font: 700 25px/1.36 'Open Sans', sans-serif;
+    margin: 0 0 23px;
+  }
+
+  .tex-output {
+    font: 17px/1.15 'Open Sans', sans-serif;
+    border: 3px solid rgba(51,102,255,0.10);
+    border-radius: 15px;
+    color: #565A60;
+    background: #F7F8F9;
+    padding: 21px 23px;
+    min-height: 25vh!important;
+  }
+
+  .tex-button {
+    &--preview {
+      border: 1px solid #DEE2E6!important;
+      font: 600 13px/1.38 'Open Sans', sans-serif !important;
+      border-radius: 7px!important;
+      padding: 6px 10px!important;
+      margin: 12px 0 0!important;
+      color: #565A60!important;
+      align-self: flex-end;
+      min-height: unset!important;
+
+      span { line-height: 1.38!important; }
+    }
+
+    &--save {
+      background-color: #5B45DC!important;
+      align-self: center;
+      border-radius: 7px!important;
+      color: #ffffff!important;
+      padding: 10px 20px!important;
+      margin: 40px 0 0 !important;
+
+      span { opacity: 1!important; }
+
+      .ck-button__label {
+        font: 600 17px/1.38 'Open Sans', sans-serif !important;
+        line-height: 1!important;
+      }
+
+      &.ck-disabled {
+        opacity: .35!important;
+      }
     }
   }
 }
