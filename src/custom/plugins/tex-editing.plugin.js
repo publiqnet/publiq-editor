@@ -164,7 +164,7 @@ export default class TexEditing extends Plugin {
 							const texOutput = renderTexInput( this.texInput, element );
 							element.replaceChild( texOutput, element.children[ 1 ] );
 							editor.editing.view.change( writer => {
-								writer.setAttribute( 'data-curr-rendering', 'true', texDiv );
+								writer.setAttribute( 'data-curr-rendering', 'false', texDiv );
 							} );
 						}
 					}, 0 );
@@ -193,6 +193,10 @@ export default class TexEditing extends Plugin {
 					if (type && id && !currentRendering ) {
 						this.texInput = viewMedia.getChild( 0 ).getChild( 0 ).data;
 						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
+					} else if ( currentRendering ) {
+						editor.model.change( writer => {
+							writer.setAttribute( 'data-curr-rendering', 'false', viewMedia );
+						} );
 					}
 				}
 			} );

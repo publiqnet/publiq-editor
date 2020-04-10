@@ -113,13 +113,13 @@ export default class TexPlugin extends Plugin {
 
 		modal.on( 'add', event => {
 			if ( form.isValid() ) {
-				editor.execute( 'renderTex', { texInput: form.texInput, type: 'tex-input', 'data-curr-rendering': true } );
+				editor.execute( 'renderTex', { texInput: form.texInput, type: 'tex-input', 'data-curr-rendering': 'true' } );
 				const texElement = editor.editing.view.domConverter.viewToDom( this.texViewElement );
 				texElement.replaceChild(
 					new DOMParser().parseFromString( html, 'text/html' ).getElementsByClassName( 'katex' )[ 0 ],// eslint-disable-line
 					texElement.children[ 1 ]
 				);
-				texElement.setAttribute( 'data-curr-rendering', 'true' );
+				texElement.setAttribute( 'data-curr-rendering', 'false' );
 				event.stop();
 				closeUI();
 			}

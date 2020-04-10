@@ -24,7 +24,7 @@ import ModalPanelView from './views/modal/modal-panel.view';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
 import SwitchButtonView from '@ckeditor/ckeditor5-ui/src/button/switchbuttonview';
 import katex from 'katex/dist/katex.mjs';
-
+import { isWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 const MaxFileSizeError = 'max file size error';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
@@ -513,7 +513,7 @@ Widget.prototype._onMousedown = function( eventInfo, domEventData ) {
 	if ( !element ) return; // eslint-disable-line
 
 	// Do nothing for single or double click inside nested editable.
-	if ( this.isInsideNestedEditable( element ) ) {
+	if ( isInsideNestedEditable( element ) ) {
 		// But at least triple click inside nested editable causes broken selection in Safari.
 		// For such event, we select the entire nested editable element.
 		// See: https://github.com/ckeditor/ckeditor5/issues/1463.
@@ -531,8 +531,8 @@ Widget.prototype._onMousedown = function( eventInfo, domEventData ) {
 	}
 
 	// If target is not a widget element - check if one of the ancestors is.
-	if ( !this.isWidget( element ) ) {
-		element = element.findAncestor( this.isWidget );
+	if ( !isWidget( element ) ) {
+		element = element.findAncestor( isWidget );
 
 		if ( !element ) {
 			return;
@@ -551,6 +551,23 @@ Widget.prototype._onMousedown = function( eventInfo, domEventData ) {
 
 	this._setSelectionOverElement( modelElement );
 };
+
+function isInsideNestedEditable( element ) {
+	while ( element ) {
+		if ( element.is( 'editableElement' ) && !element.is( 'rootElement' ) ) {
+			return true;
+		}
+
+		// Click on nested widget should select it.
+		if ( isWidget( element ) ) {
+			return false;
+		}
+
+		element = element.parent;
+	}
+
+	return false;
+}
 
 function repositionContextualBalloon( editor, relatedElement ) {
 	const balloon = editor.plugins.get( 'ContextualBalloon' );

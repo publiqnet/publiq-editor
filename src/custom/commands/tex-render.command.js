@@ -37,7 +37,7 @@ export default class RenderTexCommand extends Command {
 
 		const dataId = new Date().getTime();
 		const type = options.type;
-		const currRendering = options[ 'data-curr-rendering' ];
+		// const currRendering = options[ 'data-curr-rendering' ];
 		this.editor.plugins.get( TexEditing ).texInput = options.texInput;
 
 		const selectedElement = selection.getSelectedElement();
@@ -51,13 +51,13 @@ export default class RenderTexCommand extends Command {
 		if ( selectedElement && _isWidget ) {
 			model.change( writer => {
 				writer.setAttributes( { 'data-type': type, 'data-id': `${ type }__${ dataId }`,
-					'data-curr-rendering': currRendering }, selectedElement );
+					'data-curr-rendering': 'false' }, selectedElement );
 			} );
 		} else {
 			const insertPosition = findOptimalInsertionPosition( selection, model );
 			model.change( writer => {
 				const widgetElement = writer.createElement( 'div', { 'data-type': type, 'data-id': `${ type }__${ dataId }`,
-					'data-curr-rendering': currRendering } );
+					'data-curr-rendering': 'false' } );
 
 				model.insertContent( widgetElement, insertPosition );
 				insertNewLine( model, widgetElement );
