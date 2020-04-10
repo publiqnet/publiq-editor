@@ -15,6 +15,7 @@ export default class TexPlugin extends Plugin {
 	constructor( editor ) {
 		super( editor );
 		this._texViewElement = null;
+		this.modal = null;
 	}
 
 	static get requires() {
@@ -44,6 +45,7 @@ export default class TexPlugin extends Plugin {
 
 		editor.ui.componentFactory.add( 'texEditing', locale => {
 			const modal = createModal( locale );
+			this.modal = modal;
 			this.buttonView = new ButtonView( editor.locale ); // modal.buttonView;
 			this.buttonView.set( {
 				label: editor.t( 'Tex editing' ),
@@ -52,7 +54,7 @@ export default class TexPlugin extends Plugin {
 			} );
 			this.buttonView.delegate( 'execute' ).to( this.buttonView, 'open' );
 			this._setUpModal( modal, this.form, command, editor );
-			this._setUpForm( this.form, modal, command );
+			this._setUpForm( this.form, modal );
 
 			return this.buttonView;
 		} );
@@ -132,12 +134,12 @@ export default class TexPlugin extends Plugin {
 		}
 	}
 
-	_setUpForm( form, modal, command ) {
+	_setUpForm( form, modal ) {
 		form.delegate( 'add', 'cancel', 'preview' ).to( modal );
-		form.texInputView.bind( 'value' ).to( command, 'value' );
+		// form.texInputView.bind( 'value' ).to( command, 'value' );
 
 		// Form elements should be read-only when corresponding commands are disabled.
-		form.texInputView.bind( 'isReadOnly' ).to( command, 'isEnabled', value => !value );
+		// form.texInputView.bind( 'isReadOnly' ).to( command, 'isEnabled', value => !value );
 		form.saveButtonView.bind( 'isEnabled' ).to( form, 'valid' );
 	}
 

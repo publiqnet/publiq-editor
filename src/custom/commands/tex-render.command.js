@@ -19,7 +19,6 @@ export default class RenderTexCommand extends Command {
 		if ( parent != parent.root ) {
 			parent = parent.parent;
 		}
-
 		this.value = selectedElement ? selectedElement.getAttributes( ) : null;
 		this.isEnabled = schema.checkChild( parent, 'div' );
 	}

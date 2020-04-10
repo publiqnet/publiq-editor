@@ -155,23 +155,24 @@ export default class TexEditing extends Plugin {
 				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), createTexInputParagraph( this.texInput, viewWriter ) );
 
 				this.editor.plugins.get( TexPlugin ).texViewElement = texDiv;
-				let elem;
+				texDiv.getFillerOffset = () => null;
+
 				if ( !currentRendering ) {
 					setTimeout( () => {// eslint-disable-line
-						const element = editor.editing.view.domConverter.viewToDom( elem );
+						const element = editor.editing.view.domConverter.viewToDom( texDiv );
 						if ( element && element.children.length > 1 ) {
-							const texOutput = renderTexInput( this.texInput, element.children[ 1 ] );
+							const texOutput = renderTexInput( this.texInput, element );
 							element.replaceChild( texOutput, element.children[ 1 ] );
+							editor.editing.view.change( writer => {
+								writer.setAttribute( 'data-curr-rendering', 'true', texDiv );
+							} );
 						}
 					}, 0 );
 				}
-				elem = toWidget( texDiv, viewWriter, { hasSelectionHandle: true } );
-				editor.model.change( writer => {
-					writer.setAttribute( 'data-curr-rendering', 'true', modelElement );
-				} );// eslint-disable-line
-				return elem;
+				return toWidget( texDiv, viewWriter, { hasSelectionHandle: true } );
 			}
 		} );
+
 		// View -> Model
 		conversion.for( 'upcast' )
 		// Upcast semantic media.
@@ -192,8 +193,6 @@ export default class TexEditing extends Plugin {
 					if (type && id && !currentRendering ) {
 						this.texInput = viewMedia.getChild( 0 ).getChild( 0 ).data;
 						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
-					} else if ( currentRendering ) {
-						editor.model.change( writer => { writer.setAttribute( 'data-curr-rendering', 'false', viewMedia ); } );// eslint-disable-line
 					}
 				}
 			} );

@@ -18,7 +18,7 @@
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
 <div id="editor">
-  <div data-id="tex-input__1586447701422" data-type="tex-input" data-curr-rendering="false"><p>\f{x} = \int_{-\infty}^\infty \hat \f\xi\,e^{2 \pi i \xi x} \,d\xi</p></div><p>&nbsp;</p><p>&nbsp;</p>
+  <div data-id="tex-input__1586447701422" data-type="tex-input" data-curr-rendering="false"><p>\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)</p></div><p>&nbsp;</p><p>&nbsp;</p>
 </div>
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
@@ -35,10 +35,11 @@
 			console.log( p3 );
 		} );
 	  editor.editing.view.document.on( 'click', ( evInfo, data, p3) => {
-        console.log( evInfo)
-        console.log( data)
-        console.log( p3)
-	  } );
+		// console.log( evInfo );
+		// console.log( data );
+		// console.log( p3 );
+		//  evInfo.stop();
+	  }, {priority : 'highest'} );
 	  editor.editing.view.document.on( 'imageLoaded', ( evInfo, data, p3) => {
 		    if(editor.model.document.selection.getSelectedElement().getAttribute('uploadId')) {
 		      editor.plugins.get( 'WidgetToolbarRepository' )._toolbarDefinitions.get( 'image' )

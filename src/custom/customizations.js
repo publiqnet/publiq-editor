@@ -1,5 +1,6 @@
 import ImageUploadEditing from '@ckeditor/ckeditor5-image/src/imageupload/imageuploadediting';
 import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar';
+import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 import BlockButtonView from '@ckeditor/ckeditor5-ui/src/toolbar/block/blockbuttonview';
 import iconPilcrow from './assets/icons/Plus.svg';
 import env from '@ckeditor/ckeditor5-utils/src/env';
@@ -501,6 +502,54 @@ ImageEditing.prototype.init = function() {
 
 	// Register imageUpload command.
 	editor.commands.add( 'imageInsert', new ImageInsertCommand( editor ) );
+};
+
+Widget.prototype._onMousedown = function( eventInfo, domEventData ) {
+	const editor = this.editor;
+	const view = editor.editing.view;
+	const viewDocument = view.document;
+	let element = domEventData.target;
+
+	if ( !element ) return; // eslint-disable-line
+
+	// Do nothing for single or double click inside nested editable.
+	if ( this.isInsideNestedEditable( element ) ) {
+		// But at least triple click inside nested editable causes broken selection in Safari.
+		// For such event, we select the entire nested editable element.
+		// See: https://github.com/ckeditor/ckeditor5/issues/1463.
+		if ( env.isSafari && domEventData.domEvent.detail >= 3 ) {
+			const mapper = editor.editing.mapper;
+			const modelElement = mapper.toModelElement( element );
+
+			this.editor.model.change( writer => {
+				domEventData.preventDefault();
+				writer.setSelection( modelElement, 'in' );
+			} );
+		}
+
+		return;
+	}
+
+	// If target is not a widget element - check if one of the ancestors is.
+	if ( !this.isWidget( element ) ) {
+		element = element.findAncestor( this.isWidget );
+
+		if ( !element ) {
+			return;
+		}
+	}
+
+	domEventData.preventDefault();
+
+	// Focus editor if is not focused already.
+	if ( !viewDocument.isFocused ) {
+		view.focus();
+	}
+
+	// Create model selection over widget.
+	const modelElement = editor.editing.mapper.toModelElement( element );
+
+	this._setSelectionOverElement( modelElement );
 };
 
 function repositionContextualBalloon( editor, relatedElement ) {
