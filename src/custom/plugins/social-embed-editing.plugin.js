@@ -159,8 +159,10 @@ export default class SocialMediaEmbedEditing extends Plugin {
 						code = `${ stringify( viewMedia._children[ 0 ]._children[ 0 ] ) }`;
 					}
 					// eslint-disable-next-line
-					if ( type && id ) { return modelWriter.createElement( 'media', { 'data-embed-type': type, 'data-id': id,
-						'data-embed-code': code, 'data-embed-script': '' } ); }
+					if ( type && id ) {
+						return modelWriter.createElement( 'media', { 'data-embed-type': type, 'data-id': id,
+							'data-embed-code': code, 'data-embed-script': '' } );
+					}
 				}
 			} );
 	}

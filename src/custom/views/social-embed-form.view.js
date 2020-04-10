@@ -129,14 +129,14 @@ export default class SocialMediaEmbedFormView extends View {
 		} );
 
 		/**
-		 * The default info text for the {@link #embedInputView}.
+		 * The default info text for the {@link #texInputView}.
 		 *
 		 * @private
 		 * @member {String} #_embedInputViewInfoDefault
 		 */
 
 		/**
-		 * The info text with an additional tip for the {@link #embedInputView},
+		 * The info text with an additional tip for the {@link #texInputView},
 		 * displayed when the input has some value.
 		 *
 		 * @private
@@ -197,7 +197,7 @@ export default class SocialMediaEmbedFormView extends View {
 	}
 
 	/**
-	 * The native DOM `value` of the {@link #embedInputView} element.
+	 * The native DOM `value` of the {@link #texInputView} element.
 	 *
 	 * **Note**: Do not confuse it with the {@link module:ui/inputtext/inputtextview~InputTextView#value}
 	 * which works one way only and may not represent the actual state of the component in the DOM.
@@ -209,7 +209,7 @@ export default class SocialMediaEmbedFormView extends View {
 	}
 
 	/**
-	 * Sets the native DOM `value` of the {@link #embedInputView} element.
+	 * Sets the native DOM `value` of the {@link #texInputView} element.
 	 *
 	 * **Note**: Do not confuse it with the {@link module:ui/inputtext/inputtextview~InputTextView#value}
 	 * which works one way only and may not represent the actual state of the component in the DOM.
@@ -244,7 +244,7 @@ export default class SocialMediaEmbedFormView extends View {
 	}
 
 	/**
-	 * Cleans up the supplementary error and information text of the {@link #embedInputView}
+	 * Cleans up the supplementary error and information text of the {@link #texInputView}
 	 * bringing them back to the state when the form has been displayed for the first time.
 	 *
 	 * See {@link #isValid}.

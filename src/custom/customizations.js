@@ -1,5 +1,6 @@
 import ImageUploadEditing from '@ckeditor/ckeditor5-image/src/imageupload/imageuploadediting';
 import BlockToolbar from '@ckeditor/ckeditor5-ui/src/toolbar/block/blocktoolbar';
+import Widget from '@ckeditor/ckeditor5-widget/src/widget';
 import BlockButtonView from '@ckeditor/ckeditor5-ui/src/toolbar/block/blockbuttonview';
 import iconPilcrow from './assets/icons/Plus.svg';
 import env from '@ckeditor/ckeditor5-utils/src/env';
@@ -18,7 +19,12 @@ import ImageLoadObserver from '@ckeditor/ckeditor5-image/src/image/imageloadobse
 import { toImageWidget } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { modelToViewAttributeConverter, srcsetAttributeConverter, viewFigureToModel } from '@ckeditor/ckeditor5-image/src/image/converters';
 import ImageInsertCommand from '@ckeditor/ckeditor5-image/src/image/imageinsertcommand';
-
+import ModalView from './views/modal/modal.view';
+import ModalPanelView from './views/modal/modal-panel.view';
+import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
+import SwitchButtonView from '@ckeditor/ckeditor5-ui/src/button/switchbuttonview';
+import katex from 'katex/dist/katex.mjs';
+import { isWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 const MaxFileSizeError = 'max file size error';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
@@ -126,7 +132,7 @@ ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
 };
 
 BlockToolbar.prototype._attachButtonToElement = function( targetElement ) {
-	if ( targetElement.textContent || targetElement.closest( 'figure' ) ) {
+	if ( targetElement && ( targetElement.textContent || targetElement.closest( 'figure' ) ) ) {
 		this._hideButton();
 		return;
 	}
@@ -498,6 +504,71 @@ ImageEditing.prototype.init = function() {
 	editor.commands.add( 'imageInsert', new ImageInsertCommand( editor ) );
 };
 
+Widget.prototype._onMousedown = function( eventInfo, domEventData ) {
+	const editor = this.editor;
+	const view = editor.editing.view;
+	const viewDocument = view.document;
+	let element = domEventData.target;
+
+	if ( !element ) return; // eslint-disable-line
+
+	// Do nothing for single or double click inside nested editable.
+	if ( isInsideNestedEditable( element ) ) {
+		// But at least triple click inside nested editable causes broken selection in Safari.
+		// For such event, we select the entire nested editable element.
+		// See: https://github.com/ckeditor/ckeditor5/issues/1463.
+		if ( env.isSafari && domEventData.domEvent.detail >= 3 ) {
+			const mapper = editor.editing.mapper;
+			const modelElement = mapper.toModelElement( element );
+
+			this.editor.model.change( writer => {
+				domEventData.preventDefault();
+				writer.setSelection( modelElement, 'in' );
+			} );
+		}
+
+		return;
+	}
+
+	// If target is not a widget element - check if one of the ancestors is.
+	if ( !isWidget( element ) ) {
+		element = element.findAncestor( isWidget );
+
+		if ( !element ) {
+			return;
+		}
+	}
+
+	domEventData.preventDefault();
+
+	// Focus editor if is not focused already.
+	if ( !viewDocument.isFocused ) {
+		view.focus();
+	}
+
+	// Create model selection over widget.
+	const modelElement = editor.editing.mapper.toModelElement( element );
+
+	this._setSelectionOverElement( modelElement );
+};
+
+function isInsideNestedEditable( element ) {
+	while ( element ) {
+		if ( element.is( 'editableElement' ) && !element.is( 'rootElement' ) ) {
+			return true;
+		}
+
+		// Click on nested widget should select it.
+		if ( isWidget( element ) ) {
+			return false;
+		}
+
+		element = element.parent;
+	}
+
+	return false;
+}
+
 function repositionContextualBalloon( editor, relatedElement ) {
 	const balloon = editor.plugins.get( 'ContextualBalloon' );
 	const position = getBalloonPositionData( editor, relatedElement );
@@ -655,4 +726,71 @@ export function runEmbedScript( src, type ) {
 			} else { runScript(); }
 			break;
 	}
+}
+
+export function renderTexInput( texInput, element ) {
+	try {
+		const options = { output: 'html', macros: { '\\f': 'f(#1)' } };
+		const containerElement = document.createElement( 'div' ); // eslint-disable-line
+		containerElement.appendChild( element.cloneNode( true ) );
+		katex.render( texInput, containerElement, options );
+		return containerElement.children[ 0 ];
+	} catch ( e ) {
+		return element;
+	}
+}
+
+export function createModal( locale ) {
+	const panelView = new ModalPanelView( locale );
+	const modalView = new ModalView( locale, panelView );
+	addDefaultBehavior( modalView );
+
+	return modalView;
+}
+
+function addDefaultBehavior( modalView ) {
+	closeModalOnBlur( modalView );
+	closeModalOnExecute( modalView );
+	focusModalContentsOnArrows( modalView );
+}
+function closeModalOnBlur( modalView ) {
+	modalView.on( 'render', () => {
+		clickOutsideHandler( {
+			emitter: modalView,
+			activator: () => modalView.isOpen,
+			callback: () => {
+				modalView.isOpen = false;
+			},
+			contextElements: [ modalView.element ]
+		} );
+	} );
+}
+function closeModalOnExecute( modalView ) {
+	// Close the dropdown when one of the list items has been executed.
+	modalView.on( 'execute', evt => {
+		// Toggling a switch button view should not close the dropdown.
+		if ( evt.source instanceof SwitchButtonView ) {
+			return;
+		}
+
+		modalView.isOpen = false;
+	} );
+}
+
+function focusModalContentsOnArrows( modalView ) {
+	// If the dropdown panel is already open, the arrow down key should focus the first child of the #panelView.
+	modalView.keystrokes.set( 'arrowdown', ( data, cancel ) => {
+		if ( modalView.isOpen ) {
+			modalView.panelView.focus();
+			cancel();
+		}
+	} );
+
+	// If the dropdown panel is already open, the arrow up key should focus the last child of the #panelView.
+	modalView.keystrokes.set( 'arrowup', ( data, cancel ) => {
+		if ( modalView.isOpen ) {
+			modalView.panelView.focusLast();
+			cancel();
+		}
+	} );
 }
