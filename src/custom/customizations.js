@@ -18,7 +18,6 @@ import ImageLoadObserver from '@ckeditor/ckeditor5-image/src/image/imageloadobse
 import { toImageWidget } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { modelToViewAttributeConverter, srcsetAttributeConverter, viewFigureToModel } from '@ckeditor/ckeditor5-image/src/image/converters';
 import ImageInsertCommand from '@ckeditor/ckeditor5-image/src/image/imageinsertcommand';
-import DropdownButtonView from '@ckeditor/ckeditor5-ui/src/dropdown/button/dropdownbuttonview';
 import ModalView from './views/modal/modal.view';
 import ModalPanelView from './views/modal/modal-panel.view';
 import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsidehandler';
@@ -664,35 +663,31 @@ export function runEmbedScript( src, type ) {
 }
 
 export function renderTexInput( texInput, element ) {
-	const options = { output: 'html', macros: { '\\f': 'f(#1)' } };
-	katex.render( texInput, element, options );
+	try {
+		const options = { output: 'html', macros: { '\\f': 'f(#1)' } };
+		const containerElement = document.createElement( 'div' ); // eslint-disable-line
+		containerElement.appendChild( element.cloneNode( true ) );
+		katex.render( texInput, containerElement, options );
+		return containerElement.children[ 0 ];
+	} catch ( e ) {
+		return element;
+	}
 }
 
-export function createModal( locale, ButtonClass = DropdownButtonView ) {
-	const buttonView = new ButtonClass( locale );
-
+export function createModal( locale ) {
 	const panelView = new ModalPanelView( locale );
-	const modalView = new ModalView( locale, buttonView, panelView );
-
-	buttonView.bind( 'isEnabled' ).to( modalView );
-
-	if ( buttonView instanceof DropdownButtonView ) {
-		buttonView.bind( 'isOn' ).to( modalView, 'isOpen' );
-	} else {
-		buttonView.arrowView.bind( 'isOn' ).to( modalView, 'isOpen' );
-	}
-
+	const modalView = new ModalView( locale, panelView );
 	addDefaultBehavior( modalView );
 
 	return modalView;
 }
 
 function addDefaultBehavior( modalView ) {
-	closeDropdownOnBlur( modalView );
-	closeDropdownOnExecute( modalView );
-	focusDropdownContentsOnArrows( modalView );
+	closeModalOnBlur( modalView );
+	closeModalOnExecute( modalView );
+	focusModalContentsOnArrows( modalView );
 }
-function closeDropdownOnBlur( modalView ) {
+function closeModalOnBlur( modalView ) {
 	modalView.on( 'render', () => {
 		clickOutsideHandler( {
 			emitter: modalView,
@@ -704,7 +699,7 @@ function closeDropdownOnBlur( modalView ) {
 		} );
 	} );
 }
-function closeDropdownOnExecute( modalView ) {
+function closeModalOnExecute( modalView ) {
 	// Close the dropdown when one of the list items has been executed.
 	modalView.on( 'execute', evt => {
 		// Toggling a switch button view should not close the dropdown.
@@ -716,7 +711,7 @@ function closeDropdownOnExecute( modalView ) {
 	} );
 }
 
-function focusDropdownContentsOnArrows( modalView ) {
+function focusModalContentsOnArrows( modalView ) {
 	// If the dropdown panel is already open, the arrow down key should focus the first child of the #panelView.
 	modalView.keystrokes.set( 'arrowdown', ( data, cancel ) => {
 		if ( modalView.isOpen ) {

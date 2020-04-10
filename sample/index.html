@@ -17,7 +17,9 @@
 <body>
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
-<div id="editor"></div>
+<div id="editor">
+  <div data-id="tex-input__1586447701422" data-type="tex-input" data-curr-rendering="false"><p>\f{x} = \int_{-\infty}^\infty \hat \f\xi\,e^{2 \pi i \xi x} \,d\xi</p></div><p>&nbsp;</p><p>&nbsp;</p>
+</div>
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
 <script>
@@ -33,7 +35,9 @@
 			console.log( p3 );
 		} );
 	  editor.editing.view.document.on( 'click', ( evInfo, data, p3) => {
-
+        console.log( evInfo)
+        console.log( data)
+        console.log( p3)
 	  } );
 	  editor.editing.view.document.on( 'imageLoaded', ( evInfo, data, p3) => {
 		    if(editor.model.document.selection.getSelectedElement().getAttribute('uploadId')) {
@@ -78,12 +82,6 @@
 				} );
 			} );
 		} );
-		// const transformParent = document.querySelector('.ck-balloon-panel');
-		// const modalOverlay = document.querySelector('.modal-overlay');
-		// const button = modalOverlay.children[0];
-
-		// modalOverlay.parentNode.appendChild(button);
-		// transformParent.parentNode.appendChild(modalOverlay);
 	} )
 		.catch( error => {
 			console.error( 'There was a problem initializing the editor.', error );

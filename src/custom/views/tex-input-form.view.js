@@ -51,8 +51,7 @@ export default class TexInputFormView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.saveButtonView = this._createButton( t( 'Add' ), '', 'tex-button--save', 'submit', true );
-		this.saveButtonView.type = 'submit';
+		this.saveButtonView = this._createButton( t( 'Add' ), '', 'tex-button--save', 'add', true );
 
 		/**
 		 * The Cancel button view.
@@ -221,7 +220,7 @@ export default class TexInputFormView extends View {
 	 * @param {String} tex input
 	 */
 	set texInput( texInput ) {
-		this.texInputView.template.children[ 1 ].element.value = texInput.trim();
+		this.texInputView.template.children[ 1 ].element.value = texInput && texInput.trim();
 	}
 
 	/**
@@ -259,10 +258,10 @@ export default class TexInputFormView extends View {
 	}
 
 	/**
-	 * Creates a labeled textarea view.
+	 * Creates preview and textarea view.
 	 *
 	 * @private
-	 * @returns {} Labeled textarea view instance.
+	 * @returns {}  preview and textarea view instance.
 	 */
 	_createTexInput() {
 		const textareaView = new TextareaView( this.locale );
@@ -271,34 +270,27 @@ export default class TexInputFormView extends View {
 		textareaView.on( 'change', () => {
 			this.valid = false;
 		} );
+
 		const inputCaptionView = new View( this.locale );
 		inputCaptionView.setTemplate( {
 			tag: 'h3',
 
 			attributes: {
-				class: [
-					'tex-label'
-					// other classes
-				],
+				class: [ 'tex-label' ],
 			},
-			children: [
-				'Formula pad'
-			]
+			children: [ 'Formula pad' ]
 		} );
+
 		const outputCaptionView = new View( this.locale );
 		outputCaptionView.setTemplate( {
 			tag: 'h3',
 
 			attributes: {
-				class: [
-					'tex-label'
-					// other classes
-				]
+				class: [ 'tex-label' ]
 			},
-			children: [
-				'LaTex Formula Preview'
-			]
+			children: [ 'LaTex Formula Preview' ]
 		} );
+
 		const previewDivView = new View( this.locale );
 		previewDivView.setTemplate( {
 			tag: 'div',
@@ -307,23 +299,17 @@ export default class TexInputFormView extends View {
 				class: [
 					'ck',
 					'tex-output'
-					// other classes
 				],
-
-				// tabindex: '-1'
 			},
 		} );
+
 		const previewAndInputView = new View( this.locale );
 		previewAndInputView.setTemplate(
 			{
 				tag: 'div',
 
 				attributes: {
-					class: [
-						'ck',
-						// other classes
-					],
-
+					class: [ 'ck' ],
 					tabindex: '-1'
 				},
 

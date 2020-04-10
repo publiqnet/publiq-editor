@@ -27,11 +27,10 @@ export default class RenderTexCommand extends Command {
 	/**
 	 * Executes the command, which either:
 	 *
-	 * * updates the Embed of the selected media,
-	 * * inserts the new media into the editor and puts the selection around it.
+	 * * updates the Tex of the selected widget,
+	 * * inserts the new Tex element into the editor and puts the selection around it.
 	 *
 	 * @fires execute
-	 * @param {String} embed The Embed code of the media.
 	 */
 	execute( options ) {
 		const model = this.editor.model;
@@ -39,17 +38,27 @@ export default class RenderTexCommand extends Command {
 
 		const dataId = new Date().getTime();
 		const type = options.type;
+		const currRendering = options[ 'data-curr-rendering' ];
 		this.editor.plugins.get( TexEditing ).texInput = options.texInput;
 
 		const selectedElement = selection.getSelectedElement();
-		if ( selectedElement && isWidget( selectedElement ) ) {
+		let _isWidget;
+		try {
+			_isWidget = isWidget( selectedElement );
+		} catch ( e ) {
+			_isWidget = false;
+		}
+
+		if ( selectedElement && _isWidget ) {
 			model.change( writer => {
-				writer.setAttributes( { 'data-type': type, 'data-id': `${ type }__${ dataId }` }, selectedElement );
+				writer.setAttributes( { 'data-type': type, 'data-id': `${ type }__${ dataId }`,
+					'data-curr-rendering': currRendering }, selectedElement );
 			} );
 		} else {
 			const insertPosition = findOptimalInsertionPosition( selection, model );
 			model.change( writer => {
-				const widgetElement = writer.createElement( 'div', { 'data-type': type, 'data-id': `${ type }__${ dataId }` } );
+				const widgetElement = writer.createElement( 'div', { 'data-type': type, 'data-id': `${ type }__${ dataId }`,
+					'data-curr-rendering': currRendering } );
 
 				model.insertContent( widgetElement, insertPosition );
 				insertNewLine( model, widgetElement );

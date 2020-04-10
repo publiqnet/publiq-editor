@@ -26,7 +26,7 @@ export default class ModalView extends View {
 	 * @param {module:ui/modal/button/modalbutton~DropdownButton} buttonView
 	 * @param {} panelView
 	 */
-	constructor( locale, buttonView, panelView ) {
+	constructor( locale, panelView ) {
 		super( locale );
 
 		const bind = this.bindTemplate;

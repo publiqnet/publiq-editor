@@ -12,7 +12,6 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembedediting.css';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import RenderTexCommand from '../commands/tex-render.command';
-// import { renderTexInput } from '../customizations';
 import TexPlugin from './tex.plugin';
 import Template from '@ckeditor/ckeditor5-ui/src/template';
 import { renderTexInput } from '../customizations';
@@ -45,8 +44,6 @@ export default class TexEditing extends Plugin {
 		const editor = this.editor;
 		const schema = editor.model.schema;
 		const conversion = editor.conversion;
-		// const renderMediaPreview = editor.config.get( 'mediaEmbed.previewsInData' );
-		// const registry = this.registry;
 
 		editor.commands.add( 'renderTex', new RenderTexCommand( editor ) );
 
@@ -153,15 +150,26 @@ export default class TexEditing extends Plugin {
 				const texParagraph = viewWriter.createEditableElement( 'p' );
 				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( this.texInput ) );
 
-				const texDiv = viewWriter.createContainerElement( 'div', { 'data-id': id, 'data-type': type } );
+				const texDiv = viewWriter.createContainerElement( 'div',
+					{ 'data-id': id, 'data-type': type, 'data-curr-rendering': 'true' } );
 				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), createTexInputParagraph( this.texInput, viewWriter ) );
 
 				this.editor.plugins.get( TexPlugin ).texViewElement = texDiv;
+				let elem;
 				if ( !currentRendering ) {
-					setTimeout( () => renderTexInput( this.texInput, editor.editing.view.domConverter.viewToDom( texDiv ) ), 0 );// eslint-disable-line
+					setTimeout( () => {// eslint-disable-line
+						const element = editor.editing.view.domConverter.viewToDom( elem );
+						if ( element && element.children.length > 1 ) {
+							const texOutput = renderTexInput( this.texInput, element.children[ 1 ] );
+							element.replaceChild( texOutput, element.children[ 1 ] );
+						}
+					}, 0 );
 				}
-
-				return toWidget( texDiv, viewWriter, { hasSelectionHandle: true } );
+				elem = toWidget( texDiv, viewWriter, { hasSelectionHandle: true } );
+				editor.model.change( writer => {
+					writer.setAttribute( 'data-curr-rendering', 'true', modelElement );
+				} );// eslint-disable-line
+				return elem;
 			}
 		} );
 		// View -> Model
@@ -184,7 +192,9 @@ export default class TexEditing extends Plugin {
 					if (type && id && !currentRendering ) {
 						this.texInput = viewMedia.getChild( 0 ).getChild( 0 ).data;
 						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
-					} else if ( currentRendering ) { viewMedia._removeAttribute( 'data-curr-rendering' ); } // eslint-disable-line
+					} else if ( currentRendering ) {
+						editor.model.change( writer => { writer.setAttribute( 'data-curr-rendering', 'false', viewMedia ); } );// eslint-disable-line
+					}
 				}
 			} );
 	}

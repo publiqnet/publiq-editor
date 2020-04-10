@@ -4,16 +4,16 @@
  */
 
 /**
- * @module ui/dropdown/dropdownpanelview
+ * @module ui/modal/modalpanelview
  */
 
 import View from '@ckeditor/ckeditor5-ui/src/view';
 import '../../../../theme/theme.scss';
 
 /**
- * The dropdown panel view class.
+ * The modal panel view class.
  *
- * See {@link module:ui/dropdown/dropdownview~DropdownView} to learn about the common usage.
+ * See {@link module:ui/modal/modalview~DropdownView} to learn about the common usage.
  *
  * @extends module:ui/view~View
  */
@@ -50,11 +50,10 @@ export default class ModalPanelView extends View {
 		 * Collection of the child views in this panel.
 		 *
 		 * A common child type is the {@link module:ui/list/listview~ListView} and {@link module:ui/toolbar/toolbarview~ToolbarView}.
-		 * See {@link module:ui/dropdown/utils~addListToDropdown} and
-		 * {@link module:ui/dropdown/utils~addToolbarToDropdown} to learn more about child views of dropdowns.
+		 * See {@link module:ui/modal/utils~addListToDropdown} and
+		 * {@link module:ui/modal/utils~addToolbarToDropdown} to learn more about child views of modals.
 		 *
 		 * @readonly
-		 * @member {module:ui/viewcollection~ViewCollection}
 		 */
 		this.children = this.createCollection();
 
@@ -67,7 +66,7 @@ export default class ModalPanelView extends View {
 					'ck-reset',
 					// other classes
 					'custom-modal',
-					bind.to( 'position', value => `ck-dropdown__panel_${ value }` ),
+					bind.to( 'position', value => `ck-modal__panel_${ value }` ),
 				]
 			},
 
@@ -82,9 +81,9 @@ export default class ModalPanelView extends View {
 	}
 
 	/**
-	 * Focuses the view element or first item in view collection on opening dropdown's panel.
+	 * Focuses the view element or first item in view collection on opening modal's panel.
 	 *
-	 * See also {@link module:ui/dropdown/dropdownpanelfocusable~DropdownPanelFocusable}.
+	 * See also {@link module:ui/modal/modalpanelfocusable~DropdownPanelFocusable}.
 	 */
 	focus() {
 		if ( this.children.length ) {
@@ -93,9 +92,9 @@ export default class ModalPanelView extends View {
 	}
 
 	/**
-	 * Focuses the view element or last item in view collection on opening dropdown's panel.
+	 * Focuses the view element or last item in view collection on opening modal's panel.
 	 *
-	 * See also {@link module:ui/dropdown/dropdownpanelfocusable~DropdownPanelFocusable}.
+	 * See also {@link module:ui/modal/modalpanelfocusable~DropdownPanelFocusable}.
 	 */
 	focusLast() {
 		if ( this.children.length ) {
