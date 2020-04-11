@@ -119,7 +119,7 @@ export default class TexPlugin extends Plugin {
 					new DOMParser().parseFromString( html, 'text/html' ).getElementsByClassName( 'katex' )[ 0 ],// eslint-disable-line
 					texElement.children[ 1 ]
 				);
-				texElement.setAttribute( 'data-curr-rendering', 'false' );
+				// texElement.setAttribute( 'data-curr-rendering', 'false' );
 				event.stop();
 				closeUI();
 			}

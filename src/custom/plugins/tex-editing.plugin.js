@@ -13,8 +13,9 @@ import '@ckeditor/ckeditor5-media-embed/theme/mediaembedediting.css';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import RenderTexCommand from '../commands/tex-render.command';
 import TexPlugin from './tex.plugin';
-import Template from '@ckeditor/ckeditor5-ui/src/template';
+// import Template from '@ckeditor/ckeditor5-ui/src/template';
 import { renderTexInput } from '../customizations';
+import { toBoolean } from '../utils/utils';
 
 /**
  * The media embed editing feature.
@@ -34,7 +35,7 @@ export default class TexEditing extends Plugin {
 	 */
 	constructor( editor ) {
 		super( editor );
-		this._texInput = '';
+		this._texInput = new Map();
 	}
 
 	/**
@@ -123,17 +124,17 @@ export default class TexEditing extends Plugin {
 		conversion.for( 'dataDowncast' ).elementToElement( {
 			model: 'div',
 			view: ( modelElement, viewWriter ) => {
-				if ( modelElement.getAttribute( 'url' ) ) {
-					return;
-				} // eslint-disable-line
 				const type = modelElement.getAttribute( 'data-type' );
 				const id = modelElement.getAttribute( 'data-id' );
+				const input = this.texInput.get( modelElement );
 
 				const texParagraph = viewWriter.createEditableElement( 'p' );
-				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( this.texInput ) );
+				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( input ) );
 
 				const texDiv = viewWriter.createContainerElement( 'div', { 'data-id': id, 'data-type': type } );
 				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), texParagraph );
+
+				texDiv.getFillerOffset = () => null;
 
 				return texDiv;
 			}
@@ -146,13 +147,15 @@ export default class TexEditing extends Plugin {
 				const type = modelElement.getAttribute( 'data-type' );
 				const id = modelElement.getAttribute( 'data-id' );
 				const currentRendering = toBoolean( modelElement.getAttribute( 'data-curr-rendering' ) );
-
-				const texParagraph = viewWriter.createEditableElement( 'p' );
-				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( this.texInput ) );
+				const input = this.texInput.get( modelElement );
 
 				const texDiv = viewWriter.createContainerElement( 'div',
 					{ 'data-id': id, 'data-type': type, 'data-curr-rendering': 'true' } );
-				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), createTexInputParagraph( this.texInput, viewWriter ) );
+
+				const texParagraph = viewWriter.createEditableElement( 'p' );
+				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( input ) );
+
+				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), texParagraph );
 
 				this.editor.plugins.get( TexPlugin ).texViewElement = texDiv;
 				texDiv.getFillerOffset = () => null;
@@ -161,7 +164,7 @@ export default class TexEditing extends Plugin {
 					setTimeout( () => {// eslint-disable-line
 						const element = editor.editing.view.domConverter.viewToDom( texDiv );
 						if ( element && element.children.length > 1 ) {
-							const texOutput = renderTexInput( this.texInput, element );
+							const texOutput = renderTexInput( removeDollarSign( input ), element );
 							element.replaceChild( texOutput, element.children[ 1 ] );
 							editor.editing.view.change( writer => {
 								writer.setAttribute( 'data-curr-rendering', 'false', texDiv );
@@ -189,10 +192,14 @@ export default class TexEditing extends Plugin {
 					const type = viewMedia.getAttribute( 'data-type' );
 					const id = viewMedia.getAttribute( 'data-id' );
 					const currentRendering = toBoolean( viewMedia.getAttribute( 'data-curr-rendering' ) );
-					// eslint-disable-next-line
-					if (type && id && !currentRendering ) {
-						this.texInput = viewMedia.getChild( 0 ).getChild( 0 ).data;
-						return modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
+
+					if ( type && id && !currentRendering ) {
+						// eslint-disable-next-line
+						const modelElement = modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
+						if ( viewMedia.childCount && viewMedia.getChild( 0 ).childCount ) {
+							this.texInput.set( modelElement, viewMedia.getChild( 0 ).getChild( 0 ).data );
+						}
+						return modelElement;
 					} else if ( currentRendering ) {
 						editor.model.change( writer => {
 							writer.setAttribute( 'data-curr-rendering', 'false', viewMedia );
@@ -211,20 +218,22 @@ export default class TexEditing extends Plugin {
 	}
 }
 
-function createTexInputParagraph( texInput, writer, attributes = {} ) {
-	return writer.createUIElement( 'p', attributes, function( domDocument ) {
-		const domElement = this.toDomElement( domDocument );
-		domElement.innerHTML = new Template( {
-			tag: 'span',
-			children: [ texInput ]
-		} ).render().innerHTML;
+function removeDollarSign( text ) {
+	let newText = text.trim();
+	if ( newText.startsWith( '$' ) && newText.endsWith( '$' ) ) {
+		newText = newText.substring( 1, newText.length - 1 );
+	}
 
-		return domElement;
-	} );
+	return newText;
 }
-
-function toBoolean( val ) {
-	const stringToBoolean = new Map( [ [ 'true', true ], [ 'false', false ], [ '0', false ], [ '', false ], [ ' ', false ], [ 0, false ] ] );// eslint-disable-line
-	if ( stringToBoolean.has( val ) ) return stringToBoolean.get( val );// eslint-disable-line
-	return true;
-}
+// function createTexInputParagraph( texInput, writer, attributes = { 'data-p': Math.random() } ) {
+// 	return writer.createUIElement( 'p', attributes, function( domDocument ) {
+// 		const domElement = this.toDomElement( domDocument );
+// 		domElement.innerHTML = new Template( {
+// 			tag: 'span',
+// 			children: [ texInput ]
+// 		} ).render().innerHTML;
+//
+// 		return domElement;
+// 	} );
+// }
