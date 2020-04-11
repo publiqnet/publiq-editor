@@ -128,7 +128,7 @@ export default class TexEditing extends Plugin {
 				const id = modelElement.getAttribute( 'data-id' );
 				const input = this.texInput.get( modelElement );
 
-				const texParagraph = viewWriter.createEditableElement( 'p' );
+				const texParagraph = viewWriter.createEditableElement( 'p', { style: 'display: none' } );
 				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( input ) );
 
 				const texDiv = viewWriter.createContainerElement( 'div', { 'data-id': id, 'data-type': type } );
@@ -152,7 +152,7 @@ export default class TexEditing extends Plugin {
 				const texDiv = viewWriter.createContainerElement( 'div',
 					{ 'data-id': id, 'data-type': type, 'data-curr-rendering': 'false' } );
 
-				const texParagraph = viewWriter.createEditableElement( 'p' );
+				const texParagraph = viewWriter.createEditableElement( 'p', { style: 'display: none' } );
 				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( input ) );
 
 				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), texParagraph );
