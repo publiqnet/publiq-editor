@@ -736,7 +736,7 @@ export function renderTexInput( texInput, element ) {
 		katex.render( texInput, containerElement, options );
 		return containerElement.children[ 0 ];
 	} catch ( e ) {
-		return element;
+		return document.createElement( 'p' );// eslint-disable-line
 	}
 }
 
