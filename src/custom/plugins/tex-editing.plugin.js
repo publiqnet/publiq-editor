@@ -150,7 +150,7 @@ export default class TexEditing extends Plugin {
 				const input = this.texInput.get( modelElement );
 
 				const texDiv = viewWriter.createContainerElement( 'div',
-					{ 'data-id': id, 'data-type': type, 'data-curr-rendering': 'true' } );
+					{ 'data-id': id, 'data-type': type, 'data-curr-rendering': 'false' } );
 
 				const texParagraph = viewWriter.createEditableElement( 'p' );
 				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( input ) );
