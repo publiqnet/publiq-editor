@@ -1,5 +1,5 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import formulaIcon from '../assets/icons/formula (1).svg';
+import formulaIcon from '../assets/icons/Formula.svg';
 import TexInputFormView from '../views/tex-input-form.view';
 import TexEditing from './tex-editing.plugin';
 import { createModal } from '../customizations';
