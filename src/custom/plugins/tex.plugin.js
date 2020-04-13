@@ -63,7 +63,7 @@ export default class TexPlugin extends Plugin {
 	_setUpModal( modal, form, command ) {
 		const button = this.buttonView;
 		const editor = this.editor;
-		let html;
+		let html, currentRenderedInput;
 
 		// append model element to '.ck-balloon-panel's parent node
 		modal.render();
@@ -98,6 +98,7 @@ export default class TexPlugin extends Plugin {
 			form.isValid();
 			try {
 				html = katex.renderToString( form.texInput, { output: 'html', macros: { '\\f': 'f(#1)' } } );
+				currentRenderedInput = form.texInput;
 			} catch ( e ) {
 				if ( e instanceof katex.ParseError ) {
 					// KaTeX can't parse the expression
@@ -113,7 +114,7 @@ export default class TexPlugin extends Plugin {
 
 		modal.on( 'add', event => {
 			if ( form.isValid() ) {
-				editor.execute( 'renderTex', { texInput: form.texInput, type: 'tex-input', 'data-curr-rendering': 'true' } );
+				editor.execute( 'renderTex', { texInput: currentRenderedInput, type: 'tex-input', 'data-curr-rendering': 'true' } );
 				const texElement = editor.editing.view.domConverter.viewToDom( this.texViewElement );
 				texElement.replaceChild(
 					new DOMParser().parseFromString( html, 'text/html' ).getElementsByClassName( 'katex' )[ 0 ],// eslint-disable-line
