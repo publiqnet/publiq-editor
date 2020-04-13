@@ -19,10 +19,10 @@
 
 <div id="editor">
   <div data-id="tex-input__1586447701422" data-type="tex-input" data-curr-rendering="false">
-    <p>$ \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) $</p>
+    <p style="display:none;">\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)</p>
   </div>
   <div data-id="tex-input__1586447701427" data-type="tex-input" data-curr-rendering="false">
-    <p>$ \int u \frac{dv}{dx}\,dx=uv-\int \frac{du}{dx}v\,dx $</p>
+    <p style="display:none;">\int u \frac{dv}{dx}\,dx=uv-\int \frac{du}{dx}v\,dx</p>
   </div>
 </div>
 <script src="../build/ckeditor.js"></script>
@@ -39,7 +39,8 @@
 			console.log( p2 );
 			console.log( p3 );
 		} );
-	  editor.editing.view.document.on( 'click', ( evInfo, data, p3) => {
+	  editor.editing.view.document.on( 'copy', ( evInfo, data, p3) => {
+	  	console.log('tada')
 	  }, {priority : 'highest'} );
 	  editor.editing.view.document.on( 'imageLoaded', ( evInfo, data, p3) => {
 		    if(editor.model.document.selection.getSelectedElement().getAttribute('uploadId')) {

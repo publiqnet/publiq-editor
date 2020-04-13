@@ -25,6 +25,7 @@ import clickOutsideHandler from '@ckeditor/ckeditor5-ui/src/bindings/clickoutsid
 import SwitchButtonView from '@ckeditor/ckeditor5-ui/src/button/switchbuttonview';
 import katex from 'katex/dist/katex.mjs';
 import { isWidget } from '@ckeditor/ckeditor5-widget/src/utils';
+
 const MaxFileSizeError = 'max file size error';
 
 ImageUploadEditing.prototype._readAndUpload = function( loader, imageElement ) {
