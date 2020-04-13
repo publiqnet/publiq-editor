@@ -88,9 +88,9 @@ export default class TextareaView extends View {
 				'aria-invalid': bind.if( 'hasError', true ),
 				'aria-describedby': bind.to( 'ariaDescribedById' )
 			},
-			// on: {
-			// 	input: bind.to( 'input' )
-			// }
+			on: {
+				input: bind.to( 'input' )
+			}
 		} );
 
 		/**

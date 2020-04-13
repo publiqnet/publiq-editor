@@ -267,7 +267,7 @@ export default class TexInputFormView extends View {
 		const textareaView = new TextareaView( this.locale );
 		textareaView.placeholder = 'Paste a Tex code to compile into formulas, e.g. \\f{x} compiled into ƒ(x)';
 
-		textareaView.on( 'change', () => {
+		textareaView.on( 'input', () => {
 			this.valid = false;
 		} );
 
