@@ -460,7 +460,16 @@
     color: #565A60;
     background: #F7F8F9;
     padding: 21px 23px;
-    min-height: 25vh!important;
+    height: 25vh!important;
+    overflow: scroll;
+
+    p {
+      white-space: pre-wrap;
+    }
+
+    &::-webkit-scrollbar { 
+        display: none; 
+    }
   }
 
   .tex-button {
