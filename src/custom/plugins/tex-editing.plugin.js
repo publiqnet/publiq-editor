@@ -164,7 +164,7 @@ export default class TexEditing extends Plugin {
 					setTimeout( () => {// eslint-disable-line
 						const element = editor.editing.view.domConverter.viewToDom( texDiv );
 						if ( element && element.children.length > 1 ) {
-							const texOutput = renderTexInput( removeDollarSign( input ), element );
+							const texOutput = renderTexInput( input, element );
 							element.replaceChild( texOutput, element.children[ 1 ] );
 							editor.editing.view.change( writer => {
 								writer.setAttribute( 'data-curr-rendering', 'false', texDiv );
@@ -217,23 +217,3 @@ export default class TexEditing extends Plugin {
 		this._texInput = texInput;
 	}
 }
-
-function removeDollarSign( text ) {
-	let newText = text.trim();
-	if ( newText.startsWith( '$' ) && newText.endsWith( '$' ) ) {
-		newText = newText.substring( 1, newText.length - 1 );
-	}
-
-	return newText;
-}
-// function createTexInputParagraph( texInput, writer, attributes = { 'data-p': Math.random() } ) {
-// 	return writer.createUIElement( 'p', attributes, function( domDocument ) {
-// 		const domElement = this.toDomElement( domDocument );
-// 		domElement.innerHTML = new Template( {
-// 			tag: 'span',
-// 			children: [ texInput ]
-// 		} ).render().innerHTML;
-//
-// 		return domElement;
-// 	} );
-// }
