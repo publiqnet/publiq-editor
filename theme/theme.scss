@@ -359,7 +359,7 @@
     }
   }
 }
-.modal-overlay {
+.katex-popup {
   display: none!important;
   background: rgba(#F7F8F9, .9) !important;
   mix-blend-mode: normal;
@@ -379,7 +379,7 @@
     display: inline-block !important;
   }
 }
-.custom-modal {
+.katex-popup-form {
   background: #FFFFFF !important;
   box-shadow: 1px 3px 7px rgba(43, 43, 43, 0.2);
   border-radius: 15px!important;

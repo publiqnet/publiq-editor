@@ -65,7 +65,7 @@ export default class ModalPanelView extends View {
 					'ck',
 					'ck-reset',
 					// other classes
-					'custom-modal',
+					'katex-popup-form',
 					bind.to( 'position', value => `ck-modal__panel_${ value }` ),
 				]
 			},

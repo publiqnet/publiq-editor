@@ -116,11 +116,11 @@ export default class ModalView extends View {
 			attributes: {
 				class: [
 					'ck',
-					'modal-overlay',
+					'katex-popup',
 					// other classes
 					bind.to( 'class' ),
 					bind.if( 'isEnabled', 'ck-disabled', value => !value ),
-					bind.if( 'isOpen', 'modal-overlay--visible' ),
+					bind.if( 'isOpen', 'katex-popup--visible' ),
 				]
 			},
 
