@@ -1,10 +1,13 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import formulaIcon from '../assets/icons/Formula.svg';
+import editIcon from '../assets/icons/Edit.svg';
+import copyIcon from '../assets/icons/Copy.svg';
 import TexInputFormView from '../views/tex-input-form.view';
 import TexEditing from './tex-editing.plugin';
 import { createModal } from '../customizations';
 import katex from 'katex/dist/katex.mjs';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
+import Clipboard from 'clipboard/src/clipboard';
 
 /**
  * The Tex editing UI plugin.
@@ -34,7 +37,7 @@ export default class TexPlugin extends Plugin {
 	 */
 	init() {
 		const editor = this.editor;
-		const command = editor.commands.get( 'renderTex' );
+		// const command = editor.commands.get( 'renderTex' );
 
 		/**
 		 * The form view displayed inside the modal.
@@ -53,14 +56,56 @@ export default class TexPlugin extends Plugin {
 				tooltip: true
 			} );
 			this.buttonView.delegate( 'execute' ).to( this.buttonView, 'open' );
-			this._setUpModal( modal, this.form, command, editor );
+			this._setUpModal( modal, this.form, editor );
 			this._setUpForm( this.form, modal );
 
 			return this.buttonView;
 		} );
+
+		editor.ui.componentFactory.add( 'copyTex', locale => {
+			const clipboard = new Clipboard( '.copy__btn', { } ); // using clipboard.js module
+			const copyButtonView = new ButtonView( locale );
+			copyButtonView.set( {
+				label: editor.t( 'copy tex' ),
+				icon: copyIcon,
+				tooltip: true
+			} );
+			copyButtonView.extendTemplate( {
+				attributes: {
+					class: [ 'copy__btn' ],
+				}
+			} );
+			copyButtonView.on( 'execute', () => {
+				const selectedElem = editor.editing.view.document.selection.getSelectedElement();
+				if ( selectedElem && selectedElem.childCount === 2 ) {
+					const texParagraph = selectedElem.getChild( 1 ).name === 'p' ? selectedElem.getChild( 1 ) : selectedElem.getChild( 1 );
+					const copyText = texParagraph.getChild( 0 ).data;
+					copyButtonView.element.setAttribute( 'data-clipboard-text', copyText );
+					clipboard.on( 'success', function( ) {
+						copyButtonView.label = editor.t( 'copied!' );
+						copyButtonView.element.removeAttribute( 'data-clipboard-text' );
+						setTimeout( () => copyButtonView.label = editor.t( 'copy tex' ), 2000 );//eslint-disable-line
+					} );
+				}
+			} );
+			return copyButtonView;
+		} );
+
+		editor.ui.componentFactory.add( 'editTex', locale => {
+			const editButtonView = new ButtonView( locale );
+			editButtonView.set( {
+				label: editor.t( 'edit tex' ),
+				icon: editIcon,
+				tooltip: true
+			} );
+			if ( this.buttonView ) {
+				editButtonView.delegate( 'execute' ).to( this.buttonView, 'open' );
+			}
+			return editButtonView;
+		} );
 	}
 
-	_setUpModal( modal, form, command ) {
+	_setUpModal( modal, form ) {
 		const button = this.buttonView;
 		const editor = this.editor;
 		let html, currentRenderedInput;
@@ -89,7 +134,13 @@ export default class TexPlugin extends Plugin {
 			// unaltered) and re-opened it without changing the value of the media command (e.g. because they
 			// didn't change the selection), they would see the old value instead of the actual value of the
 			// command.
-			form.texInput = command.value || '';
+			const selectedElem = editor.editing.view.document.selection.getSelectedElement();
+			let editTex = '';
+			if ( selectedElem && selectedElem.childCount === 2 ) {
+				const texParagraph = selectedElem.getChild( 1 ).name === 'p' ? selectedElem.getChild( 1 ) : selectedElem.getChild( 1 );
+				editTex = texParagraph.getChild( 0 ).data;
+			}
+			form.texInput = editTex;
 			form.texInputView.template.children[ 1 ].select();
 			form.focus();
 		}, { priority: 'low' } );

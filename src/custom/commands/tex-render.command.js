@@ -1,5 +1,5 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
-import { findOptimalInsertionPosition, isWidget } from '@ckeditor/ckeditor5-widget/src/utils';
+import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/utils';
 import { insertNewLine } from '../customizations';
 import TexEditing from '../plugins/tex-editing.plugin';
 
@@ -35,36 +35,35 @@ export default class RenderTexCommand extends Command {
 		const model = this.editor.model;
 		const selection = model.document.selection;
 
-		const dataId = new Date().getTime();
-		const type = options.type;
-		// const currRendering = options[ 'data-curr-rendering' ];
+		options.dataId = new Date().getTime();
 
 		const selectedElement = selection.getSelectedElement();
-		let _isWidget;
-		try {
-			_isWidget = isWidget( selectedElement );
-		} catch ( e ) {
-			_isWidget = false;
-		}
+		const isTexWidget = ( selectedElement && selectedElement.getAttribute( 'data-type' ) === 'tex-input' );
 
-		if ( selectedElement && _isWidget ) {
-			model.change( writer => {
-				writer.setAttributes( { 'data-type': type, 'data-id': `${ type }__${ dataId }`,
-					'data-curr-rendering': 'false' }, selectedElement );
-			} );
+		const insertPosition = findOptimalInsertionPosition( selection, model );
+		if ( selectedElement && isTexWidget ) {
+			this._addModelTexElement( insertPosition, options, 'edit', selectedElement );
 		} else {
-			const insertPosition = findOptimalInsertionPosition( selection, model );
-			model.change( writer => {
-				const widgetElement = writer.createElement( 'div', { 'data-type': type, 'data-id': `${ type }__${ dataId }`,
-					'data-curr-rendering': 'false' } );
-				widgetElement.getFillerOffset = () => null;
-
-				this.editor.plugins.get( TexEditing ).texInput.set( widgetElement, options.texInput );
-
-				model.insertContent( widgetElement, insertPosition );
-				insertNewLine( model, widgetElement );
-				writer.setSelection( widgetElement, 'on' );
-			} );
+			this._addModelTexElement( insertPosition, options, 'create' );
 		}
 	}
+
+	_addModelTexElement( insertPosition, options, type = 'create', selectedElement = null ) {
+		const editor = this.editor;
+		const model = editor.model;
+		model.change( writer => {
+			const modelTexElement = writer.createElement( 'div', { 'data-type': options.type,
+				'data-id': `${ options.type }__${ options.dataId }`, 'data-curr-rendering': 'false' } );
+			modelTexElement.getFillerOffset = () => null;
+			model.insertContent( modelTexElement, insertPosition );
+			writer.setSelection( modelTexElement, 'on' );
+			editor.plugins.get( TexEditing ).texInput.set( modelTexElement, options.texInput );
+			if ( type === 'create' ) {
+				insertNewLine( model, modelTexElement );
+			} else {
+				writer.remove( selectedElement );
+			}
+		} );
+	}
 }
+
