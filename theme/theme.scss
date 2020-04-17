@@ -28,6 +28,10 @@
 
   --ck-color-toolbar-background: #fff;
   --ck-color-base-foreground: #fff;
+
+  --ck-widget-handler-icon-size: 22px;
+
+  --ck-publiq-base-color: #3366ff;
 }
 
 .ck.ck-content {
@@ -48,10 +52,6 @@
     @include media-md {
       max-width: 530px;
     }
-  }
-
-  .ck-widget {
-    margin: 0 auto 20px;
   }
 
   p {
@@ -112,6 +112,44 @@
   }
 
   .image > figcaption {background-color: unset;}
+
+  .ck-widget {
+    margin: 0 auto 20px;
+
+    &.ck-widget_with-selection-handle {
+      .ck-widget__selection-handle {
+        padding: 0;
+        background: none !important;
+        color: #c2c2c2;
+
+        .ck-icon {
+          color: inherit !important;
+        }
+      }
+    }
+
+    &[data-type="tex-input"] {
+      text-align: center;
+      cursor: default;
+    }
+  }
+
+  &.ck-focused {
+    .ck-widget_with-selection-handle {
+      &.ck-widget_selected {
+        .ck-widget__selection-handle {
+          color: var(--ck-publiq-base-color);
+        }
+      }
+
+      &:hover {
+        .ck-widget__selection-handle,
+        .ck-icon__selected-indicator {
+          opacity: 1;
+        }
+      }
+    }
+  }
 }
 
 .ck {
@@ -121,7 +159,7 @@
 
     &.ck-on {
       .ck.ck-icon :not([fill]) {
-        color: #3366ff;
+        color: var(--ck-publiq-base-color);
       }
     }
 
@@ -160,7 +198,7 @@
 
     &:hover {
       .ck.ck-icon :not([fill]) {
-        color: #3366ff;
+        color: var(--ck-publiq-base-color);
       }
     }
 
