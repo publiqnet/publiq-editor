@@ -64,6 +64,20 @@ export default class TexToolbar extends Plugin {
 				getRelatedElement: getSelectedTexWidget
 			} );
 		}
+
+		editor.editing.view.document.on( 'click', ( evInfo, data ) => {
+			const target = data.domTarget;
+			const domTexDiv = target.closest( 'div' );
+			const converter = data.view.domConverter;
+			const viewTexDiv = converter.domToView( domTexDiv );
+
+			if ( viewTexDiv && viewTexDiv.getAttribute( 'data-type' ) === 'tex-input' ) {
+				const modelTexDiv = editor.editing.mapper.toModelElement( viewTexDiv );
+				editor.model.change( writer => {
+					writer.setSelection( modelTexDiv, 'on' );
+				} );
+			}
+		}, { priority: 'highest' } );
 	}
 }
 

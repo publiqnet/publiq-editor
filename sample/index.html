@@ -21,6 +21,7 @@
   <div data-id="tex-input__1586447701422" data-type="tex-input" data-curr-rendering="false">
     <p style="display:none;">\left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right)</p>
   </div>
+  <p>lvcjhbkjhlkcvjhbjlkcxhvbkjhcxvlbjkhcxkvjlbhcxjkzlvbhjckxvhbxckjlvbhc</p>
   <div data-id="tex-input__1586447701427" data-type="tex-input" data-curr-rendering="false">
     <p style="display:none;">\int u \frac{dv}{dx}\,dx=uv-\int \frac{du}{dx}v\,dx</p>
   </div>
@@ -39,8 +40,36 @@
 			console.log( p2 );
 			console.log( p3 );
 		} );
-	  editor.editing.view.document.on( 'copy', ( evInfo, data, p3) => {
-	  	console.log('tada')
+
+	  // const balloonToolbar = editor.plugins.get( 'BalloonToolbar' );
+    //
+	  // editor.listenTo( balloonToolbar, 'show',( evt, data ) => {
+    //   const target = data.domTarget;
+    //   const domTexDiv = target.closest( 'div' );
+    //   const converter = data.view.domConverter;
+    //   const viewTexDiv = converter.domToView( domTexDiv );
+    //
+    //   if ( viewTexDiv.getAttribute( 'data-type' ) === 'tex-input') {
+    //     const modelTexDiv = editor.editing.mapper.toModelElement( viewTexDiv );
+    //     editor.model.change( writer => {
+    //       writer.setSelection( modelTexDiv, 'on' );
+    //     });
+    //     console.log('view', viewTexDiv);
+    //   }
+	  // }, { priority: 'highest' } );
+	  editor.editing.view.document.on( 'click', ( evInfo, data, p3) => {
+	  	const target = data.domTarget;
+	  	const domTexDiv = target.closest( 'div' );
+      const converter = data.view.domConverter;
+      const viewTexDiv = converter.domToView( domTexDiv );
+
+		  if ( viewTexDiv.getAttribute( 'data-type' ) === 'tex-input') {
+        const modelTexDiv = editor.editing.mapper.toModelElement( viewTexDiv );
+        editor.model.change( writer => {
+          writer.setSelection( modelTexDiv, 'on' );
+		    });
+        console.log('view', viewTexDiv);
+      }
 	  }, {priority : 'highest'} );
 	  editor.editing.view.document.on( 'imageLoaded', ( evInfo, data, p3) => {
 		    if(editor.model.document.selection.getSelectedElement().getAttribute('uploadId')) {
