@@ -13,7 +13,6 @@ import '@ckeditor/ckeditor5-media-embed/theme/mediaembedediting.css';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import RenderTexCommand from '../commands/tex-render.command';
 import TexPlugin from './tex.plugin';
-// import Template from '@ckeditor/ckeditor5-ui/src/template';
 import { renderTexInput } from '../customizations';
 import { toBoolean } from '../utils/utils';
 
@@ -149,30 +148,31 @@ export default class TexEditing extends Plugin {
 				const currentRendering = toBoolean( modelElement.getAttribute( 'data-curr-rendering' ) );
 				const input = this.texInput.get( modelElement );
 
-				const texDiv = viewWriter.createContainerElement( 'div',
+				const viewTexElement = viewWriter.createContainerElement( 'div',
 					{ 'data-id': id, 'data-type': type, 'data-curr-rendering': 'false' } );
 
-				const texParagraph = viewWriter.createEditableElement( 'p', { style: 'display: none' } );
-				viewWriter.insert( viewWriter.createPositionAt( texParagraph, 'end' ), viewWriter.createText( input ) );
+				const viewTexParagraph = viewWriter.createEditableElement( 'p', { style: 'display: none' } );
+				viewWriter.insert( viewWriter.createPositionAt( viewTexParagraph, 'end' ), viewWriter.createText( input ) );
 
-				viewWriter.insert( viewWriter.createPositionAt( texDiv, 0 ), texParagraph );
+				viewWriter.insert( viewWriter.createPositionAt( viewTexElement, 0 ), viewTexParagraph );
 
-				this.editor.plugins.get( TexPlugin ).texViewElement = texDiv;
-				texDiv.getFillerOffset = () => null;
+				this.editor.plugins.get( TexPlugin ).texViewElement = viewTexElement;
+				viewTexElement.getFillerOffset = () => null;
 
 				if ( !currentRendering ) {
 					setTimeout( () => {// eslint-disable-line
-						const element = editor.editing.view.domConverter.viewToDom( texDiv );
+						const element = editor.editing.view.domConverter.viewToDom( viewTexElement );
 						if ( element && element.children.length > 1 ) {
 							const texOutput = renderTexInput( input, element );
 							element.replaceChild( texOutput, element.children[ 1 ] );
 							editor.editing.view.change( writer => {
-								writer.setAttribute( 'data-curr-rendering', 'false', texDiv );
+								writer.setAttribute( 'data-curr-rendering', 'false', viewTexElement );
 							} );
 						}
 					}, 0 );
 				}
-				return toWidget( texDiv, viewWriter, { hasSelectionHandle: true } );
+
+				return toWidget( viewTexElement, viewWriter, { hasSelectionHandle: true } );
 			}
 		} );
 
@@ -195,11 +195,11 @@ export default class TexEditing extends Plugin {
 
 					if ( type && id && !currentRendering ) {
 						// eslint-disable-next-line
-						const modelElement = modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
+						const modelTexElement = modelWriter.createElement( 'div', { 'data-type': type, 'data-id': id, 'data-curr-rendering': 'false' } );
 						if ( viewMedia.childCount && viewMedia.getChild( 0 ).childCount ) {
-							this.texInput.set( modelElement, viewMedia.getChild( 0 ).getChild( 0 ).data );
+							this.texInput.set( modelTexElement, viewMedia.getChild( 0 ).getChild( 0 ).data );
 						}
-						return modelElement;
+						return modelTexElement;
 					} else if ( currentRendering ) {
 						editor.model.change( writer => {
 							writer.setAttribute( 'data-curr-rendering', 'false', viewMedia );

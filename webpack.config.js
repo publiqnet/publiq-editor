@@ -106,6 +106,10 @@ module.exports = {
 		new webpack.NormalModuleReplacementPlugin(
 			/\/pencil\.svg/,
 			'../../../../../src/custom/assets/icons/Pencil.svg'
+		),
+		new webpack.NormalModuleReplacementPlugin(
+			/\/drag-handle\.svg/,
+			'../../../../src/custom/assets/icons/Drag_handle.svg'
 		)
 	],
 
