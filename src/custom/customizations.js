@@ -508,7 +508,9 @@ Widget.prototype._onMousedown = function( eventInfo, domEventData ) {
 	const viewDocument = view.document;
 	let element = domEventData.target;
 
-	if ( !element ) return; // eslint-disable-line
+	if ( !element ) {
+		return;
+	}
 
 	// Do nothing for single or double click inside nested editable.
 	if ( isInsideNestedEditable( element ) ) {
