@@ -1,12 +1,3 @@
-/**
- * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
- */
-
-/**
- * @module ui/modal/modalview
- */
-
 import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 
@@ -120,7 +111,7 @@ export default class ModalView extends View {
 					// other classes
 					bind.to( 'class' ),
 					bind.if( 'isEnabled', 'ck-disabled', value => !value ),
-					bind.if( 'isOpen', 'katex-popup--visible' ),
+					bind.if( 'isOpen', 'katex-popup--visible' )
 				]
 			},
 

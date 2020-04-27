@@ -1,5 +1,8 @@
 @import "variables";
 @import "katex_custom.css";
+@import "../src/custom/special-characters/theme/charactergrid.css";
+@import "../src/custom/special-characters/theme/characterinfo.css";
+@import "../src/custom/special-characters/theme/specialcharacters.css";
 
 
 :root {
@@ -24,7 +27,7 @@
   --ck-color-button-on-active-background: #fff;
   --ck-color-button-on-active-shadow: transparent;
 
-  --ck-color-button-default-shadow: 0 3px 7px rgba(43,43,43,.1);
+  --ck-color-button-default-shadow: 0 3px 7px rgba(43, 43, 43, .1);
 
   --ck-color-toolbar-background: #fff;
   --ck-color-base-foreground: #fff;
@@ -111,7 +114,9 @@
     margin: 19px auto;
   }
 
-  .image > figcaption {background-color: unset;}
+  .image > figcaption {
+    background-color: unset;
+  }
 
   .ck-widget {
     margin: 0 auto 20px;
@@ -167,11 +172,12 @@
       box-shadow: 0 3px 7px var(--ck-color-button-default-shadow);
     }
   }
+
   &.ck-block-toolbar-button {
     border: 1px solid #dee2e6;
     border-radius: 50% !important;
     transform: translateX(calc(50vw - var(--ck-spacing-large) - 870px / 2));
-    box-shadow: 0 3px 7px rgba(43,43,43,.1);
+    box-shadow: 0 3px 7px rgba(43, 43, 43, .1);
 
     svg {
       transition: 300ms transform;
@@ -206,14 +212,16 @@
       border: 1px solid #dee2e6;
     }
   }
+
   &.ck-toolbar-circular {
     box-shadow: none;
     border: none;
     background: none;
 
     &.ck-balloon-panel_arrow_n {
-      transform: translate(152px,-54px);
+      transform: translate(152px, -54px);
     }
+
     &.ck-balloon-panel_arrow_s {
       transform: translate(152px, 54px);
     }
@@ -229,10 +237,11 @@
 
       & > .ck-button, & > * > .ck-button {
         display: inline-block;
-        width: 40px; height: 40px;
-        box-shadow: 0 3px 7px rgba(43,43,43,.1);
+        width: 40px;
+        height: 40px;
+        box-shadow: 0 3px 7px rgba(43, 43, 43, .1);
         border: 1px solid #dee2e6;
-        border-radius: 50%!important;
+        border-radius: 50% !important;
 
         &:active {
           background: #fff;
@@ -240,6 +249,7 @@
         }
       }
     }
+
     &.ck-toolbar {
       border-radius: 10px;
       overflow: hidden;
@@ -251,22 +261,27 @@
 
     .ck-dropdown__panel {
       border: none;
-      border-radius: 10px!important;
+      border-radius: 10px !important;
       padding: 5px;
       transform: translateY(8px);
 
-      input { border: none!important; }
-      .ck-labeled-input__status { display: none; }
+      input {
+        border: none !important;
+      }
+
+      .ck-labeled-input__status {
+        display: none;
+      }
     }
 
     &:before, &:after {
-      content: none!important;
+      content: none !important;
     }
   }
 
   &.ck-balloon-panel {
     &, .ck.ck-toolbar {
-      border-radius: 8px!important;
+      border-radius: 8px !important;
     }
   }
 
@@ -280,7 +295,8 @@
 
         iframe {
           position: absolute;
-          top: 0; left: 0;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
         }
@@ -299,9 +315,15 @@
       max-width: 100%;
     }
 
-    @include media-xl { max-width: 644px; }
-    @include media-lg { max-width: 470px; }
-    @include media-md { max-width: 530px; }
+    @include media-xl {
+      max-width: 644px;
+    }
+    @include media-lg {
+      max-width: 470px;
+    }
+    @include media-md {
+      max-width: 530px;
+    }
     @include media-sm {
       max-width: 100%;
 
@@ -373,7 +395,9 @@
       width: 100%;
       max-width: unset;
 
-      img { width: 100%; }
+      img {
+        width: 100%;
+      }
     }
 
     &.containersize-image {
@@ -383,22 +407,36 @@
       //   width: calc(100% - 15px);
       // }
 
-      img { width: 100%; }
+      img {
+        width: 100%;
+      }
 
-      @include media-xl { max-width: 970px; }
-      @include media-lg { max-width: 710px; }
-      @include media-md { max-width: 530px; }
-      @include media-sm { max-width: 100%; }
+      @include media-xl {
+        max-width: 970px;
+      }
+      @include media-lg {
+        max-width: 710px;
+      }
+      @include media-md {
+        max-width: 530px;
+      }
+      @include media-sm {
+        max-width: 100%;
+      }
     }
 
     &.gridsize-image {
       max-width: 870px;
-      img { width: 100%; }
+
+      img {
+        width: 100%;
+      }
     }
   }
 }
+
 .katex-popup {
-  display: none!important;
+  display: none !important;
   background: rgba(#F7F8F9, .9) !important;
   mix-blend-mode: normal;
   position: fixed !important;
@@ -417,22 +455,25 @@
     display: inline-block !important;
   }
 }
+
 .katex-popup-form {
   background: #FFFFFF !important;
   box-shadow: 1px 3px 7px rgba(43, 43, 43, 0.2);
-  border-radius: 15px!important;
+  border-radius: 15px !important;
   max-width: 1090px;
   // height: 510px;
   overflow: hidden;
   width: calc(100% - 30px) !important;
   padding: 23px 30px 35px !important;
   position: absolute !important;
-  top: 50%; left: 50% !important;
+  top: 50%;
+  left: 50% !important;
   transform: translate(-50%, -50%) !important;
   @include media-md {
     height: 100vh;
     border-radius: 0;
   }
+
   h3 {
     font-style: normal;
     font-weight: bold;
@@ -441,47 +482,50 @@
     color: #2B2B2B;
     margin: 0 0 30px;
     padding-right: 40px;
+
     b {
       color: #3365ff;
     }
+
     @include media-sm {
       font-size: 20px;
     }
   }
 
   form {
-    width: 100%!important;
+    width: 100% !important;
   }
 
   form > div {
     width: 100% !important;
     display: flex !important;
     flex-direction: column;
-    outline: none!important;
+    outline: none !important;
 
     textarea {
-      width: 100%!important;
-      min-height: 30vh!important;
-      color: #565A60!important;
+      width: 100% !important;
+      min-height: 30vh !important;
+      color: #565A60 !important;
       font: 17px/1.15 'Open Sans', sans-serif !important;
-      background: #F7F8F9!important;
-      border: 3px solid rgba(51,102,255,0.10)!important;
-      border-radius: 15px!important;
-      padding: 21px 23px!important;
+      background: #F7F8F9 !important;
+      border: 3px solid rgba(51, 102, 255, 0.10) !important;
+      border-radius: 15px !important;
+      padding: 21px 23px !important;
       resize: none;
     }
 
     & + button {
       position: absolute !important;
-      min-width: 30px!important;
-      min-height: 30px!important;
-      top: 25px; right: 25px;
-      background-color: #ECF0F3!important;
-      border-radius: 50%!important;
+      min-width: 30px !important;
+      min-height: 30px !important;
+      top: 25px;
+      right: 25px;
+      background-color: #ECF0F3 !important;
+      border-radius: 50% !important;
 
       svg {
-        width: 16px!important;
-        height: 16px!important;
+        width: 16px !important;
+        height: 16px !important;
       }
     }
   }
@@ -493,54 +537,58 @@
 
   .tex-output {
     font: 17px/1.15 'Open Sans', sans-serif;
-    border: 3px solid rgba(51,102,255,0.10);
+    border: 3px solid rgba(51, 102, 255, 0.10);
     border-radius: 15px;
     color: #565A60;
     background: #F7F8F9;
     padding: 21px 23px;
-    height: 25vh!important;
+    height: 25vh !important;
     overflow: scroll;
 
     p {
       white-space: pre-wrap;
     }
 
-    &::-webkit-scrollbar { 
-        display: none; 
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 
   .tex-button {
     &--preview {
-      border: 1px solid #DEE2E6!important;
+      border: 1px solid #DEE2E6 !important;
       font: 600 13px/1.38 'Open Sans', sans-serif !important;
-      border-radius: 7px!important;
-      padding: 6px 10px!important;
-      margin: 12px 0 0!important;
-      color: #565A60!important;
+      border-radius: 7px !important;
+      padding: 6px 10px !important;
+      margin: 12px 0 0 !important;
+      color: #565A60 !important;
       align-self: flex-end;
-      min-height: unset!important;
+      min-height: unset !important;
 
-      span { line-height: 1.38!important; }
+      span {
+        line-height: 1.38 !important;
+      }
     }
 
     &--save {
-      background-color: #5B45DC!important;
+      background-color: #5B45DC !important;
       align-self: center;
-      border-radius: 7px!important;
-      color: #ffffff!important;
-      padding: 10px 20px!important;
+      border-radius: 7px !important;
+      color: #ffffff !important;
+      padding: 10px 20px !important;
       margin: 40px 0 0 !important;
 
-      span { opacity: 1!important; }
+      span {
+        opacity: 1 !important;
+      }
 
       .ck-button__label {
         font: 600 17px/1.38 'Open Sans', sans-serif !important;
-        line-height: 1!important;
+        line-height: 1 !important;
       }
 
       &.ck-disabled {
-        opacity: .35!important;
+        opacity: .35 !important;
       }
     }
   }

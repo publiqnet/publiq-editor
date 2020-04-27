@@ -1,7 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/utils';
-import { insertNewLine } from '../customizations';
 import TexEditing from '../plugins/tex-editing.plugin';
+import { insertNewLine } from '../../utils/utils';
 
 export default class RenderTexCommand extends Command {
 	/**

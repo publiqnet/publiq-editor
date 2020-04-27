@@ -30,23 +30,31 @@ import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefrom
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import Enter from '@ckeditor/ckeditor5-enter/src/enter';
-import ImageGalleryPlugin from './custom/plugins/image-gallery.plugin';
-import ImageCropPlugin from './custom/plugins/image-crop.plugin';
+import ImageGalleryPlugin from './custom/image-editing/plugins/image-gallery.plugin';
+import ImageCropPlugin from './custom/image-editing/plugins/image-crop.plugin';
 import SimpleUploadAdapterCustom from './custom/adapter/custom-upload.adapter';
-import ImageDeletePlugin from './custom/plugins/image-delete.plugin';
+import ImageDeletePlugin from './custom/image-editing/plugins/image-delete.plugin';
 import largeGrid from './custom/assets/icons/Large Grid.svg';
 import middleGrid from './custom/assets/icons/Middle grid.svg';
 import smallGrid from './custom/assets/icons/Small grid.svg';
-import BeforeImageInsertPlugin from './custom/plugins/before-image-insert.plugin';
-import BeforeImageDeletePlugin from './custom/plugins/before-image-delete.plugin';
-import SocialMediaEmbedEditing from './custom/plugins/social-embed-editing.plugin';
-import SocialEmbedPlugin from './custom/plugins/social-embed.plugin';
-import * as customizations from './custom/customizations';
+import BeforeImageInsertPlugin from './custom/image-editing/plugins/before-image-insert.plugin';
+import BeforeImageDeletePlugin from './custom/image-editing/plugins/before-image-delete.plugin';
+import SocialMediaEmbedEditing from './custom/social-embedding/plugins/social-embed-editing.plugin';
+import SocialEmbedPlugin from './custom/social-embedding/plugins/social-embed.plugin';
+import TexPlugin from './custom/tex-editing/plugins/tex.plugin';
+import TexToolbar from './custom/tex-editing/plugins/tex-toolbar.plugin';
+import Strikethrough from '@ckeditor/ckeditor5-basic-styles/src/strikethrough';
+import Code from '@ckeditor/ckeditor5-basic-styles/src/code';
+import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
+import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
+import SpecialCharacters from './custom/special-characters/plugins/specialcharacters';
+import SpecialCharactersEssentials from './custom/special-characters/plugins/specialcharactersessentials';
 import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
 import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
+import { GreekCharacters } from './custom/special-characters/plugins/specialcharactersgreek';
+import { getImageProperties, toggleSizeButtons } from './custom/utils/utils';
+import * as customizations from './custom/customizations'; //eslint-disable-line
 import '../theme/theme.scss';
-import TexPlugin from './custom/plugins/tex.plugin';
-import TexToolbar from './custom/plugins/tex-toolbar.plugin';
 
 export default class BalloonEditor extends BalloonEditorBase {
 }
@@ -85,7 +93,14 @@ BalloonEditor.builtinPlugins = [
 	SocialMediaEmbedEditing,
 	SocialEmbedPlugin,
 	TexPlugin,
-	TexToolbar
+	TexToolbar,
+	Strikethrough,
+	Code,
+	Subscript,
+	Superscript,
+	SpecialCharacters,
+	SpecialCharactersEssentials,
+	GreekCharacters
 ];
 
 // Editor configuration.
@@ -102,6 +117,12 @@ BalloonEditor.defaultConfig = {
 			'bold',
 			'italic',
 			'link',
+			'|',
+			'strikethrough',
+			'code',
+			'subscript',
+			'superscript',
+			'specialCharacters'
 		]
 	}, // '|', 'indent', 'outdent' undo, redo,
 	image: {
@@ -116,14 +137,14 @@ BalloonEditor.defaultConfig = {
 			'alignRight',
 			{ name: '_grid', title: 'Grid size', icon: largeGrid, className: 'gridsize-image' },
 			{ name: '_container', title: 'Container size', icon: smallGrid, className: 'containersize-image' },
-			{ name: '_full', title: 'Full size', icon: middleGrid, className: 'fullsize-image' },
+			{ name: '_full', title: 'Full size', icon: middleGrid, className: 'fullsize-image' }
 		]
 	},
 	table: { contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ] },
 	tex: { texToolbar: [ 'copyTex', 'editTex' ] },
 	language: 'en',
 	link: {
-		addTargetToExternalLinks: true,
+		addTargetToExternalLinks: true
 	},
 	mediaEmbed: {
 		previewsInData: true,
@@ -132,7 +153,7 @@ BalloonEditor.defaultConfig = {
 				name: 'pinterest',
 				url: [
 					/(<a data-pin-do="embedPin" .*?href="https:\/\/www\.pinterest\.com\/pin\/.*?".*?><\/a>)\s?(<script .*?>.*?<\/script>)/,
-					/(<a data-pin-do="embedPin" .*?href="https:\/\/www\.pinterest\.com\/pin\/.*?".*?><\/a>)/,
+					/(<a data-pin-do="embedPin" .*?href="https:\/\/www\.pinterest\.com\/pin\/.*?".*?><\/a>)/
 				],
 				html: match => {
 					return ( match[ 1 ] );
@@ -184,5 +205,5 @@ BalloonEditor.defaultConfig = {
 BalloonEditor.utils = {};
 BalloonEditor.utils.fetchLocalImage = fetchLocalImage;
 BalloonEditor.utils.insertImage = insertImage;
-BalloonEditor.utils.toggleSizeButtons = customizations.toggleSizeButtons;
-BalloonEditor.utils.getImageProperties = customizations.getImageProperties;
+BalloonEditor.utils.toggleSizeButtons = toggleSizeButtons;
+BalloonEditor.utils.getImageProperties = getImageProperties;
