@@ -10,7 +10,7 @@
 import View from '@ckeditor/ckeditor5-ui/src/view';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 
-import '../../theme/charactergrid.css';
+import '../../theme/charactergrid.scss';
 
 /**
  * A grid of character tiles. It allows browsing special characters and selecting the character to

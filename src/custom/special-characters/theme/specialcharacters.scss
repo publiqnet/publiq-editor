@@ -9,4 +9,10 @@
 	flex-wrap: nowrap;
 	align-items: center;
 	justify-content: space-between;
+  padding: 6px 14px 0;
+
+  label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+  }
 }

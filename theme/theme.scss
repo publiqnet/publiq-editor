@@ -1,8 +1,8 @@
 @import "variables";
-@import "katex_custom.css";
-@import "../src/custom/special-characters/theme/charactergrid.css";
-@import "../src/custom/special-characters/theme/characterinfo.css";
-@import "../src/custom/special-characters/theme/specialcharacters.css";
+@import "katex_custom.scss";
+@import "../src/custom/special-characters/theme/charactergrid.scss";
+@import "../src/custom/special-characters/theme/characterinfo.scss";
+@import "../src/custom/special-characters/theme/specialcharacters.scss";
 
 
 :root {
@@ -283,6 +283,10 @@
     &, .ck.ck-toolbar {
       border-radius: 8px !important;
     }
+  }
+
+  &.ck-character-popup {
+    border-radius: 8px !important;
   }
 
   .media {

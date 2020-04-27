@@ -9,7 +9,7 @@
 
 import View from '@ckeditor/ckeditor5-ui/src/view';
 
-import '../../theme/characterinfo.css';
+import '../../theme/characterinfo.scss';
 
 /**
  * The view displaying detailed information about a special character glyph, e.g. upon

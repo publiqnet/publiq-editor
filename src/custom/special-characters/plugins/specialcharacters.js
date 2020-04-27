@@ -16,7 +16,7 @@ import CharacterGridView from './ui/charactergridview';
 import CharacterInfoView from './ui/characterinfoview';
 
 import specialCharactersIcon from '../theme/icons/specialcharacters.svg';
-import '../theme/specialcharacters.css';
+import '../theme/specialcharacters.scss';
 
 const ALL_SPECIAL_CHARACTERS_GROUP = 'All';
 
@@ -83,6 +83,12 @@ export default class SpecialCharacters extends Plugin {
 				label: t( 'Special characters' ),
 				icon: specialCharactersIcon,
 				tooltip: true
+			} );
+
+			dropdownView.panelView.extendTemplate( {
+				attributes: {
+					class: 'ck-character-popup'
+				}
 			} );
 
 			dropdownView.bind( 'isEnabled' ).to( inputCommand );
