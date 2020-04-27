@@ -1,6 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import searchIcon from '../assets/icons/Search.svg';
+import searchIcon from '../../assets/icons/Search.svg';
 import ImageGalleryCommand from '../commands/image-gallery.command';
 
 /**

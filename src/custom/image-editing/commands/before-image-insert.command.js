@@ -1,6 +1,6 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import { isImage } from '@ckeditor/ckeditor5-image/src/image/utils';
-import { insertNewLine } from '../customizations';
+import { insertNewLine } from '../../utils/utils';
 
 export default class BeforeImageInsert extends Command {
 	/**

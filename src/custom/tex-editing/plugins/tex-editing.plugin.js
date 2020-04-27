@@ -13,8 +13,7 @@ import '@ckeditor/ckeditor5-media-embed/theme/mediaembedediting.css';
 import { toWidget } from '@ckeditor/ckeditor5-widget/src/utils';
 import RenderTexCommand from '../commands/tex-render.command';
 import TexPlugin from './tex.plugin';
-import { renderTexInput } from '../customizations';
-import { toBoolean } from '../utils/utils';
+import { renderTexInput, toBoolean } from '../../utils/utils';
 
 /**
  * The media embed editing feature.

@@ -9,7 +9,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import { createDropdown } from '@ckeditor/ckeditor5-ui/src/dropdown/utils';
-import embedIcon from '../assets/icons/Embed.svg';
+import embedIcon from '../../assets/icons/Embed.svg';
 import SocialMediaEmbedFormView from '../views/social-embed-form.view';
 import SocialMediaEmbedEditing from './social-embed-editing.plugin';
 

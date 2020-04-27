@@ -1,13 +1,13 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import formulaIcon from '../assets/icons/Formula.svg';
-import editIcon from '../assets/icons/Edit.svg';
-import copyIcon from '../assets/icons/Copy.svg';
+import formulaIcon from '../../assets/icons/Formula.svg';
+import editIcon from '../../assets/icons/Edit.svg';
+import copyIcon from '../../assets/icons/Copy.svg';
 import TexInputFormView from '../views/tex-input-form.view';
 import TexEditing from './tex-editing.plugin';
-import { createModal } from '../customizations';
 import katex from 'katex/dist/katex.mjs';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import Clipboard from 'clipboard/src/clipboard';
+import { createModal } from '../../utils/utils';
 
 /**
  * The Tex editing UI plugin.
@@ -72,7 +72,7 @@ export default class TexPlugin extends Plugin {
 			} );
 			copyButtonView.extendTemplate( {
 				attributes: {
-					class: [ 'copy__btn' ],
+					class: [ 'copy__btn' ]
 				}
 			} );
 			copyButtonView.on( 'execute', () => {

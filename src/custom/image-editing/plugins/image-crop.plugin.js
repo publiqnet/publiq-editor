@@ -1,6 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import cropIcon from '../assets/icons/Crop.svg';
+import cropIcon from '../../assets/icons/Crop.svg';
 import ImageCropCommand from '../commands/image-crop.command';
 
 /**

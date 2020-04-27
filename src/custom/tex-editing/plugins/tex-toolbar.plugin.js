@@ -9,7 +9,7 @@
 
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import WidgetToolbarRepository from '@ckeditor/ckeditor5-widget/src/widgettoolbarrepository';
-import { getSelectedTexWidget } from '../utils/utils';
+import { getSelectedTexWidget } from '../../utils/utils';
 
 /**
  * The table toolbar class. It creates toolbars for the table feature and its content (for now only for a table cell content).
