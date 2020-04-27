@@ -13,8 +13,8 @@ import '@ckeditor/ckeditor5-media-embed/theme/mediaembedediting.css';
 import SocialMediaEmbedRegistry from '../views/social-media-embed.registry';
 import SocialMediaEmbedCommand from '../commands/social-embed.command';
 import { createMediaFigureElement, toMediaWidget } from '@ckeditor/ckeditor5-media-embed/src/utils';
-import { runEmbedScript } from '../customizations';
 import { stringify } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+import { runEmbedScript } from '../../utils/utils';
 
 /**
  * The media embed editing feature.

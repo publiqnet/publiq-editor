@@ -1,7 +1,7 @@
 import Command from '@ckeditor/ckeditor5-core/src/command';
 import { findOptimalInsertionPosition } from '@ckeditor/ckeditor5-widget/src/utils';
 import { getSelectedMediaModelWidget } from '@ckeditor/ckeditor5-media-embed/src/utils';
-import { embedTypes, insertNewLine } from '../customizations';
+import { embedTypes, insertNewLine } from '../../utils/utils';
 
 export default class SocialMediaEmbedCommand extends Command {
 	/**

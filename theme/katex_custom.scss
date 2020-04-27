@@ -121,17 +121,20 @@
     font-weight: normal;
     font-style: normal;
 }
+
+.ck-reset_all {
+
 .katex {
     font: normal 1.21em KaTeX_Main, Times New Roman, serif!important;
     line-height: 1.2!important;
     text-indent: 0!important;
     text-rendering: auto!important;
 }
-.katex * {
+.katex *:not([style*="vertical-align"]) {
     -ms-high-contrast-adjust: none!important;
     font: unset!important;
     vertical-align: initial!important;
-    text-align: initial!important;
+    text-align: unset!important;
 }
 .katex .katex-version::after {
     content: "0.11.1"!important;
@@ -893,8 +896,8 @@
 .katex svg {
     display: block!important;
     position: absolute!important;
-    width: 100%!important;
-    height: inherit!important;
+    width: 100%;
+    height: inherit;
     fill: currentColor!important;
     stroke: currentColor!important;
     fill-rule: nonzero!important;
@@ -1013,5 +1016,7 @@
 }
 .katex-display.fleqn > .katex {
     text-align: left!important;
+}
+
 }
 

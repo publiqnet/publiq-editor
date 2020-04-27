@@ -13,7 +13,7 @@ import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
 import '@ckeditor/ckeditor5-media-embed/theme/mediaform.css';
-import TextareaView from './textarea.view';
+import TextareaView from '../../views/text-area/textarea.view';
 
 /**
  * The Tex (especially LaTex) input form view controller class.
@@ -276,7 +276,7 @@ export default class TexInputFormView extends View {
 			tag: 'h3',
 
 			attributes: {
-				class: [ 'tex-label' ],
+				class: [ 'tex-label' ]
 			},
 			children: [ 'Formula pad' ]
 		} );
@@ -299,8 +299,8 @@ export default class TexInputFormView extends View {
 				class: [
 					'ck',
 					'tex-output'
-				],
-			},
+				]
+			}
 		} );
 
 		const previewAndInputView = new View( this.locale );

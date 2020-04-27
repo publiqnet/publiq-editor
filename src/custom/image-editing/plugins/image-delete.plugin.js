@@ -1,6 +1,6 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import deleteIcon from '../assets/icons/Delete.svg';
+import deleteIcon from '../../assets/icons/Delete.svg';
 
 /**
  *
