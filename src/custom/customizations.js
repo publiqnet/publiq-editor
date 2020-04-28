@@ -184,15 +184,15 @@ BlockToolbar.prototype._createButtonView = function() {
 		}
 	} );
 
-	this.listenTo( buttonView, 'change:isOn', () => {
-		const position = editor.model.document.selection.getLastPosition();
-		if ( !buttonView.isOn && position.path[ 0 ] && position.path[ 1 ] ) {
-			const element = document.querySelector( '[data-placeholder]:not(figcaption)' ); //eslint-disable-line
-			if ( element ) {
-				element.classList.add( 'ck-placeholder' );
-			}
-		}
-	} );
+	// this.listenTo( buttonView, 'change:isOn', () => {
+	// 	const position = editor.model.document.selection.getLastPosition();
+	// 	if ( !buttonView.isOn && position.path[ 0 ] && position.path[ 1 ] ) {
+	// 		const element = document.querySelector( '[data-placeholder]:not(figcaption)' ); //eslint-disable-line
+	// 		if ( element ) {
+	// 			element.classList.add( 'ck-placeholder' );
+	// 		}
+	// 	}
+	// } );
 
 	editor.ui.view.body.add( buttonView );
 	editor.ui.focusTracker.add( buttonView.element );
