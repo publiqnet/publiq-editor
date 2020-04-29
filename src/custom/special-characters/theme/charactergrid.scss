@@ -6,7 +6,7 @@
 .ck.ck-character-grid {
 	.ck-character-grid__tiles {
 		display: grid;
-    overflow: scroll;
+    overflow-y: scroll;
     max-height: 40vh;
 		grid-template-columns: repeat( 10, 1fr );
 
