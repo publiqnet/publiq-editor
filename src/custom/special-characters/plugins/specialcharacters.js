@@ -80,7 +80,7 @@ export default class SpecialCharacters extends Plugin {
 			let dropdownPanelContent;
 
 			dropdownView.buttonView.set( {
-				label: t( 'Special characters' ),
+				label: t( 'Special Characters' ),
 				icon: specialCharactersIcon,
 				tooltip: true
 			} );
