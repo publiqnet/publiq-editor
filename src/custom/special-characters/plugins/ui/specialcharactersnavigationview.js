@@ -41,7 +41,7 @@ export default class SpecialCharactersNavigationView extends View {
 		 * @member {module:ui/label/labelview~LabelView}
 		 */
 		this.labelView = new LabelView( locale );
-		this.labelView.text = t( 'Special characters' );
+		this.labelView.text = t( 'Special Characters' );
 
 		/**
 		 * A dropdown that allows selecting a group of special characters to be displayed.
