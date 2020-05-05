@@ -163,6 +163,7 @@ BlockToolbar.prototype._attachButtonToElement = function( targetElement ) {
 BlockToolbar.prototype._createButtonView = function() {
 	const editor = this.editor;
 	const t = editor.t;
+	const view = editor.editing.view;
 	const buttonView = new BlockButtonView( editor.locale );
 
 	buttonView.set( {
@@ -184,26 +185,20 @@ BlockToolbar.prototype._createButtonView = function() {
 		}
 	} );
 
-	// this.listenTo( buttonView, 'change:isOn', () => {
-	// 	const position = editor.model.document.selection.getLastPosition();
-	// 	if ( !buttonView.isOn && position.path[ 0 ] && position.path[ 1 ] ) {
-	// 		const element = document.querySelector( '[data-placeholder]:not(figcaption)' ); //eslint-disable-line
-	// 		if ( element ) {
-	// 			element.classList.add( 'ck-placeholder' );
-	// 		}
-	// 	}
-	// } );
+	this.listenTo( buttonView, 'change:isOn', () => {
+		const viewTarget = view.document.selection.getLastPosition().parent;
+		const domTarget = view.domConverter.mapViewToDom( viewTarget );
+		if ( domTarget ) {
+			if ( !buttonView.isOn && !viewTarget.nextSibling && !viewTarget.previousSibling ) {
+				domTarget.classList.add( 'ck-placeholder' );
+			} else if ( buttonView.isOn && !viewTarget.nextSibling && !viewTarget.previousSibling ) {
+				domTarget.classList.remove( 'ck-placeholder' );
+			}
+		}
+	} );
 
 	editor.ui.view.body.add( buttonView );
 	editor.ui.focusTracker.add( buttonView.element );
-
-	buttonView.element.addEventListener( 'click', function() {
-		const element = document.querySelector( '[data-placeholder]:not(figcaption)' ); //eslint-disable-line
-		const position = editor.model.document.selection.getLastPosition();
-		if ( element && !position.path[ 0 ] && !position.path[ 1 ] ) {
-			element.classList.remove( 'ck-placeholder' );
-		}
-	} );
 
 	return buttonView;
 };
