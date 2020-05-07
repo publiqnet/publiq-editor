@@ -79,7 +79,7 @@ export function closeModalOnBlur( modalView ) {
 			callback: () => {
 				modalView.isOpen = false;
 			},
-			contextElements: [ modalView.element ]
+			contextElements: [ modalView.panelView.element ]
 		} );
 	} );
 }
