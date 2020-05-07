@@ -53,7 +53,6 @@ import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils
 import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { GreekCharacters } from './custom/special-characters/plugins/specialcharactersgreek';
 import { getImageProperties, toggleSizeButtons } from './custom/utils/utils';
-import * as customizations from './custom/customizations'; //eslint-disable-line
 import '../theme/theme.scss';
 
 export default class BalloonEditor extends BalloonEditorBase {
@@ -106,7 +105,7 @@ BalloonEditor.builtinPlugins = [
 // Editor configuration.
 BalloonEditor.defaultConfig = {
 	placeholder: `Let's write an awesome story!`, // eslint-disable-line
-	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed' ],
+	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed', 'texEditing' ],
 	toolbar: {
 		items: [
 			'blockQuote',
