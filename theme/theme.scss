@@ -136,6 +136,22 @@
     &[data-type="tex-input"] {
       text-align: center;
       cursor: default;
+      overflow-x: scroll;
+
+      &::-webkit-scrollbar {
+        height: 13px;
+      }
+
+      &::-webkit-scrollbar-track {
+        display: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #DEE2E6;
+        border-radius: 2px;
+        border-top: 5px solid white;
+        border-bottom: 5px solid white;
+      }
     }
   }
 
@@ -551,6 +567,10 @@
 
     p {
       white-space: pre-wrap;
+    }
+
+    .katex-display > .katex {
+      text-align: left !important;
     }
 
     &::-webkit-scrollbar {
