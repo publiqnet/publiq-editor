@@ -113,7 +113,8 @@ export default class TexPlugin extends Plugin {
 		// append model element to '.ck-balloon-panel's parent node
 		modal.render();
 		setTimeout( () => {//eslint-disable-line
-			document.querySelector( '.ck-balloon-panel' ).parentNode.appendChild( modal.element );//eslint-disable-line
+			document.querySelector( '.ck-balloon-panel' )//eslint-disable-line
+				.parentNode.appendChild( modal.element );//eslint-disable-line
 		}, 0 );
 
 		// Toggle the modal when its button has been clicked.
@@ -148,7 +149,7 @@ export default class TexPlugin extends Plugin {
 		modal.on( 'preview', () => {
 			form.isValid();
 			try {
-				html = katex.renderToString( form.texInput, { output: 'html', macros: { '\\f': 'f(#1)' } } );
+				html = katex.renderToString( form.texInput, { output: 'html', macros: { '\\f': 'f(#1)' }, displayMode: true } );
 				currentRenderedInput = form.texInput;
 			} catch ( e ) {
 				if ( e instanceof katex.ParseError ) {
