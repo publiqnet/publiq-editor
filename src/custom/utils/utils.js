@@ -79,7 +79,7 @@ export function closeModalOnBlur( modalView ) {
 			callback: () => {
 				modalView.isOpen = false;
 			},
-			contextElements: [ modalView.element ]
+			contextElements: [ modalView.panelView.element ]
 		} );
 	} );
 }
@@ -235,7 +235,7 @@ export function runEmbedScript( src, type ) {
 
 export function renderTexInput( texInput, element ) {
 	try {
-		const options = { output: 'html', macros: { '\\f': 'f(#1)' } };
+		const options = { output: 'html', macros: { '\\f': 'f(#1)' }, displayMode: true };
 		const containerElement = document.createElement( 'div' ); // eslint-disable-line
 		containerElement.appendChild( element.cloneNode( true ) );
 		katex.render( texInput, containerElement, options );

@@ -136,6 +136,22 @@
     &[data-type="tex-input"] {
       text-align: center;
       cursor: default;
+      overflow-x: scroll;
+
+      &::-webkit-scrollbar {
+        height: 13px;
+      }
+
+      &::-webkit-scrollbar-track, &::-webkit-scrollbar-corner {
+        display: none;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #DEE2E6;
+        border-radius: 2px;
+        border-top: 5px solid white;
+        border-bottom: 5px solid white;
+      }
     }
   }
 
@@ -391,7 +407,7 @@
       height: 13px;
     }
 
-    &::-webkit-scrollbar-track {
+    &::-webkit-scrollbar-track, &::-webkit-scrollbar-corner {
       display: none;
     }
 
@@ -553,8 +569,23 @@
       white-space: pre-wrap;
     }
 
+    .katex-display > .katex {
+      text-align: left !important;
+    }
+
     &::-webkit-scrollbar {
+      height: 13px;
+    }
+
+    &::-webkit-scrollbar-track, &::-webkit-scrollbar-corner {
       display: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #DEE2E6;
+      border-radius: 2px;
+      border-top: 5px solid #F7F8F9;
+      border-bottom: 5px solid #F7F8F9;
     }
   }
 

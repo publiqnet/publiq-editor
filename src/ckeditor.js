@@ -53,7 +53,8 @@ import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils
 import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { GreekCharacters } from './custom/special-characters/plugins/specialcharactersgreek';
 import { getImageProperties, toggleSizeButtons } from './custom/utils/utils';
-import * as customizations from './custom/customizations'; //eslint-disable-line
+// eslint-disable-next-line
+import * as customizations from './custom/customizations'; // don't remove this import
 import '../theme/theme.scss';
 
 export default class BalloonEditor extends BalloonEditorBase {
