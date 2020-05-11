@@ -107,7 +107,7 @@ BalloonEditor.builtinPlugins = [
 // Editor configuration.
 BalloonEditor.defaultConfig = {
 	placeholder: `Let's write an awesome story!`, // eslint-disable-line
-	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed', 'texEditing' ],
+	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed' ],
 	toolbar: {
 		items: [
 			'blockQuote',
