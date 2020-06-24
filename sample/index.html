@@ -1,126 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>CKEditor 5 – balloon block editor build – development sample</title>
-  <style>
-    body {
-      margin: 20px auto;
-    }
+	<meta charset="utf-8">
+	<title>CKEditor 5 – balloon block editor build – development sample</title>
+	<style>
+		body {
+			margin: 20px auto;
+		}
 
-    h1 {
-      max-width: 870px;
-      margin: 1em auto;
-    }
-  </style>
+		h1 {
+			max-width: 870px;
+			margin: 1em auto;
+		}
+	</style>
 </head>
 <body>
 <h1>CKEditor 5 – balloon block editor build – development sample</h1>
 
 <div id="editor">
-
 </div>
 <script src="../build/ckeditor.js"></script>
 <script src="../build/translations/ja.js"></script>
+<script src="node_modules/@ckeditor/ckeditor5-engine/src/view/upcastwriter.js"></script>
 <script>
 
-	BalloonEditor.create( document.querySelector( '#editor' ) ).then( editor => {
+	BalloonEditor.create(document.querySelector('#editor')).then(editor => {
 		window.editor = editor;
 		window.env = BalloonEditor.utils.env;
-		console.log( window.editor.ui.componentFactory._components );
-		window.editor.ui.componentFactory._components.get( 'gallery' ).callback().on( 'change:galleryIsOn', ( p1, p2, p3 ) => {
-			console.log( 'gallery' );
-			console.log( p1 );
-			console.log( p2 );
-			console.log( p3 );
-		} );
+		console.log(window.editor.ui.componentFactory._components);
+		window.editor.ui.componentFactory._components.get('gallery').callback().on('change:galleryIsOn', (p1, p2, p3) => {
+			console.log('gallery');
+			console.log(p1);
+			console.log(p2);
+			console.log(p3);
+		});
+		editor.plugins.get( 'Clipboard' ).on( 'inputTransformation', ( evt, data ) => {
+			if ( data.content.childCount == 2 ) {
+				const linkUrl = data.content.getChild( 0 ).data;
 
-	  // const balloonToolbar = editor.plugins.get( 'BalloonToolbar' );
-    //
-	  // editor.listenTo( balloonToolbar, 'show',( evt, data ) => {
-    //   const target = data.domTarget;
-    //   const domTexDiv = target.closest( 'div' );
-    //   const converter = data.view.domConverter;
-    //   const viewTexDiv = converter.domToView( domTexDiv );
-    //
-    //   if ( viewTexDiv.getAttribute( 'data-type' ) === 'tex-input') {
-    //     const modelTexDiv = editor.editing.mapper.toModelElement( viewTexDiv );
-    //     editor.model.change( writer => {
-    //       writer.setSelection( modelTexDiv, 'on' );
-    //     });
-    //     console.log('view', viewTexDiv);
-    //   }
-	  // }, { priority: 'highest' } );
-	  editor.editing.view.document.on( 'click', ( evInfo, data, p3) => {
-	  	// const target = data.domTarget;
-	  	// const domTexDiv = target.closest( 'div' );
-      // const converter = data.view.domConverter;
-      // const viewTexDiv = converter.domToView( domTexDiv );
-      //
-		  // if ( viewTexDiv.getAttribute( 'data-type' ) === 'tex-input') {
-      //   const modelTexDiv = editor.editing.mapper.toModelElement( viewTexDiv );
-      //   editor.model.change( writer => {
-      //     writer.setSelection( modelTexDiv, 'on' );
-		  //   });
-      //   console.log('view', viewTexDiv);
-      // }
-	  }, {priority : 'highest'} );
-	  editor.editing.view.document.on( 'imageLoaded', ( evInfo, data, p3) => {
-		    if(editor.model.document.selection.getSelectedElement().getAttribute('uploadId')) {
-		      editor.plugins.get( 'WidgetToolbarRepository' )._toolbarDefinitions.get( 'image' )
-				    .view.items.get( 3 ).element.classList.remove( 'ck-disabled' );
-        }
-	  } );
-		window.editor.ui.componentFactory._components.get( 'imagecrop' ).callback().on( 'change:cropIsOn', ( p1, p2, p3 ) => {
-			console.log( 'crop' );
-			BalloonEditor.utils.fetchLocalImage( editor.model.document.selection.getSelectedElement() )
-				.then( ( data ) => {
-					console.log( data );
-				} )
-				.catch( ( err ) => {
-					console.log( err );
-				} );
+				data.content = 'jhjh';
+			}
 		} );
-		editor.ui.componentFactory._components.get( 'beforeimginsert' ).callback()
-			.on( 'change:beforeInsert', ( p1, p2, p3 ) => {
-				console.log( 'before insert--- ', p3 );
-			} );
-	  editor.plugins.get( 'Notification' )
-			.on( 'show:caution:size-error', ( p1, p2, p3 ) => {
-				console.log( 'warning is shown in error' );
-			} );
-	  editor.plugins.get( 'Notification' )
-			.on( 'show:caution:upload', ( p1, p2, p3 ) => {
-				console.log( 'warning is shown ' );
-			} );
-		editor.ui.componentFactory._components.get( 'beforeimgdelete' ).callback()
-			.on( 'change:beforeDelete', ( p1, p2, p3 ) => {
-				console.log( 'before delete--- ', p3 );
-			} );
-		editor.plugins.get( 'FileRepository' ).loaders.on( 'add', ( evt, loader ) => {
-			loader.on( 'change:uploaded', ( evt, name, uploadedPercent ) => {
-				editor.model.change( writer => {
+		window.editor.ui.componentFactory._components.get('imagecrop').callback().on('change:cropIsOn', (p1, p2, p3) => {
+			BalloonEditor.utils.fetchLocalImage(editor.model.document.selection.getSelectedElement())
+					.then((data) => {
+						console.log(data);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+		});
+		editor.ui.componentFactory._components.get('beforeimginsert').callback()
+				.on('change:beforeInsert', (p1, p2, p3) => {
+					console.log('before insert--- ', p3);
+				});
+		editor.plugins.get('Notification')
+				.on('show:caution:size-error', (p1, p2, p3) => {
+					console.log('warning is shown in error');
+				});
+		editor.plugins.get('Notification')
+				.on('show:caution:upload', (p1, p2, p3) => {
+					console.log('warning is shown ');
+				});
+		editor.ui.componentFactory._components.get('beforeimgdelete').callback()
+				.on('change:beforeDelete', (p1, p2, p3) => {
+					console.log('before delete--- ', p3);
+				});
+		editor.plugins.get('FileRepository').loaders.on('add', (evt, loader) => {
+			loader.on('change:uploaded', (evt, name, uploadedPercent) => {
+				editor.model.change(writer => {
 					const carretPosition = editor.model.document.selection.getLastPosition();
 					if (carretPosition.nodeAfter && carretPosition.nodeAfter.name !== 'paragraph') {
-						const pElement = writer.createElement( 'paragraph' );
-						writer.insert( pElement, carretPosition );
+						const pElement = writer.createElement('paragraph');
+						writer.insert(pElement, carretPosition);
 					}
-				} );
-			} );
-		} );
-	} )
-		.catch( error => {
-			console.error( 'There was a problem initializing the editor.', error );
-		} );
-  function insertNewLine( model ) {
-	  model.change( writer => {
-		  const caretPosition = model.document.selection.getLastPosition();
-		  if ( !caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph' ) {
-			  const pElement = writer.createElement( 'paragraph' );
-			  writer.insert( pElement, model.document.selection.getLastPosition() );
-		  }
-	  } );
-  }
+				});
+			});
+		});
+	})
+			.catch(error => {
+				console.error('There was a problem initializing the editor.', error);
+			});
+
+	function insertNewLine(model) {
+		model.change(writer => {
+			const caretPosition = model.document.selection.getLastPosition();
+			if (!caretPosition.nodeAfter || caretPosition.nodeAfter.name !== 'paragraph') {
+				const pElement = writer.createElement('paragraph');
+				writer.insert(pElement, model.document.selection.getLastPosition());
+			}
+		});
+	}
 </script>
 </body>
 </html>
