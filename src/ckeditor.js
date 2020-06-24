@@ -49,6 +49,7 @@ import Subscript from '@ckeditor/ckeditor5-basic-styles/src/subscript';
 import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import SpecialCharacters from './custom/special-characters/plugins/specialcharacters';
 import SpecialCharactersEssentials from './custom/special-characters/plugins/specialcharactersessentials';
+import InputTransformation from './custom/input-transformation';
 import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
 import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { GreekCharacters } from './custom/special-characters/plugins/specialcharactersgreek';
@@ -101,13 +102,14 @@ BalloonEditor.builtinPlugins = [
 	Superscript,
 	SpecialCharacters,
 	SpecialCharactersEssentials,
-	GreekCharacters
+	GreekCharacters,
+	InputTransformation
 ];
 
 // Editor configuration.
 BalloonEditor.defaultConfig = {
-	placeholder: `Let's write an awesome story!`, // eslint-disable-line
-	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed' ],
+	placeholder: 'Let\'s write an awesome story!',
+	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed', 'texEditing' ],
 	toolbar: {
 		items: [
 			'blockQuote',
@@ -126,6 +128,9 @@ BalloonEditor.defaultConfig = {
 			'specialCharacters'
 		]
 	}, // '|', 'indent', 'outdent' undo, redo,
+	simpleUpload: {
+		uploadUrl: 'https://publiq.free.beeceptor.com/test'
+	},
 	image: {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]

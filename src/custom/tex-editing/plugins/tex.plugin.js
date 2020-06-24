@@ -81,9 +81,17 @@ export default class TexPlugin extends Plugin {
 					const texParagraph = selectedElem.getChild( 1 ).name === 'p' ? selectedElem.getChild( 1 ) : selectedElem.getChild( 1 );
 					const copyText = texParagraph.getChild( 0 ).data;
 					copyButtonView.element.setAttribute( 'data-clipboard-text', copyText );
+
+					editor.ui.focusTracker.on( 'change:isFocused', ( evt, name, focused ) => {
+						const attr = copyButtonView.element.getAttribute( 'data-clipboard-text' );
+						if ( !focused && attr ) {
+							copyButtonView.element.removeAttribute( 'data-clipboard-text' );
+							evt.stop();
+						}
+					}, { priority: 'highest' } );
+
 					clipboard.on( 'success', function( ) {
 						copyButtonView.label = editor.t( 'copied!' );
-						copyButtonView.element.removeAttribute( 'data-clipboard-text' );
 						setTimeout( () => copyButtonView.label = editor.t( 'copy tex' ), 2000 );//eslint-disable-line
 					} );
 				}
