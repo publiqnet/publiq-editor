@@ -50,6 +50,7 @@ import Superscript from '@ckeditor/ckeditor5-basic-styles/src/superscript';
 import SpecialCharacters from './custom/special-characters/plugins/specialcharacters';
 import SpecialCharactersEssentials from './custom/special-characters/plugins/specialcharactersessentials';
 import InputTransformation from './custom/input-transformation';
+import Clipboard from '@ckeditor/ckeditor5-clipboard/src/clipboard';
 import { fetchLocalImage } from '@ckeditor/ckeditor5-image/src/imageupload/utils';
 import { insertImage } from '@ckeditor/ckeditor5-image/src/image/utils';
 import { GreekCharacters } from './custom/special-characters/plugins/specialcharactersgreek';
@@ -100,6 +101,7 @@ BalloonEditor.builtinPlugins = [
 	Code,
 	Subscript,
 	Superscript,
+	Clipboard,
 	SpecialCharacters,
 	SpecialCharactersEssentials,
 	GreekCharacters,
