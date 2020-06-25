@@ -33,6 +33,7 @@
 			console.log(p2);
 			console.log(p3);
 		});
+
 		window.editor.ui.componentFactory._components.get('imagecrop').callback().on('change:cropIsOn', (p1, p2, p3) => {
 			BalloonEditor.utils.fetchLocalImage(editor.model.document.selection.getSelectedElement())
 					.then((data) => {

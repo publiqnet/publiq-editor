@@ -29,5 +29,14 @@ export default class InputTransformation extends Plugin {
 
 			evt.stop();
 		} );
+		// prevent default action and upload image file to server when pasting it.
+		editingView.document.on( 'clipboardInput', ( evt, data ) => {
+			if ( data.dataTransfer.files.length ) {
+				editor.execute( 'delete' );
+				editor.execute( 'imageUpload', { file: data.dataTransfer.files[ 0 ] } );
+
+				evt.stop();
+			}
+		}, { priority: 'high' } );
 	}
 }
