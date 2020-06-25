@@ -1,18 +1,30 @@
 import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
+import plainTextToHtml from '@ckeditor/ckeditor5-clipboard/src/utils/plaintexttohtml';
+import normalizeClipboardHtml from '@ckeditor/ckeditor5-clipboard/src/utils/normalizeclipboarddata';
+import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
 
 export default class InputTransformation extends Plugin {
 	init() {
 		const editor = this.editor;
 		const editingView = editor.editing.view;
 		const clipboardPlugin = editor.plugins.get( 'Clipboard' );
+		this._htmlDataProcessor = new HtmlDataProcessor();
 
 		editingView.document.on( 'clipboardInput', ( evt, data ) => {
 			const dataTransfer = data.dataTransfer;
-			let content = dataTransfer.getData( 'text/html' );
-			content = content.replace( new RegExp( /<figure .*?>.*?(<img.*?>).*?<\/figure>/, 'g' ), '' );
-			content = clipboardPlugin._htmlDataProcessor.toView( content );
+			let content = '';
+
+			if ( dataTransfer.getData( 'text/html' ) ) {
+				content = dataTransfer.getData( 'text/html' )
+					.replace( new RegExp( /<figure .*?>.*?(<img.*?>).*?<\/figure>/, 'g' ), '' );
+				content = normalizeClipboardHtml( content );
+			} else if ( dataTransfer.getData( 'text/plain' ) ) {
+				content = plainTextToHtml( dataTransfer.getData( 'text/plain' ) );
+			}
+			content = this._htmlDataProcessor.toView( content );
 
 			clipboardPlugin.fire( 'inputTransformation', { content, dataTransfer } );
+
 			editingView.scrollToTheSelection();
 
 			evt.stop();
