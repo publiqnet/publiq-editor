@@ -130,9 +130,6 @@ BalloonEditor.defaultConfig = {
 			'specialCharacters'
 		]
 	}, // '|', 'indent', 'outdent' undo, redo,
-	simpleUpload: {
-		uploadUrl: 'https://publiq.free.beeceptor.com/test'
-	},
 	image: {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
