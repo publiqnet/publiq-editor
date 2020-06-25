@@ -111,7 +111,7 @@ BalloonEditor.builtinPlugins = [
 // Editor configuration.
 BalloonEditor.defaultConfig = {
 	placeholder: 'Let\'s write an awesome story!',
-	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed', 'texEditing' ],
+	blockToolbar: [ 'imageUpload', 'mediaEmbed', 'gallery', 'socialMediaEmbed' ],
 	toolbar: {
 		items: [
 			'blockQuote',
@@ -130,9 +130,6 @@ BalloonEditor.defaultConfig = {
 			'specialCharacters'
 		]
 	}, // '|', 'indent', 'outdent' undo, redo,
-	simpleUpload: {
-		uploadUrl: 'https://publiq.free.beeceptor.com/test'
-	},
 	image: {
 		upload: {
 			types: [ 'gif', 'jpg', 'jpeg', 'png' ]
